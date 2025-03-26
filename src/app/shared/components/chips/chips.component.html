@@ -1,0 +1,8 @@
+<div class="chips-container" *ngIf="chips().length > 0">
+  @for (chip of chips(); track chip.id) {
+  <div class="single-chip" (click)="onClearFilter(chip)">
+    <span>{{ chip?.selectedValue() }}</span>
+    <button type="button" class="single-chip__clear-filter">x</button>
+  </div>
+  }
+</div>

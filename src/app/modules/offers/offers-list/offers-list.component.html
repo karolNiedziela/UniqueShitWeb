@@ -1,0 +1,77 @@
+<div class="offer-filter-side-panel" [class.show]="filtersVisible()">
+  <app-filled-button
+    text="Close filters"
+    (buttonClick)="toggleFilters()"
+  ></app-filled-button>
+
+  @if (appliedFilters().length > 0) {
+  <div class="offer-applied-filters">
+    <h3>APPLIED FILTERS</h3>
+    <app-chips
+      [chips]="appliedFilters()"
+      (clearFilter)="clearFilter($event)"
+    ></app-chips>
+  </div>
+  }
+
+  <app-select
+    #productCategorySelect
+    label="Product category"
+    [options]="this.productCategoryService.productCategoriesOptions.value()"
+    (selectionChange)="onProductCategoryChange($event)"
+  >
+  </app-select>
+
+  <app-select
+    #brandSelect
+    label="Brands"
+    [options]="brandsOptions()"
+    (selectionChange)="onBrandChanged($event)"
+  >
+  </app-select>
+
+  <app-select
+    #itemConditionSelect
+    label="Item condition"
+    [options]="itemConditionOptions()"
+    (selectionChange)="onItemConditionChange($event)"
+  >
+  </app-select>
+
+  <app-select
+    #colourSelect
+    label="Colour"
+    [options]="this.colourService.colourOptions.value()"
+    (selectionChange)="onColourChange($event)"
+  >
+  </app-select>
+
+  <app-select
+    #sizeSelect
+    label="Size"
+    [options]="sizeOptions()"
+    (selectionChange)="onSizeChange($event)"
+  >
+  </app-select>
+
+  <app-filled-button [text]="'Apply'"></app-filled-button>
+</div>
+
+<div class="offers-container" [class.dimmed]="filtersVisible()">
+  <div class="offers-filter-toggle-container">
+    <app-filled-button
+      text="Show filters"
+      (buttonClick)="toggleFilters()"
+    ></app-filled-button>
+  </div>
+
+  @if (offerService.isLoadingOffers()) {
+  <div>Loading ...</div>
+  } @else {
+  <div class="offers-grid-container">
+    @for (offer of offerService.offers().items; track offer.id) {
+    <app-offer-card [offer]="offer"> </app-offer-card>
+    }
+  </div>
+  }
+</div>
