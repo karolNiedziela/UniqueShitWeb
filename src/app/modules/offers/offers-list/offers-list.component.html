@@ -9,7 +9,7 @@
     <h3>APPLIED FILTERS</h3>
     <app-chips
       [chips]="appliedFilters()"
-      (clearFilter)="clearFilter($event)"
+      (removed)="onChipRemoved($event)"
     ></app-chips>
   </div>
   }
@@ -18,23 +18,25 @@
     #productCategorySelect
     label="Product category"
     [options]="this.productCategoryService.productCategoriesOptions.value()"
-    (selectionChange)="onProductCategoryChange($event)"
+    (selectedOptionChanged)="onProductCategoryChange($event)"
   >
   </app-select>
 
-  <app-select
-    #brandSelect
+  <app-autocomplete
+    #brandAutocomplete
     label="Brands"
-    [options]="brandsOptions()"
-    (selectionChange)="onBrandChanged($event)"
+    placeholder="Search for brands"
+    [options]="this.brandService.brandOptions.value()"
+    (selectedOptionChanged)="onBrandSelected($event)"
+    (searchTerm)="onSearchTermChanged($event)"
   >
-  </app-select>
+  </app-autocomplete>
 
   <app-select
     #itemConditionSelect
     label="Item condition"
     [options]="itemConditionOptions()"
-    (selectionChange)="onItemConditionChange($event)"
+    (selectedOptionChanged)="onItemConditionChange($event)"
   >
   </app-select>
 
@@ -42,15 +44,19 @@
     #colourSelect
     label="Colour"
     [options]="this.colourService.colourOptions.value()"
-    (selectionChange)="onColourChange($event)"
+    (selectedOptionChanged)="onColourChange($event)"
   >
   </app-select>
 
   <app-select
     #sizeSelect
     label="Size"
-    [options]="sizeOptions()"
-    (selectionChange)="onSizeChange($event)"
+    [options]="this.sizeService.sizeOptions.value()"
+    (selectedOptionChanged)="onSizeChange($event)"
+    [hidden]="
+      !this.sizeService.sizeOptions.value() ||
+      this.sizeService.sizeOptions.value().length === 0
+    "
   >
   </app-select>
 

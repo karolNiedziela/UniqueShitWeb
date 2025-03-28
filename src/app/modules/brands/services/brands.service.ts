@@ -1,9 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BrandModel } from '../models/brand.model';
-import { Observable } from 'rxjs';
-import { PagedListModel } from '../../../shared/components/models/paged-list-model';
+import { httpResource } from '@angular/common/http';
+import { OptionSetType } from '../../../shared/components/models/option-set.model';
+import { BrandArraySchema, BrandType } from '../models/brand.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,18 +10,19 @@ import { PagedListModel } from '../../../shared/components/models/paged-list-mod
 export class BrandsService {
   private brandEndpointUrl: string = `${environment.apiUrl}/brands`;
 
-  private defaultHttpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
+  searchTerm = signal<string>('');
+
+  brandOptions = httpResource<OptionSetType[]>(
+    () => ({
+      url: `${this.brandEndpointUrl}?searchTerm=${this.searchTerm()}`,
     }),
-  };
-
-  private http = inject(HttpClient);
-
-  get(): Observable<PagedListModel<BrandModel>> {
-    return this.http.get<PagedListModel<BrandModel>>(
-      `${this.brandEndpointUrl}`,
-      this.defaultHttpOptions
-    );
-  }
+    {
+      defaultValue: [],
+      parse: (data) =>
+        BrandArraySchema.parse(data).map((brand: BrandType) => ({
+          id: brand.id,
+          value: brand.name,
+        })),
+    }
+  );
 }
