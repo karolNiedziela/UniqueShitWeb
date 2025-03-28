@@ -1,5 +1,11 @@
-import { CommonModule, NgForOf, NgIf } from '@angular/common';
-import { Component, input, output, OutputEmitterRef } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
+import { Component, input, output } from '@angular/core';
+import { SelectComponent } from '../select/select.component';
+import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
+
+export type ChipType = {
+  name: string;
+};
 
 @Component({
   selector: 'app-chips',
@@ -9,10 +15,10 @@ import { Component, input, output, OutputEmitterRef } from '@angular/core';
   standalone: true,
 })
 export class ChipsComponent {
-  chips = input.required<any[]>();
-  clearFilter: OutputEmitterRef<any> = output<any>();
+  chips = input.required<SelectComponent[] | AutocompleteComponent[]>();
+  removed = output<SelectComponent | AutocompleteComponent>();
 
-  onClearFilter(chip: any) {
-    this.clearFilter.emit(chip);
+  removeChip(chip: SelectComponent | AutocompleteComponent) {
+    this.removed.emit(chip);
   }
 }
