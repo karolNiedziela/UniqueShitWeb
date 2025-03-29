@@ -1,15 +1,30 @@
 <mat-toolbar color="primary">
+  <!--Powrót na stronę główną-->
   <a mat-button class="title" href="/">UniqueShit</a>
+
+   <!--Button do ofert sprzedaży-->
   <a
-    mat-button
+   mat-button
     [routerLink]="['/offers-list']"
     routerLinkActive="router-link-active"
-    >Offers</a
-  >
+    >Offers
+  </a>
 
+  <!-- Button do ofert zakupu, trzeba zmienic routing-->
+  <a
+  mat-button
+   [routerLink]="['/offers-list']"
+   routerLinkActive="router-link-active"
+   >Purchase offers
+ </a>
+
+
+<!-- Odstęp w toolbarze-->
   <div class="toolbar-spacer"></div>
 
   <div class="flex-stretch"></div>
+
+  <!-- Routing do buttona profilu, widoczny po zalogowaniu-->
   <a
     mat-button
     [routerLink]="['/profile']"
@@ -17,6 +32,8 @@
     routerLinkActive="router-link-active"
     >Profile</a
   >
+
+    <!-- Routing do buttona WEBAPI?, widoczny po zalogowaniu-->
   <a
     mat-button
     [routerLink]="['/webapi']"
@@ -24,15 +41,32 @@
     routerLinkActive="router-link-active"
     >WebApi</a
   >
+
+     <!-- Routing do ???? widoczny po zalogowaniu-->
+  <a
+    mat-button
+    [routerLink]="['/webapi']"
+    *ngIf="loginDisplay"
+    routerLinkActive="router-link-active"
+    >WebApi</a
+  >
+
+  <!-- Przycisk do logowania, widoczny przed zalogowaniem-->
   <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
     Login
   </button>
+  
+  <!-- Przycisk do wylogowania, widoczny po zalogowaniu-->
   <button mat-raised-button *ngIf="loginDisplay" (click)="logout()">
     Logout
   </button>
+
+  <!-- Przycisk do zmiany kolorów strony?-->
   <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
     <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
   </button>
+
+
 
   <mat-menu #themeMenu="matMenu">
     @for (theme of themeService.getThemes(); track theme.name) {
