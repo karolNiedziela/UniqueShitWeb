@@ -28,14 +28,13 @@
     placeholder="Search for brands"
     [options]="this.brandService.brandOptions.value()"
     (selectedOptionChanged)="onBrandSelected($event)"
-    (searchTerm)="onSearchTermChanged($event)"
   >
   </app-autocomplete>
 
   <app-select
     #itemConditionSelect
     label="Item condition"
-    [options]="itemConditionOptions()"
+    [options]="this.itemConditionService.itemConditionOptions.value()"
     (selectedOptionChanged)="onItemConditionChange($event)"
   >
   </app-select>

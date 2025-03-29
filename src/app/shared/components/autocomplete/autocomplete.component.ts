@@ -1,8 +1,13 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import {
+  Component,
+  input,
+  OnChanges,
+  output,
+  signal,
+  SimpleChanges,
+} from '@angular/core';
 import { OptionSetType } from '../models/option-set.model';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-autocomplete',
@@ -10,7 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './autocomplete.component.html',
   styleUrl: './autocomplete.component.scss',
 })
-export class AutocompleteComponent {
+export class AutocompleteComponent implements OnChanges {
   options = input.required<OptionSetType[]>();
   label = input.required<string>();
   placeholder = input<string>('Search term...');
@@ -20,19 +25,27 @@ export class AutocompleteComponent {
   searchTerm = output<string>();
 
   searchInput = new FormControl('');
+  filteredOptions = signal<OptionSetType[]>([]);
 
   selectedOption = signal<OptionSetType | null>(null);
 
   isOpen = signal<boolean>(false);
 
-  constructor() {
-    effect(() => {
-      this.searchInput.valueChanges
-        .pipe(debounceTime(300), distinctUntilChanged())
-        .subscribe((res) => {
-          this.searchTerm.emit(res ? res : '');
-        });
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options']) {
+      this.filteredOptions.set(this.options());
+    }
+  }
+
+  onInputChange(event: any) {
+    const value = event.target.value;
+    this.filteredOptions.set(
+      this.options().filter((option) =>
+        option.value.toLowerCase().startsWith(value.toLowerCase())
+      )
+    );
+
+    this.isOpen.set(this.filteredOptions().length > 0);
   }
 
   onSelectedOptionChange(option: OptionSetType): void {
