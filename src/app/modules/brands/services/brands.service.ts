@@ -10,11 +10,9 @@ import { BrandArraySchema, BrandType } from '../models/brand.model';
 export class BrandsService {
   private brandEndpointUrl: string = `${environment.apiUrl}/brands`;
 
-  searchTerm = signal<string>('');
-
   brandOptions = httpResource<OptionSetType[]>(
     () => ({
-      url: `${this.brandEndpointUrl}?searchTerm=${this.searchTerm()}`,
+      url: `${this.brandEndpointUrl}`,
     }),
     {
       defaultValue: [],

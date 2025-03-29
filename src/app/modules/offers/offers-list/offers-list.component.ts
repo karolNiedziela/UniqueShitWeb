@@ -14,6 +14,7 @@ import { OfferModel } from '../models/offer.model';
 import { OfferService } from '../services/offer.service';
 import { AutocompleteComponent } from '../../../shared/components/autocomplete/autocomplete.component';
 import { OptionSetType } from '../../../shared/components/models/option-set.model';
+import { ItemConditionService } from '../../item-conditions/services/item-condition.service';
 
 @Component({
   selector: 'app-offers-list',
@@ -43,8 +44,7 @@ export class OffersListComponent implements OnInit {
   colourService = inject(ColourService);
   productCategoryService = inject(ProductCategoryService);
   sizeService = inject(SizeService);
-
-  itemConditionOptions = signal<OptionSetType[]>([]);
+  itemConditionService = inject(ItemConditionService);
 
   filtersVisible = signal<boolean>(false);
 
@@ -54,7 +54,7 @@ export class OffersListComponent implements OnInit {
     this.getOffers();
   }
 
-  onColourChange(value: number | null): void {
+  onColourChange(selectedOption: OptionSetType | null): void {
     this.tryAddAppliedFilter(this.colourSelect);
   }
 
@@ -69,7 +69,9 @@ export class OffersListComponent implements OnInit {
     this.tryAddAppliedFilter(this.productCategorySelect);
   }
 
-  onItemConditionChange(value: number | null): void {}
+  onItemConditionChange(selectedOption: OptionSetType | null): void {
+    this.tryAddAppliedFilter(this.itemConditionSelect);
+  }
 
   onBrandSelected(selectedOption: OptionSetType | null): void {
     this.tryAddAppliedFilter(this.brandAutocomplete);
@@ -104,10 +106,6 @@ export class OffersListComponent implements OnInit {
     );
 
     filter.clear();
-  }
-
-  onSearchTermChanged(searchTerm: string) {
-    this.brandService.searchTerm.set(searchTerm);
   }
 
   private getOffers(): void {
