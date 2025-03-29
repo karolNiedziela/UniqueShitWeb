@@ -9,3 +9,18 @@ body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
 }
+
+app-home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  position: relative;
+  background-image: url('assets/obrazek.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}

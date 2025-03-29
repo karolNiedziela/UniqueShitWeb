@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [MatButtonModule],
+  standalone: true,
+  imports: [RouterModule, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
-  constructor() {}
+export class HomeComponent implements OnInit {
+  // Sterowanie widocznością dodatkowych okienek
+  showTextWindow1: boolean = true;
+  showTextWindow2: boolean = true;
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    // Usunięto logikę dotyczącą logowania – event listener’y nie są już potrzebne.
+  }
+
+  navigateTo(url: string): void {
+    this.router.navigateByUrl(url);
+  }
 }

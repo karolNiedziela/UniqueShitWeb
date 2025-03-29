@@ -1,1 +1,30 @@
-<div></div>
+<!-- Przyciski na dole – nawigacja -->
+<button class="button-green bottom-center button-small" [routerLink]="['/contact']">
+    Kontakt
+  </button>
+  <button class="button-green bottom-right button-small" [routerLink]="['/regulations']">
+    Regulamin
+  </button>
+  
+  <!-- Dodatkowe okienka tekstowe -->
+  <div class="text-window left-window" *ngIf="showTextWindow1">
+    <span class="close-btn" (click)="showTextWindow1 = false">&times;</span>
+    <p>on this site you can buy clothes</p>
+  </div>
+    
+  <div class="text-window right-window" *ngIf="showTextWindow2">
+    <span class="close-btn" (click)="showTextWindow2 = false">&times;</span>
+    <p>on this site you can sell clothes</p>
+  </div>
+    
+  <!-- Dodatkowe okienka tekstowe (alternatywne) -->
+  <div class="text-window1 left-window1" *ngIf="showTextWindow1">
+    <span class="close-btn" (click)="showTextWindow1 = false">&times;</span>
+    <p>you can also sell and buy shoes</p>
+  </div>
+    
+  <div class="text-window1 right-window1" *ngIf="showTextWindow2">
+    <span class="close-btn" (click)="showTextWindow2 = false">&times;</span>
+    <p>new, damaged or used? here U can find everything</p>
+  </div>
+  
