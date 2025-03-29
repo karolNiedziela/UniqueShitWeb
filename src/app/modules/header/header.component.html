@@ -1,55 +1,62 @@
 <mat-toolbar color="primary">
   <!--Powrót na stronę główną-->
-  <a mat-button class="title" href="/">UniqueShit</a>
+  <a mat-button class="title" href="/">HOME</a>
 
+
+  <div class="offers-buttons">
    <!--Button do ofert sprzedaży-->
   <a
    mat-button
     [routerLink]="['/offers-list']"
     routerLinkActive="router-link-active"
-    >Offers
+    >Offer$
   </a>
-
+  
   <!-- Button do ofert zakupu, trzeba zmienic routing-->
   <a
   mat-button
    [routerLink]="['/offers-list']"
    routerLinkActive="router-link-active"
-   >Purchase offers
+   >Purchase offer$
  </a>
+</div>
 
-
-<!-- Odstęp w toolbarze-->
+ <div class="add-offer-buttons">
+      <!-- Routing do dodawania ofert sprzedaży widoczny po zalogowaniu-->
+      <a
+      mat-button
+      [routerLink]="['/webapi']"
+      *ngIf="loginDisplay"
+      routerLinkActive="router-link-active"
+      >Add sales offer</a
+    >
+      <!-- Routing do dodawania ofert zakupu, widoczny po zalogowaniu-->
+      <a
+      mat-button
+      [routerLink]="['/webapi']"
+      *ngIf="loginDisplay"
+      routerLinkActive="router-link-active"
+      >Add purschase offer</a
+    >
+ </div>
+  
+ 
+   <!-- Odstęp w toolbarze-->
   <div class="toolbar-spacer"></div>
 
   <div class="flex-stretch"></div>
 
+  
+
   <!-- Routing do buttona profilu, widoczny po zalogowaniu-->
   <a
-    mat-button
-    [routerLink]="['/profile']"
-    *ngIf="loginDisplay"
-    routerLinkActive="router-link-active"
-    >Profile</a
-  >
+  mat-button
+  [routerLink]="['/profile']"
+  *ngIf="loginDisplay"
+  routerLinkActive="router-link-active"
+  class="profile-btn"
+>Profile</a>
 
-    <!-- Routing do buttona WEBAPI?, widoczny po zalogowaniu-->
-  <a
-    mat-button
-    [routerLink]="['/webapi']"
-    *ngIf="loginDisplay"
-    routerLinkActive="router-link-active"
-    >WebApi</a
-  >
-
-     <!-- Routing do ???? widoczny po zalogowaniu-->
-  <a
-    mat-button
-    [routerLink]="['/webapi']"
-    *ngIf="loginDisplay"
-    routerLinkActive="router-link-active"
-    >WebApi</a
-  >
 
   <!-- Przycisk do logowania, widoczny przed zalogowaniem-->
   <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
