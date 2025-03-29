@@ -1,19 +1,160 @@
 @use "@angular/material" as mat;
+
 mat-toolbar {
   display: flex;
   align-items: center;
-  @include mat.toolbar-overrides(
-    (
-      container-background-color: var(--mat-sys-primary),
-      container-text-color: var(--mat-sys-on-primary),
-    )
-  );
-  @include mat.icon-button-overrides(
-    (
-      icon-color: var(--mat-sys-on-primary),
-    )
-  );
+
+  @include mat.toolbar-overrides((
+    container-background-color: var(--mat-sys-primary),
+    container-text-color: var(--mat-sys-on-primary)
+  ));
+
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-on-primary)
+  ));
+
+  a[mat-button],
+  button[mat-raised-button] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: var(--button-bg, transparent);
+    color: var(--button-text, inherit);
+  }
+
+  a[mat-button]:hover,
+  button[mat-raised-button]:hover {
+    background-color: var(--button-bg-hover, rgba(255, 255, 255, 0.2));
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  a[mat-button]:active,
+  button[mat-raised-button]:active {
+    background-color: var(--button-bg-active, rgba(255, 255, 255, 0.3));
+    box-shadow: none;
+  }
+
+  // Stylizacja login + logout
+  > a.title,
+  > a[mat-button][routerLink],
+  > button[mat-raised-button] {
+    padding: 0.85rem 1.75rem;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(0, 102, 255, 1.2);
+    border: 2px solid #0066ff;
+    box-shadow: 0 0 10px #0066ff, 0 0 40px #0066ff inset;
+    color: white;
+  }
+
+  > a.title:hover,
+  > a[mat-button][routerLink]:hover,
+  > button[mat-raised-button]:hover {
+    background: #0066ff;
+    box-shadow: 0 0 20px #0066ff, 0 0 60px #0066ff inset;
+  }
+
+  > a.title:active,
+  > a[mat-button][routerLink]:active,
+  > button[mat-raised-button]:active {
+    background: rgba(0, 102, 255, 0.2);
+    box-shadow: none;
+  }
+
+
+// Stylizacja dla przycisku Profile
+a.profile-btn {
+  padding: 0.85rem 1.75rem;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(156, 39, 176, 1.2); // 
+  border: 2px solid #9c27b0;
+  box-shadow: 0 0 10px #9c27b0, 0 0 40px #9c27b0 inset;
+  color: white;
+  margin-right: 1rem; // 
 }
+
+> a.profile-btn:hover {
+  background: #9c27b0; // 
+  box-shadow: 0 0 20px #9c27b0, 0 0 60px #9c27b0 inset;
+}
+
+> a.profile-btn:active {
+  background: rgba(156, 39, 176, 1.2); 
+  box-shadow: none;
+}
+
+}
+
 .flex-stretch {
   flex: 1 0 auto;
+}
+
+// Stylizacja przycisków Add Sales Offer i Add Purchase Offer 
+.add-offer-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.add-offer-buttons a[mat-button] {
+  padding: 0.75rem 1.5rem;
+  border-radius: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(0, 255, 127, 1.2);
+  border: 2px solid #00ff7f;
+  box-shadow: 0 0 10px #00ff7f, 0 0 40px #00ff7f inset;
+  color: white;
+}
+
+.add-offer-buttons a[mat-button]:hover {
+  background: #00ff7f;
+  box-shadow: 0 0 20px #00ff7f, 0 0 30px #00ff7f inset;
+}
+
+.add-offer-buttons a[mat-button]:active {
+  background: rgba(0, 255, 127, 0.2);
+  box-shadow: none;
+}
+
+// Stylizacja przycisków Offers i Purchase Offers
+.offers-buttons a[mat-button] {
+  padding: 0.85rem 1.75rem;
+  border-radius: 15px;
+  margin: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 165, 0, 1.2);
+  border: 2px solid orange;
+  box-shadow: 0 0 5px orange, 0 0 40px orange inset;
+  color: white;
+}
+
+.offers-buttons a[mat-button]:hover {
+  background: orange;
+  box-shadow: 0 0 20px orange, 0 0 30px orange inset;
+}
+
+.offers-buttons a[mat-button]:active {
+  background: rgba(255, 165, 0, 0.2);
+  box-shadow: none;
 }
