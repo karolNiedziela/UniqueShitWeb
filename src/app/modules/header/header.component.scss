@@ -14,6 +14,29 @@ mat-toolbar {
     )
   );
 }
-.flex-stretch {
-  flex: 1 0 auto;
+
+.left-buttons,
+.middle-buttons,
+.right-buttons {
+  display: flex;
+  align-items: center; 
+  height: 100%; 
 }
+
+.left-buttons {
+  flex: 0 0 auto;
+}
+
+.middle-buttons {
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.right-buttons {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+
