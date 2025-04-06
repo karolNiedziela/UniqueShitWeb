@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
     RouterLink
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],  // Poprawna właściwość
+  styleUrls: ['./home.component.scss'], 
 })
 export class HomeComponent {
 }

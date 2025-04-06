@@ -1,39 +1,40 @@
 .text-window {
     position: fixed;
-    width: 200px;
-    padding: 15px;
+    width: clamp(150px, 20vw, 250px);
+    padding: clamp(10px, 2vw, 15px);
     background: saddlebrown;
     color: whitesmoke;
     border-radius: 10px;
     box-shadow: 0 4px 12px black;
     font-family: 'Inter', sans-serif;
     text-align: center;
-}
+  }
 
-.left-window {
-    left: 30px;
-    top: 40%;
-}
-
-.left-window1 {
-    left: 20px;
+  .left-window {
+    left: 2%;
+    top: 25%;
+  }
+  
+  .left-window1 {
+    left: 3%;
     top: 80%;
-}
-
-.right-window {
-    right: 30px;
-    top: 15%;
-}
-
-.right-window1 {
-    right: 20px;
-    top: 60%;
-}
-      
-.down-buttons {
+  }
+  
+  .right-window {
+    right: 2%;
+    top: 20%;
+  }
+  
+  .right-window1 {
+    right: 0.5%;
+    top: 80%;
+  }
+  
+  .down-buttons {
     display: flex;
     justify-content: center; 
-    gap: 400px; 
-    margin-top: auto; 
+    gap: 5vw; 
+    margin-top: auto;
     padding: 1%;
   }
+  
