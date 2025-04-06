@@ -2,6 +2,13 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 
+mat-toolbar {
+  position: fixed; 
+  top: 0;          
+  left: 0;         
+  width: 100%;     
+  z-index: 1000;  
+}
 
 
 html,
@@ -12,4 +19,19 @@ body {
 body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+app-home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  position: relative;
+  background-image: url('assets/obrazek.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
