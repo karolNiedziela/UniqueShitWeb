@@ -1,8 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { httpResource } from '@angular/common/http';
-import { OptionSetType } from '../../../shared/components/models/option-set.model';
 import { BrandArraySchema, BrandType } from '../models/brand.model';
+import { OptionSet } from '../../../shared/models/option-set.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ import { BrandArraySchema, BrandType } from '../models/brand.model';
 export class BrandsService {
   private brandEndpointUrl: string = `${environment.apiUrl}/brands`;
 
-  brandOptions = httpResource<OptionSetType[]>(
+  brandOptions = httpResource<OptionSet[]>(
     () => ({
       url: `${this.brandEndpointUrl}`,
     }),
@@ -20,6 +20,7 @@ export class BrandsService {
         BrandArraySchema.parse(data).map((brand: BrandType) => ({
           id: brand.id,
           value: brand.name,
+          viewValue: `${brand.id}-${brand.name}`,
         })),
     }
   );

@@ -1,7 +1,7 @@
 <div class="chips-container" *ngIf="chips().length > 0">
-  @for (chip of chips(); track chip.id) {
+  @for (chip of chips(); track chip.viewValue) {
   <div class="single-chip" (click)="removeChip(chip)">
-    <span>{{ chip?.selectedOption().value }}</span>
+    <span>{{ chip?.name }}</span>
     <button type="button" class="single-chip__clear-filter">x</button>
   </div>
   }

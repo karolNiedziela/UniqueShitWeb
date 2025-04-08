@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { httpResource } from '@angular/common/http';
-import { OptionSetType } from '../../../shared/components/models/option-set.model';
 import {
   ItemConditionType,
   ItemCondtionArraySchema,
 } from '../models/item-conditions.model';
+import { OptionSet } from '../../../shared/models/option-set.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ import {
 export class ItemConditionService {
   private itemConditionsEndpointUrl: string = `${environment.apiUrl}/item-conditions`;
 
-  itemConditionOptions = httpResource<OptionSetType[]>(
+  itemConditionOptions = httpResource<OptionSet[]>(
     () => ({
       url: `${this.itemConditionsEndpointUrl}`,
     }),
@@ -24,6 +24,7 @@ export class ItemConditionService {
           (itemCondition: ItemConditionType) => ({
             id: itemCondition.id,
             value: itemCondition.name,
+            viewValue: `${itemCondition.id}-${itemCondition.name}}`,
           })
         ),
     }

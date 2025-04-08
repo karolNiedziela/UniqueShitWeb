@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { OfferModel } from '../models/offer.model';
+import { OfferType } from '../models/offer.model';
 
 @Component({
   selector: 'app-offer-card',
@@ -9,5 +9,5 @@ import { OfferModel } from '../models/offer.model';
   standalone: true,
 })
 export class OfferCardComponent {
-  offer = input.required<OfferModel>();
+  offer = input.required<OfferType>();
 }

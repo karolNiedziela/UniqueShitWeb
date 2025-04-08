@@ -1,0 +1,56 @@
+<div
+  class="offer-filter-side-panel"
+  [formGroup]="form"
+  [class.show]="visible()"
+>
+  <button mat-raised-button (click)="toggleFilters()">Hide filters</button>
+
+  @if (appliedFilters().length > 0) {
+  <div class="offer-applied-filters">
+    <h3>APPLIED FILTERS</h3>
+    <app-chips
+      [chips]="appliedFilters()"
+      (removed)="onChipRemoved($event)"
+    ></app-chips>
+  </div>
+  }
+
+  <app-select
+    label="Product category"
+    formControlName="productCategory"
+    [options]="this.productCategoryService.productCategoriesOptions.value()"
+  >
+  </app-select>
+
+  <app-select
+    label="Item condition"
+    formControlName="itemCondition"
+    [options]="this.itemConditionService.itemConditionOptions.value()"
+  >
+  </app-select>
+
+  <app-select
+    label="Colour"
+    formControlName="colour"
+    [options]="this.colourService.colourOptions.value()"
+  >
+  </app-select>
+
+  <app-autocomplete
+    label="Brand"
+    [options]="this.brandService.brandOptions.value()"
+    formControlName="brand"
+  >
+  </app-autocomplete>
+
+  @if ( this.sizeService.sizeOptions.value().length !== 0) {
+  <app-select
+    label="Size"
+    formControlName="size"
+    [options]="this.sizeService.sizeOptions.value()"
+  >
+  </app-select>
+  }
+
+  <button mat-raised-button (click)="applyFilters()">Apply filters</button>
+</div>

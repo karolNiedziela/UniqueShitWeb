@@ -1,66 +1,130 @@
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
   Component,
+  inject,
+  Injector,
   input,
-  OnChanges,
-  output,
-  signal,
-  SimpleChanges,
+  OnDestroy,
+  OnInit,
+  Self,
+  Signal,
 } from '@angular/core';
-import { OptionSetType } from '../models/option-set.model';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormControl,
+  FormsModule,
+  NgControl,
+  ReactiveFormsModule,
+  ValidatorFn,
+} from '@angular/forms';
+import { map, Observable, startWith } from 'rxjs';
+import { OptionSet } from '../../models/option-set.model';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-autocomplete',
-  imports: [ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './autocomplete.component.html',
   styleUrl: './autocomplete.component.scss',
 })
-export class AutocompleteComponent implements OnChanges {
-  options = input.required<OptionSetType[]>();
+export class AutocompleteComponent
+  implements OnInit, ControlValueAccessor, OnDestroy
+{
   label = input.required<string>();
-  placeholder = input<string>('Search term...');
-  minimumCharacters = input<number>(2);
+  options = input.required<OptionSet[]>();
+  filteredOptions$!: Observable<OptionSet[]>;
 
-  selectedOptionChanged = output<OptionSetType | null>();
-  searchTerm = output<string>();
+  filteredOptionsSignal!: Signal<OptionSet[]>;
 
-  searchInput = new FormControl('');
-  filteredOptions = signal<OptionSetType[]>([]);
+  onChanged!: (value: OptionSet | null) => void;
+  onTouched!: () => void;
 
-  selectedOption = signal<OptionSetType | null>(null);
+  formControl!: FormControl;
 
-  isOpen = signal<boolean>(false);
+  private injector = inject(Injector);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['options']) {
-      this.filteredOptions.set(this.options());
+  get isRequired(): boolean {
+    if (this.formControl?.validator) {
+      const validator = this.formControl?.validator(this.formControl)!;
+      if (validator && validator['required']) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  constructor(@Self() private controlDir: NgControl) {
+    this.controlDir.valueAccessor = this;
+  }
+
+  ngOnInit() {
+    this.formControl = this.controlDir.control as FormControl<any>;
+
+    let validators: ValidatorFn[] = this.formControl?.validator
+      ? [this.formControl.validator]
+      : [];
+
+    this.formControl.setValidators(validators);
+    this.formControl.updateValueAndValidity();
+
+    this.filteredOptions$ = this.formControl.valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        const name = typeof value === 'string' ? value : value?.name;
+        return name
+          ? this._filter(name as string)
+          : this.options()?.slice() || [];
+      })
+    );
+
+    this.filteredOptionsSignal = toSignal(this.filteredOptions$, {
+      injector: this.injector,
+      initialValue: [],
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.formControl?.clearValidators();
+    this.formControl?.markAsPristine();
+    this.formControl.reset();
+  }
+
+  displayFn(optionSet: OptionSet): string {
+    return optionSet && optionSet.value ? optionSet.value : '';
+  }
+
+  writeValue(value: OptionSet | null): void {
+    if (this.formControl?.value != value) {
+      this.controlDir.control?.setValue(value);
     }
   }
 
-  onInputChange(event: any) {
-    const value = event.target.value;
-    this.filteredOptions.set(
-      this.options().filter((option) =>
-        option.value.toLowerCase().startsWith(value.toLowerCase())
-      )
+  registerOnChange(onChanged: (value: any) => void): void {
+    this.onChanged = onChanged;
+  }
+
+  registerOnTouched(onTouched: () => void): void {
+    this.onTouched = onTouched;
+  }
+
+  setDisabledState(isDisabled: boolean): void {}
+
+  private _filter(name: string): OptionSet[] {
+    const filterValue = name.toLowerCase();
+
+    return (
+      this.options()?.filter((option) =>
+        option.value.toLowerCase().includes(filterValue)
+      ) || []
     );
-
-    this.isOpen.set(this.filteredOptions().length > 0);
-  }
-
-  onSelectedOptionChange(option: OptionSetType): void {
-    this.isOpen.set(false);
-    this.selectedOption.set(option);
-    this.selectedOptionChanged.emit(option);
-  }
-
-  toggleDropdown(): void {
-    this.isOpen.set(!this.isOpen());
-  }
-
-  clear(): void {
-    this.selectedOption.set(null);
-    this.selectedOptionChanged.emit(null);
-    this.searchTerm.emit('');
   }
 }

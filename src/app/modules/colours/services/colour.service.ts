@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { httpResource } from '@angular/common/http';
 import { ColourArraySchema, ColourType } from '../models/colour.model';
-import { OptionSetType } from '../../../shared/components/models/option-set.model';
+import { OptionSet } from '../../../shared/models/option-set.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ import { OptionSetType } from '../../../shared/components/models/option-set.mode
 export class ColourService {
   private colourEndpointUrl: string = `${environment.apiUrl}/colours`;
 
-  colourOptions = httpResource<OptionSetType[]>(
+  colourOptions = httpResource<OptionSet[]>(
     () => ({
       url: `${this.colourEndpointUrl}`,
     }),
@@ -20,6 +20,7 @@ export class ColourService {
         ColourArraySchema.parse(data).map((colour: ColourType) => ({
           id: colour.id,
           value: colour.name,
+          viewValue: `${colour.id}-${colour.name}}`,
         })),
     }
   );

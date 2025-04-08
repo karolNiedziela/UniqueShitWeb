@@ -1,19 +1,14 @@
-<div class="autocomplete">
-  <div class="autocomplete-label">{{ label() }}</div>
+<mat-form-field class="autocomplete-form-field" appearance="outline">
+  <mat-label> {{ label() }}</mat-label>
   <input
     type="text"
-    [placeholder]="placeholder()"
-    (click)="toggleDropdown()"
-    [value]="selectedOption()?.value"
-    (input)="onInputChange($event)"
+    matInput
+    [formControl]="formControl"
+    [matAutocomplete]="auto"
   />
-  @if(isOpen()) {
-  <ul>
-    @for (option of filteredOptions(); track option.id) {
-    <li (click)="onSelectedOptionChange(option)">
-      {{ option.value }}
-    </li>
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    @for (option of filteredOptionsSignal(); track option.viewValue) {
+    <mat-option [value]="option">{{ option.value }}</mat-option>
     }
-  </ul>
-  }
-</div>
+  </mat-autocomplete>
+</mat-form-field>

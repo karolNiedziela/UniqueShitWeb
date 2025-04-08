@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { httpResource } from '@angular/common/http';
 import { SizeArraySchema, SizeType } from '../models/sizes.model';
-import { OptionSetType } from '../../../shared/components/models/option-set.model';
+import { OptionSet } from '../../../shared/models/option-set.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class SizeService {
 
   productCategoryId = signal<number | null>(null);
 
-  sizeOptions = httpResource<OptionSetType[]>(
+  sizeOptions = httpResource<OptionSet[]>(
     () => {
       if (this.productCategoryId() === null) {
         return undefined;
@@ -29,6 +29,7 @@ export class SizeService {
         SizeArraySchema.parse(data).map((size: SizeType) => ({
           id: size.id,
           value: size.value,
+          viewValue: `${size.id}-${size.value}}`,
         })),
     }
   );

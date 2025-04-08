@@ -1,51 +1,53 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
+import { HttpParams, httpResource } from '@angular/common/http';
+import { computed, Injectable, signal } from '@angular/core';
+import { OfferType } from '../models/offer.model';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { OfferModel } from '../models/offer.model';
-import { PagedListModel } from '../../../shared/components/models/paged-list-model';
-import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  DefaultOfferQueryParameters,
+  OfferQueryParameters,
+  OffersQueryParamMapping,
+} from '../models/offers-query-parameters.model';
+import { PagedListModel } from '../../../shared/models/paged-list-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OfferService {
   private offersEndpoint: string = `${environment.apiUrl}/offers`;
-  private defaultHttpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-  };
 
-  private http = inject(HttpClient);
-
-  private offersSignal = signal<PagedListModel<OfferModel>>({
-    hasNextPage: false,
-    hasPreviosPage: false,
-    items: [],
-    pageNumber: 0,
-    pageSize: 0,
-    totalCount: 0,
+  offersQueryParameters = signal<OfferQueryParameters>({
+    ...DefaultOfferQueryParameters,
   });
-  private loadingOffersSignal = signal<boolean>(false);
 
-  getOffers(otid: number, pn: number, ps: number) {
-    this.loadingOffersSignal.set(true);
+  offersParams = computed<HttpParams>(() => {
+    let params = new HttpParams();
 
-    const url = `${this.offersEndpoint}?otid=${otid}&pn=${pn}&ps=${ps}`;
-    this.http
-      .get<PagedListModel<OfferModel>>(url, this.defaultHttpOptions)
-      .subscribe((offers: PagedListModel<OfferModel>) => {
-        this.offersSignal.set(offers);
-        this.loadingOffersSignal.set(false);
-      });
-  }
+    Object.entries(this.offersQueryParameters()).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        const queryParamKey =
+          OffersQueryParamMapping[key as keyof OfferQueryParameters];
+        params = params.set(queryParamKey, value.toString());
+      }
+    });
 
-  get offers(): Signal<PagedListModel<OfferModel>> {
-    return this.offersSignal;
-  }
+    return params;
+  });
 
-  get isLoadingOffers(): Signal<boolean> {
-    return this.loadingOffersSignal;
-  }
+  offers = httpResource<PagedListModel<OfferType>>(
+    () => ({ url: `${this.offersEndpoint}?${this.offersParams()}` }),
+    {
+      defaultValue: {
+        items: [],
+        totalCount: 0,
+        hasNextPage: false,
+        hasPreviosPage: false,
+        pageNumber: DefaultOfferQueryParameters.pageNumber,
+        pageSize: DefaultOfferQueryParameters.pageSize,
+      },
+      parse: (data) => {
+        const parsedData = data as PagedListModel<OfferType>;
+        return parsedData;
+      },
+    }
+  );
 }

@@ -5,7 +5,7 @@ import {
 import { Injectable } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { OptionSetType } from '../../../shared/components/models/option-set.model';
+import { OptionSet } from '../../../shared/models/option-set.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ import { OptionSetType } from '../../../shared/components/models/option-set.mode
 export class ProductCategoryService {
   private productCategoryEndpointUrl: string = `${environment.apiUrl}/product-categories`;
 
-  productCategoriesOptions = httpResource<OptionSetType[]>(
+  productCategoriesOptions = httpResource<OptionSet[]>(
     () => ({
       url: `${this.productCategoryEndpointUrl}`,
     }),
@@ -24,6 +24,7 @@ export class ProductCategoryService {
           (productCategory: ProductCategoryType) => ({
             id: productCategory.id,
             value: productCategory.name,
+            viewValue: `${productCategory.id}-${productCategory.name}}`,
           })
         ),
     }

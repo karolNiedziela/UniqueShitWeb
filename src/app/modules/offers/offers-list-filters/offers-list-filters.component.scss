@@ -1,0 +1,39 @@
+@use "../../../../styles/variables.scss" as vars;
+
+.offer-filter-side-panel {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px vars.$side-panel-box-shadow-color;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: right 0.3s ease, opacity 0.3s ease;
+  z-index: 1000;
+  opacity: 0;
+
+  &.show {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+.offer-applied-filters {
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .offer-filter-side-panel {
+    width: 100%;
+    right: -100%;
+
+    &.show {
+      right: 0;
+      opacity: 1;
+    }
+  }
+}

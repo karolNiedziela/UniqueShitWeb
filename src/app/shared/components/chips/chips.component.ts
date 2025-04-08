@@ -3,9 +3,11 @@ import { Component, input, output } from '@angular/core';
 import { SelectComponent } from '../select/select.component';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 
-export type ChipType = {
+export interface Chip {
   name: string;
-};
+  viewValue: string;
+  formControlName: string;
+}
 
 @Component({
   selector: 'app-chips',
@@ -15,10 +17,10 @@ export type ChipType = {
   standalone: true,
 })
 export class ChipsComponent {
-  chips = input.required<SelectComponent[] | AutocompleteComponent[]>();
-  removed = output<SelectComponent | AutocompleteComponent>();
+  chips = input.required<Chip[]>();
+  removed = output<Chip>();
 
-  removeChip(chip: SelectComponent | AutocompleteComponent) {
+  removeChip(chip: Chip) {
     this.removed.emit(chip);
   }
 }

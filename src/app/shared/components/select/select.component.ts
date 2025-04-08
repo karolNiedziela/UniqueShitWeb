@@ -1,35 +1,106 @@
-import { Component, input, signal, output } from '@angular/core';
+import {
+  Component,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  Self,
+  signal,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormControl,
+  FormsModule,
+  NgControl,
+  ReactiveFormsModule,
+  ValidatorFn,
+} from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { OptionSetType } from '../models/option-set.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { OptionSet } from '../../models/option-set.model';
 
 @Component({
   selector: 'app-select',
-  imports: [MatSelectModule],
+  imports: [
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+  ],
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
   standalone: true,
 })
-export class SelectComponent {
+export class SelectComponent
+  implements OnInit, ControlValueAccessor, OnDestroy
+{
   label = input.required<string>();
-  options = input.required<OptionSetType[]>();
-  hidden = input<boolean>(false);
+  options = input.required<OptionSet[]>();
+  isDisabled = signal<boolean>(false);
 
-  selectedOptionChanged = output<OptionSetType | null>();
+  formControlNameCleared = output<string>();
 
-  selectedOption = signal<OptionSetType | null>(null);
+  onChanged!: (value: OptionSet | null) => void;
+  onTouched!: () => void;
 
-  onSelectedOptionChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedId = selectElement.value ? Number(selectElement.value) : null;
-    const selectedOption =
-      this.options().find((opt: OptionSetType) => opt.id === selectedId) ||
-      null;
-    this.selectedOption.set(selectedOption);
-    this.selectedOptionChanged.emit(selectedOption);
+  formControl!: FormControl;
+
+  get isRequired(): boolean {
+    if (this.formControl?.validator) {
+      const validator = this.formControl?.validator(this.formControl)!;
+      if (validator && validator['required']) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
-  clear() {
-    this.selectedOption.set(null);
-    this.selectedOptionChanged.emit(null);
+  constructor(@Self() private controlDir: NgControl) {
+    this.controlDir.valueAccessor = this;
+  }
+
+  ngOnInit(): void {
+    this.formControl = this.controlDir.control as FormControl<any>;
+
+    let validators: ValidatorFn[] = this.formControl?.validator
+      ? [this.formControl.validator]
+      : [];
+
+    this.formControl.setValidators(validators);
+    this.formControl.updateValueAndValidity();
+  }
+
+  ngOnDestroy(): void {
+    this.formControl?.clearValidators();
+    this.formControl?.markAsPristine();
+    this.formControl.reset();
+  }
+
+  writeValue(value: OptionSet | null): void {
+    if (this.formControl?.value != value) {
+      this.controlDir.control?.setValue(value);
+    }
+  }
+
+  registerOnChange(onChanged: (value: any) => void): void {
+    this.onChanged = onChanged;
+  }
+
+  registerOnTouched(onTouched: () => void): void {
+    this.onTouched = onTouched;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
+  }
+
+  clear(event?: MouseEvent): void {
+    event?.stopPropagation();
+    this.formControl.reset();
   }
 }

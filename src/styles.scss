@@ -1,11 +1,54 @@
 @use "tailwindcss";
+@use "@angular/material" as mat;
 
 html,
 body {
   height: 100%;
+
+  --primary-color: #3f51b5;
 }
 
 body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+$theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+    ),
+  )
+);
+
+// Tailwind conflicts with Angular Material css class
+.mdc-notched-outline__notch {
+  border-right: none !important;
+}
+
+.mat-mdc-form-field-error-wrapper {
+  padding: 0 !important;
+}
+
+:root {
+  @include mat.form-field-overrides(
+    (
+      filled-container-color: white,
+    )
+  );
+
+  @include mat.select-overrides(
+    (
+      placeholder-text-color: black,
+      enabled-trigger-text-color: black,
+      panel-background-color: white,
+    )
+  );
+
+  @include mat.autocomplete-overrides(
+    (
+      background-color: white,
+    )
+  );
 }
