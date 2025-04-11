@@ -20,32 +20,35 @@
   
   
   <div class="middle-buttons" >
-    <a
-    mat-stroked-button
-      [routerLink]="['/webapi']"
-      *ngIf="loginDisplay"
-      routerLinkActive="router-link-active"
-      >Add sale offer
-    </a>
+    @if (loginDisplay) {
+      <a
+        mat-stroked-button
+        [routerLink]="['/webapi']"
+        routerLinkActive="router-link-active">
+        Add sale offer
+      </a>
+    }
   
-     <a
-     mat-stroked-button
-      [routerLink]="['/webapi']"
-      *ngIf="loginDisplay"
-      routerLinkActive="router-link-active"
-      >Add purchase offer
-     </a>
+    @if (loginDisplay) {
+      <a
+        mat-stroked-button
+        [routerLink]="['/webapi']"
+        routerLinkActive="router-link-active">
+        Add purchase offer
+      </a>
+    }
   </div>
   
   
   <div class="right-buttons">
-    <a
-      mat-button
-      [routerLink]="['/profile']"
-      *ngIf="loginDisplay"
-      routerLinkActive="router-link-active"
-      >Profile
-    </a>
+    @if (loginDisplay) {
+      <a
+        mat-stroked-button
+        [routerLink]="['/profile']"
+        routerLinkActive="router-link-active">
+        Profile
+      </a>
+    }
   
     <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
       Login
