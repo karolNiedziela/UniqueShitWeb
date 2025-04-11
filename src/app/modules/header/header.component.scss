@@ -1,19 +1,34 @@
 @use "@angular/material" as mat;
-mat-toolbar {
+
+mat-toolbar.header-toolbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  z-index: 1001;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.left-buttons,
+.middle-buttons,
+.right-buttons {
   display: flex;
   align-items: center;
-  @include mat.toolbar-overrides(
-    (
-      container-background-color: var(--mat-sys-primary),
-      container-text-color: var(--mat-sys-on-primary),
-    )
-  );
-  @include mat.icon-button-overrides(
-    (
-      icon-color: var(--mat-sys-on-primary),
-    )
-  );
+  height: 100%;
 }
-.flex-stretch {
+
+.left-buttons {
+  flex: 0 0 auto;
+}
+
+.middle-buttons {
   flex: 1 0 auto;
+  justify-content: center;
+}
+
+.right-buttons {
+  flex: 0 0 auto;
+  justify-content: flex-end;
 }
