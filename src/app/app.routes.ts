@@ -6,6 +6,8 @@ import { OffersListComponent } from './modules/offers/offers-list/offers-list.co
 import { HomeComponent } from './modules/home/home.component';
 import { RegulationsComponent } from './modules/regulations/regulations.component';
 import { ContactComponent } from './modules/contact/contact.component';
+import { SaleofferformComponent } from './modules/offerform/saleofferform/saleofferform.component';
+import { sample } from 'rxjs';
 
 export const routes: Routes = [
   {
@@ -31,5 +33,8 @@ export const routes: Routes = [
   },
   { path: 'regulations', 
     component: RegulationsComponent 
+  },
+  { path: 'saleofferform', 
+    component: SaleofferformComponent 
   },
 ];
