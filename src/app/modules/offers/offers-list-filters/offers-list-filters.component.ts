@@ -1,6 +1,8 @@
+import { ModelType } from './../../models/models/model.model';
 import { OptionSet } from './../../../shared/models/option-set.model';
 import {
   Component,
+  DestroyRef,
   inject,
   input,
   OnDestroy,
@@ -11,7 +13,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { ProductCategoryService } from '../../product-categories/services/product-category.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, filter, skip, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import {
   Chip,
@@ -28,6 +30,10 @@ import {
   DefaultOfferQueryParameters,
   OfferQueryParameters,
 } from '../models/offers-query-parameters.model';
+import { ModelsAutocompleteComponent } from '../../models/models-autocomplete/models-autocomplete.component';
+import { ModelsService } from '../../models/services/models.service';
+import { OfferListFiltersControlName } from './offers-list-filters.controls';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-offers-list-filters',
@@ -38,13 +44,12 @@ import {
     CommonModule,
     ChipsComponent,
     AutocompleteComponent,
+    ModelsAutocompleteComponent,
   ],
   templateUrl: './offers-list-filters.component.html',
   styleUrl: './offers-list-filters.component.scss',
 })
-export class OffersListFiltersComponent implements OnInit, OnDestroy {
-  private _onDestroy = new Subject<void>();
-
+export class OffersListFiltersComponent implements OnInit {
   visible = input<boolean>(false);
   filtersToggled = output();
 
@@ -54,26 +59,34 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   sizeService = inject(SizeService);
   brandService = inject(BrandsService);
   offerService = inject(OfferService);
+  modelService = inject(ModelsService);
+  destroyRef = inject(DestroyRef);
 
   appliedFilters = signal<Chip[]>([]);
 
-  form!: FormGroup;
+  filterOffersForm!: FormGroup;
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      productCategory: new FormControl<OptionSet | null>(null),
-      colour: new FormControl<OptionSet | null>(null),
-      itemCondition: new FormControl<OptionSet | null>(null),
-      size: new FormControl<OptionSet | null>(null),
-      brand: new FormControl<OptionSet | null>(null),
+    this.filterOffersForm = new FormGroup({
+      [OfferListFiltersControlName.ProductCategory]:
+        new FormControl<OptionSet | null>(null),
+      [OfferListFiltersControlName.Colour]: new FormControl<OptionSet | null>(
+        null
+      ),
+      [OfferListFiltersControlName.ItemCondition]:
+        new FormControl<OptionSet | null>(null),
+      [OfferListFiltersControlName.Size]: new FormControl<OptionSet | null>(
+        null
+      ),
+      [OfferListFiltersControlName.Brand]: new FormControl<OptionSet | null>(
+        null
+      ),
+      [OfferListFiltersControlName.Model]: new FormControl<ModelType | null>(
+        null
+      ),
     });
 
     this.trackFormControlChanges();
-  }
-
-  ngOnDestroy() {
-    this._onDestroy.next();
-    this._onDestroy.complete();
   }
 
   toggleFilters(): void {
@@ -81,7 +94,7 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    const formValues = this.form.value;
+    const formValues = this.filterOffersForm.value;
 
     const queryParameters: OfferQueryParameters = {
       ...DefaultOfferQueryParameters,
@@ -89,10 +102,15 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       itemConditionId: formValues.itemCondition?.id ?? undefined,
       brandId: formValues.brand?.id ?? undefined,
       sizeId: formValues.size?.id ?? undefined,
+      modelId: formValues.model?.id ?? undefined,
     };
 
     this.offerService.offersQueryParameters.set(queryParameters);
     this.toggleFilters();
+  }
+
+  clearFilters(): void {
+    this.filterOffersForm.reset();
   }
 
   onChipRemoved(chip: Chip) {
@@ -100,39 +118,85 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       filters.filter((appliedFilter) => appliedFilter !== chip)
     );
 
-    this.form.get(chip.formControlName)?.setValue(null);
+    this.filterOffersForm.get(chip.formControlName)?.setValue(null);
   }
 
   private trackFormControlChanges(): void {
-    const handleValueChange = (
-      controlName: string,
-      value: OptionSet | null
-    ) => {
-      if (controlName === 'productCategory') {
-        this.handleProductCategoryChange(value);
-      }
-
-      if (!value) {
-        this.removeFilterByControlName(controlName);
-        return;
-      }
-
-      this.updateAppliedFilters(controlName, value);
-    };
-
-    Object.keys(this.form.controls).forEach((controlName) => {
-      this.form
+    Object.keys(this.filterOffersForm.controls).forEach((controlName) => {
+      this.filterOffersForm
         .get(controlName)
-        ?.valueChanges.pipe(takeUntil(this._onDestroy))
-        .subscribe((value: OptionSet | null) =>
-          handleValueChange(controlName, value)
-        );
+        ?.valueChanges.pipe(
+          skip(1),
+          distinctUntilChanged(),
+          takeUntilDestroyed(this.destroyRef),
+          filter((value) => typeof value === 'object' || value === null)
+        )
+        .subscribe((value: OptionSet | null | ModelType) => {
+          this.handleValueChange(controlName, value);
+        });
     });
+  }
+
+  private handleValueChange(controlName: string, value: unknown): void {
+    switch (controlName) {
+      case OfferListFiltersControlName.ProductCategory:
+        this.handleProductCategoryChange(value as OptionSet | null);
+        break;
+
+      case OfferListFiltersControlName.Model:
+        this.handleModelChange(controlName, value as ModelType | null);
+        break;
+
+      case OfferListFiltersControlName.Brand:
+        this.handleBrandChange(value as OptionSet | null);
+        break;
+    }
+
+    if (!value) {
+      this.removeFilterByControlName(controlName);
+      return;
+    }
+
+    if (controlName !== OfferListFiltersControlName.Model) {
+      this.updateAppliedFilters(controlName, value as OptionSet);
+    }
   }
 
   private handleProductCategoryChange(value: OptionSet | null): void {
     this.sizeService.productCategoryId.set(value?.id ?? null);
-    this.removeFilterByControlName('size');
+    this.modelService.modelQueryParameters.update((params) => ({
+      ...params,
+      productCategoryId: value?.id ?? undefined,
+      searchTerm: '',
+    }));
+
+    this.removeFilterByControlName(OfferListFiltersControlName.Size);
+    this.removeFilterByControlName(OfferListFiltersControlName.Model);
+  }
+
+  private handleModelChange(controlName: string, value: ModelType | null) {
+    if (!value) {
+      return;
+    }
+
+    const model = value as ModelType;
+    const optionSet: OptionSet = {
+      id: model.id,
+      value: model.name,
+      viewValue: `${model.id}-${model.name}`,
+    };
+
+    this.updateAppliedFilters(controlName, optionSet);
+  }
+
+  private handleBrandChange(value: OptionSet | null): void {
+    this.modelService.modelQueryParameters.update((params) => ({
+      ...params,
+      brandId: value?.id ?? undefined,
+      searchTerm: '',
+    }));
+
+    this.removeFilterByControlName(OfferListFiltersControlName.Model);
   }
 
   private removeFilterByControlName(controlName: string): void {
@@ -141,26 +205,22 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
         (appliedFilter) => appliedFilter.formControlName !== controlName
       )
     );
+
+    this.filterOffersForm.get(controlName)?.setValue(null);
   }
 
-  private updateAppliedFilters(controlName: string, value: OptionSet): void {
-    if (
-      !value ||
-      typeof value !== 'object' ||
-      !('id' in value) ||
-      !('value' in value)
-    ) {
-      return;
-    }
-
+  private updateAppliedFilters(
+    controlName: string,
+    optionSet: OptionSet
+  ): void {
     this.appliedFilters.update((appliedFilters) => {
       const updatedFilters = appliedFilters.filter(
         (appliedFilter) => appliedFilter.formControlName !== controlName
       );
 
       updatedFilters.push({
-        name: value.value,
-        viewValue: value.viewValue,
+        name: optionSet?.value,
+        viewValue: optionSet?.viewValue,
         formControlName: controlName,
       });
 

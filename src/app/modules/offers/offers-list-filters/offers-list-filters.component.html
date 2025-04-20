@@ -1,13 +1,18 @@
 <div
   class="offer-filter-side-panel"
-  [formGroup]="form"
+  [formGroup]="filterOffersForm"
   [class.show]="visible()"
 >
   <button mat-raised-button (click)="toggleFilters()">Hide filters</button>
 
   @if (appliedFilters().length > 0) {
   <div class="offer-applied-filters">
-    <h3>APPLIED FILTERS</h3>
+    <div class="offer-applied-filters__header">
+      <h3>APPLIED FILTERS</h3>
+      <button mat-raised-button (click)="this.filterOffersForm.reset()">
+        Clear all
+      </button>
+    </div>
     <app-chips
       [chips]="appliedFilters()"
       (removed)="onChipRemoved($event)"
@@ -21,6 +26,15 @@
     [options]="this.productCategoryService.productCategoriesOptions.value()"
   >
   </app-select>
+
+  @if (this.brandService.brandOptions.value().length > 0) {
+  <app-autocomplete
+    label="Brand"
+    [options]="this.brandService.brandOptions.value()"
+    formControlName="brand"
+  >
+  </app-autocomplete>
+  }
 
   <app-select
     label="Item condition"
@@ -36,12 +50,7 @@
   >
   </app-select>
 
-  <app-autocomplete
-    label="Brand"
-    [options]="this.brandService.brandOptions.value()"
-    formControlName="brand"
-  >
-  </app-autocomplete>
+  <app-models-autocomplete formControlName="model"> </app-models-autocomplete>
 
   @if ( this.sizeService.sizeOptions.value().length !== 0) {
   <app-select

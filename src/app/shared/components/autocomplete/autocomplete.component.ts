@@ -1,5 +1,6 @@
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
+  AfterContentInit,
   Component,
   inject,
   Injector,
@@ -22,6 +23,7 @@ import { OptionSet } from '../../models/option-set.model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-autocomplete',
