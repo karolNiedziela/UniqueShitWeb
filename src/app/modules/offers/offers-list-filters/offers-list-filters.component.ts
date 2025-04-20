@@ -1,3 +1,4 @@
+import { ModelType } from './../../models/models/model.model';
 import { OptionSet } from './../../../shared/models/option-set.model';
 import {
   Component,
@@ -11,7 +12,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { ProductCategoryService } from '../../product-categories/services/product-category.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, filter, skip, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import {
   Chip,
@@ -28,6 +29,8 @@ import {
   DefaultOfferQueryParameters,
   OfferQueryParameters,
 } from '../models/offers-query-parameters.model';
+import { ModelsAutocompleteComponent } from '../../models/models-autocomplete/models-autocomplete.component';
+import { ModelsService } from '../../models/services/models.service';
 
 @Component({
   selector: 'app-offers-list-filters',
@@ -38,6 +41,7 @@ import {
     CommonModule,
     ChipsComponent,
     AutocompleteComponent,
+    ModelsAutocompleteComponent,
   ],
   templateUrl: './offers-list-filters.component.html',
   styleUrl: './offers-list-filters.component.scss',
@@ -54,6 +58,7 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   sizeService = inject(SizeService);
   brandService = inject(BrandsService);
   offerService = inject(OfferService);
+  modelService = inject(ModelsService);
 
   appliedFilters = signal<Chip[]>([]);
 
@@ -66,6 +71,7 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       itemCondition: new FormControl<OptionSet | null>(null),
       size: new FormControl<OptionSet | null>(null),
       brand: new FormControl<OptionSet | null>(null),
+      model: new FormControl<ModelType | null>(null),
     });
 
     this.trackFormControlChanges();
@@ -89,10 +95,15 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       itemConditionId: formValues.itemCondition?.id ?? undefined,
       brandId: formValues.brand?.id ?? undefined,
       sizeId: formValues.size?.id ?? undefined,
+      modelId: formValues.model?.id ?? undefined,
     };
 
     this.offerService.offersQueryParameters.set(queryParameters);
     this.toggleFilters();
+  }
+
+  clearFilters(): void {
+    this.form.reset();
   }
 
   onChipRemoved(chip: Chip) {
@@ -104,35 +115,87 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   }
 
   private trackFormControlChanges(): void {
-    const handleValueChange = (
-      controlName: string,
-      value: OptionSet | null
-    ) => {
-      if (controlName === 'productCategory') {
-        this.handleProductCategoryChange(value);
-      }
-
-      if (!value) {
-        this.removeFilterByControlName(controlName);
-        return;
-      }
-
-      this.updateAppliedFilters(controlName, value);
-    };
-
     Object.keys(this.form.controls).forEach((controlName) => {
       this.form
         .get(controlName)
-        ?.valueChanges.pipe(takeUntil(this._onDestroy))
-        .subscribe((value: OptionSet | null) =>
-          handleValueChange(controlName, value)
-        );
+        ?.valueChanges.pipe(
+          skip(1),
+          distinctUntilChanged(),
+          takeUntil(this._onDestroy),
+          filter((value) => typeof value === 'object' || value === null)
+        )
+        .subscribe((value: OptionSet | null | ModelType) => {
+          this.handleValueChange(controlName, value);
+        });
     });
   }
 
-  private handleProductCategoryChange(value: OptionSet | null): void {
+  private handleValueChange(
+    controlName: string,
+    value: OptionSet | null | ModelType
+  ) {
+    switch (controlName) {
+      case 'productCategory':
+        this.handleProductCategoryChange(value);
+        break;
+
+      case 'model':
+        this.handleModelChange(controlName, value);
+        break;
+
+      case 'brand':
+        this.handleBrandChange(value);
+        break;
+    }
+
+    if (!value) {
+      this.removeFilterByControlName(controlName);
+      return;
+    }
+
+    if (controlName !== 'model') {
+      this.updateAppliedFilters(controlName, value as OptionSet);
+    }
+  }
+
+  private handleProductCategoryChange(
+    value: OptionSet | null | ModelType
+  ): void {
     this.sizeService.productCategoryId.set(value?.id ?? null);
+    this.modelService.modelQueryParameters.update((params) => ({
+      ...params,
+      productCategoryId: value?.id ?? undefined,
+    }));
+
     this.removeFilterByControlName('size');
+    this.removeFilterByControlName('model');
+  }
+
+  private handleModelChange(
+    controlName: string,
+    value: OptionSet | null | ModelType
+  ) {
+    if (!value) {
+      return;
+    }
+
+    const model = value as ModelType;
+    const optionSet: OptionSet = {
+      id: model.id,
+      value: model.name,
+      viewValue: `${model.id}-${model.name}`,
+    };
+
+    this.updateAppliedFilters(controlName, optionSet);
+  }
+
+  private handleBrandChange(value: OptionSet | null | ModelType): void {
+    this.modelService.modelQueryParameters.update((params) => ({
+      ...params,
+      brandId: value?.id ?? undefined,
+    }));
+
+    this.removeFilterByControlName('model');
   }
 
   private removeFilterByControlName(controlName: string): void {
@@ -141,26 +204,22 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
         (appliedFilter) => appliedFilter.formControlName !== controlName
       )
     );
+
+    this.form.get(controlName)?.setValue(null);
   }
 
-  private updateAppliedFilters(controlName: string, value: OptionSet): void {
-    if (
-      !value ||
-      typeof value !== 'object' ||
-      !('id' in value) ||
-      !('value' in value)
-    ) {
-      return;
-    }
-
+  private updateAppliedFilters(
+    controlName: string,
+    optionSet: OptionSet
+  ): void {
     this.appliedFilters.update((appliedFilters) => {
       const updatedFilters = appliedFilters.filter(
         (appliedFilter) => appliedFilter.formControlName !== controlName
       );
 
       updatedFilters.push({
-        name: value.value,
-        viewValue: value.viewValue,
+        name: optionSet?.value,
+        viewValue: optionSet?.viewValue,
         formControlName: controlName,
       });
 

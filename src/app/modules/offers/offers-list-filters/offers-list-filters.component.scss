@@ -24,6 +24,13 @@
 
 .offer-applied-filters {
   border-radius: 5px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
 }
 
 @media (max-width: 768px) {
