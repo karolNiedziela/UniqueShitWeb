@@ -2,6 +2,7 @@ import { ModelType } from './../../models/models/model.model';
 import { OptionSet } from './../../../shared/models/option-set.model';
 import {
   Component,
+  DestroyRef,
   inject,
   input,
   OnDestroy,
@@ -31,6 +32,8 @@ import {
 } from '../models/offers-query-parameters.model';
 import { ModelsAutocompleteComponent } from '../../models/models-autocomplete/models-autocomplete.component';
 import { ModelsService } from '../../models/services/models.service';
+import { OfferListFiltersControlName } from './offers-list-filters.controls';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-offers-list-filters',
@@ -46,9 +49,7 @@ import { ModelsService } from '../../models/services/models.service';
   templateUrl: './offers-list-filters.component.html',
   styleUrl: './offers-list-filters.component.scss',
 })
-export class OffersListFiltersComponent implements OnInit, OnDestroy {
-  private _onDestroy = new Subject<void>();
-
+export class OffersListFiltersComponent implements OnInit {
   visible = input<boolean>(false);
   filtersToggled = output();
 
@@ -59,27 +60,33 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   brandService = inject(BrandsService);
   offerService = inject(OfferService);
   modelService = inject(ModelsService);
+  destroyRef = inject(DestroyRef);
 
   appliedFilters = signal<Chip[]>([]);
 
-  form!: FormGroup;
+  filterOffersForm!: FormGroup;
 
   ngOnInit(): void {
-    this.form = new FormGroup({
-      productCategory: new FormControl<OptionSet | null>(null),
-      colour: new FormControl<OptionSet | null>(null),
-      itemCondition: new FormControl<OptionSet | null>(null),
-      size: new FormControl<OptionSet | null>(null),
-      brand: new FormControl<OptionSet | null>(null),
-      model: new FormControl<ModelType | null>(null),
+    this.filterOffersForm = new FormGroup({
+      [OfferListFiltersControlName.ProductCategory]:
+        new FormControl<OptionSet | null>(null),
+      [OfferListFiltersControlName.Colour]: new FormControl<OptionSet | null>(
+        null
+      ),
+      [OfferListFiltersControlName.ItemCondition]:
+        new FormControl<OptionSet | null>(null),
+      [OfferListFiltersControlName.Size]: new FormControl<OptionSet | null>(
+        null
+      ),
+      [OfferListFiltersControlName.Brand]: new FormControl<OptionSet | null>(
+        null
+      ),
+      [OfferListFiltersControlName.Model]: new FormControl<ModelType | null>(
+        null
+      ),
     });
 
     this.trackFormControlChanges();
-  }
-
-  ngOnDestroy() {
-    this._onDestroy.next();
-    this._onDestroy.complete();
   }
 
   toggleFilters(): void {
@@ -87,7 +94,7 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    const formValues = this.form.value;
+    const formValues = this.filterOffersForm.value;
 
     const queryParameters: OfferQueryParameters = {
       ...DefaultOfferQueryParameters,
@@ -103,7 +110,7 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
   }
 
   clearFilters(): void {
-    this.form.reset();
+    this.filterOffersForm.reset();
   }
 
   onChipRemoved(chip: Chip) {
@@ -111,17 +118,17 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       filters.filter((appliedFilter) => appliedFilter !== chip)
     );
 
-    this.form.get(chip.formControlName)?.setValue(null);
+    this.filterOffersForm.get(chip.formControlName)?.setValue(null);
   }
 
   private trackFormControlChanges(): void {
-    Object.keys(this.form.controls).forEach((controlName) => {
-      this.form
+    Object.keys(this.filterOffersForm.controls).forEach((controlName) => {
+      this.filterOffersForm
         .get(controlName)
         ?.valueChanges.pipe(
           skip(1),
           distinctUntilChanged(),
-          takeUntil(this._onDestroy),
+          takeUntilDestroyed(this.destroyRef),
           filter((value) => typeof value === 'object' || value === null)
         )
         .subscribe((value: OptionSet | null | ModelType) => {
@@ -130,21 +137,18 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
     });
   }
 
-  private handleValueChange(
-    controlName: string,
-    value: OptionSet | null | ModelType
-  ) {
+  private handleValueChange(controlName: string, value: unknown): void {
     switch (controlName) {
-      case 'productCategory':
-        this.handleProductCategoryChange(value);
+      case OfferListFiltersControlName.ProductCategory:
+        this.handleProductCategoryChange(value as OptionSet | null);
         break;
 
-      case 'model':
-        this.handleModelChange(controlName, value);
+      case OfferListFiltersControlName.Model:
+        this.handleModelChange(controlName, value as ModelType | null);
         break;
 
-      case 'brand':
-        this.handleBrandChange(value);
+      case OfferListFiltersControlName.Brand:
+        this.handleBrandChange(value as OptionSet | null);
         break;
     }
 
@@ -153,28 +157,24 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (controlName !== 'model') {
+    if (controlName !== OfferListFiltersControlName.Model) {
       this.updateAppliedFilters(controlName, value as OptionSet);
     }
   }
 
-  private handleProductCategoryChange(
-    value: OptionSet | null | ModelType
-  ): void {
+  private handleProductCategoryChange(value: OptionSet | null): void {
     this.sizeService.productCategoryId.set(value?.id ?? null);
     this.modelService.modelQueryParameters.update((params) => ({
       ...params,
       productCategoryId: value?.id ?? undefined,
+      searchTerm: '',
     }));
 
-    this.removeFilterByControlName('size');
-    this.removeFilterByControlName('model');
+    this.removeFilterByControlName(OfferListFiltersControlName.Size);
+    this.removeFilterByControlName(OfferListFiltersControlName.Model);
   }
 
-  private handleModelChange(
-    controlName: string,
-    value: OptionSet | null | ModelType
-  ) {
+  private handleModelChange(controlName: string, value: ModelType | null) {
     if (!value) {
       return;
     }
@@ -189,13 +189,14 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
     this.updateAppliedFilters(controlName, optionSet);
   }
 
-  private handleBrandChange(value: OptionSet | null | ModelType): void {
+  private handleBrandChange(value: OptionSet | null): void {
     this.modelService.modelQueryParameters.update((params) => ({
       ...params,
       brandId: value?.id ?? undefined,
+      searchTerm: '',
     }));
 
-    this.removeFilterByControlName('model');
+    this.removeFilterByControlName(OfferListFiltersControlName.Model);
   }
 
   private removeFilterByControlName(controlName: string): void {
@@ -205,7 +206,7 @@ export class OffersListFiltersComponent implements OnInit, OnDestroy {
       )
     );
 
-    this.form.get(controlName)?.setValue(null);
+    this.filterOffersForm.get(controlName)?.setValue(null);
   }
 
   private updateAppliedFilters(

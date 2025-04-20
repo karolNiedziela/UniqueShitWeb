@@ -1,6 +1,6 @@
 <div
   class="offer-filter-side-panel"
-  [formGroup]="form"
+  [formGroup]="filterOffersForm"
   [class.show]="visible()"
 >
   <button mat-raised-button (click)="toggleFilters()">Hide filters</button>
@@ -9,7 +9,9 @@
   <div class="offer-applied-filters">
     <div class="offer-applied-filters__header">
       <h3>APPLIED FILTERS</h3>
-      <button mat-raised-button (click)="clearFilters()">Clear all</button>
+      <button mat-raised-button (click)="this.filterOffersForm.reset()">
+        Clear all
+      </button>
     </div>
     <app-chips
       [chips]="appliedFilters()"
