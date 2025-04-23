@@ -36,6 +36,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { CustomAuthInterceptor } from './core/interceptors/custom-auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -72,6 +73,11 @@ export const appConfig: ApplicationConfig = {
       provide: MSAL_INTERCEPTOR_CONFIG,
       useFactory: MSALInterceptorConfigFactory,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomAuthInterceptor,
+      multi: true,
+    },
     MsalService,
     MsalGuard,
     MsalBroadcastService,
@@ -106,7 +112,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
 
-  //protectedResourceMap.set(environment.apiUrl, environment.adb2c.scopeUrls);
+  // protectedResourceMap.set(environment.apiUrl, environment.adb2c.scopeUrls);
 
   return {
     interactionType: InteractionType.Redirect,
