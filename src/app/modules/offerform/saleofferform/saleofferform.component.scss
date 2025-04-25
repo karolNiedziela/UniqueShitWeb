@@ -1,0 +1,82 @@
+.background-wrapper {
+    position: relative;
+    min-height: 100vh;
+    background: url('/assets/obraz1.jpeg') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .saleofferform {
+    width: 50%;
+    padding: 4rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    font-family: Arial, sans-serif;
+  
+    .form-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+    
+    .topic,
+    .description {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 2rem;
+      
+      mat-form-field {
+        width: 100%;
+      }
+    }
+    
+    .details-item {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+      
+      > * {
+        width: 100%;
+      }
+      
+      mat-form-field,
+      app-models-autocomplete,
+      app-select {
+        width: 100%;
+      }
+    }
+    
+    .quantityandprice {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+      
+      > * {
+        width: 100%;
+      }
+      
+      mat-form-field {
+        width: 100%;
+      }
+    }
+    
+    .upload-button {
+      display: flex;
+      justify-content: left;
+      margin-bottom: 1rem;
+    }
+    
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 5rem;
+      margin-top: 1rem;
+    }
+  }
+  
