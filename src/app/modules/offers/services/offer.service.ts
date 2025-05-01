@@ -1,5 +1,6 @@
-import { HttpParams, httpResource } from '@angular/common/http';
+import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
 import { computed, Injectable, signal } from '@angular/core';
+import { tap } from 'rxjs/operators';
 import { OfferType } from '../models/offer.model';
 import { environment } from '../../../../environments/environment';
 import {
@@ -8,11 +9,14 @@ import {
   OffersQueryParamMapping,
 } from '../models/offers-query-parameters.model';
 import { PagedListModel } from '../../../shared/models/paged-list-model';
+import { CreateOfferDto } from '../models/offer.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OfferService {
+  private readonly endpoint = `${environment.apiUrl}/offers`;
+
   private offersEndpoint: string = `${environment.apiUrl}/offers`;
 
   offersQueryParameters = signal<OfferQueryParameters>({
@@ -21,7 +25,6 @@ export class OfferService {
 
   offersParams = computed<HttpParams>(() => {
     let params = new HttpParams();
-
     Object.entries(this.offersQueryParameters()).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
         const queryParamKey =
@@ -29,7 +32,6 @@ export class OfferService {
         params = params.set(queryParamKey, value.toString());
       }
     });
-
     return params;
   });
 
@@ -44,10 +46,28 @@ export class OfferService {
         pageNumber: DefaultOfferQueryParameters.pageNumber,
         pageSize: DefaultOfferQueryParameters.pageSize,
       },
-      parse: (data) => {
-        const parsedData = data as PagedListModel<OfferType>;
-        return parsedData;
-      },
+      parse: (data) => data as PagedListModel<OfferType>,
     }
   );
+
+  constructor(private http: HttpClient) {}
+
+  createOffer(dto: CreateOfferDto) {
+    console.log('DTO to send:', dto);
+    console.log(`POST ${this.endpoint}`);
+    return this.http
+      .post<OfferType>(this.endpoint, dto)
+      .pipe(tap(() => console.log('Offer created')));
+  }
+
+  createOfferWithFile(dto: CreateOfferDto, file: File) {
+    console.log('DTO to send:', dto);
+    console.log(`POST multipart to ${this.endpoint}`);
+    const formData = new FormData();
+    formData.append('offer', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+    formData.append('file', file);
+    return this.http
+      .post<OfferType>(this.endpoint, formData)
+      .pipe(tap(() => console.log('Offer with file created')));
+  }
 }

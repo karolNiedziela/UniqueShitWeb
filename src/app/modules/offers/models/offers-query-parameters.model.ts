@@ -12,7 +12,7 @@ export interface OfferQueryParameters {
 }
 
 export const DefaultOfferQueryParameters: OfferQueryParameters = {
-  offerTypeId: 1,
+  offerTypeId: 2,
   pageNumber: 1,
   pageSize: 50,
 };

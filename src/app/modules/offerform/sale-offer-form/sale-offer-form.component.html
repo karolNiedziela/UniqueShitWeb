@@ -9,7 +9,14 @@
         <div class="topic">
           <mat-form-field appearance="outline">
             <mat-label>Topic</mat-label>
-            <input matInput formControlName="topic" />
+            <input
+              matInput
+              formControlName="topic"
+              maxlength="30"
+              #topicInput>
+            <mat-hint align="end">
+              {{ topicInput.value?.length || 0 }} / 30
+            </mat-hint>
           </mat-form-field>
         </div>
   
@@ -21,11 +28,11 @@
               matInput
               formControlName="description"
               rows="7"
-              maxlength="500"
+              maxlength="200"
               #descriptionInput>
             </textarea>
             <mat-hint align="end">
-              {{ descriptionInput.value?.length || 0 }} / 500
+              {{ descriptionInput.value?.length || 0 }} / 200
             </mat-hint>
           </mat-form-field>
         </div>

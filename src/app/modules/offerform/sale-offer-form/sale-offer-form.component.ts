@@ -1,8 +1,7 @@
-import { Component, inject, OnInit, DestroyRef, signal } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,24 +16,11 @@ import { ModelsAutocompleteComponent } from '../../models/models-autocomplete/mo
 import { OptionSet } from '../../../shared/models/option-set.model';
 import { ModelType } from '../../models/models/model.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { environment } from '../../../../environments/environment';
-
-type CreateOfferDto = {
-  topic: string;
-  description: string;
-  price: { amount: number; currency: string };
-  offerTypeId: number;
-  itemConditionId: number;
-  modelId: number;
-  sizeId: number;
-  quantity: number;
-};
-
-type OfferType = CreateOfferDto & { id: number };
+import { CreateOfferDto } from '../../offers/models/offer.dto';
+import { OfferService } from '../../offers/services/offer.service';
 
 @Component({
-  selector: 'app-saleofferform',
-  standalone: true,
+  selector: 'app-saleoffer-form',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -48,13 +34,13 @@ type OfferType = CreateOfferDto & { id: number };
     SelectComponent,
     ModelsAutocompleteComponent,
   ],
-  templateUrl: './saleofferform.component.html',
-  styleUrls: ['./saleofferform.component.scss'],
+  templateUrl: './sale-offer-form.component.html',
+  styleUrls: ['./sale-offer-form.component.scss'],
 })
-export class SaleofferformComponent implements OnInit {
+export class SaleOfferFormComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
-  private http = inject(HttpClient);
+  private offerService = inject(OfferService);
 
   itemConditionService = inject(ItemConditionService);
   sizeService = inject(SizeService);
@@ -69,15 +55,39 @@ export class SaleofferformComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      topic: new FormControl<string>(''),
-      description: new FormControl<string>(''),
-      quantity: new FormControl<number>(0),
-      priceamount: new FormControl<number>(0),
-      pricecurrency: new FormControl<string>('PLN'),
-      offertypeid: new FormControl<number>(2),
-      itemCondition: new FormControl<OptionSet | null>(null),
-      model: new FormControl<ModelType | null>(null),
-      size: new FormControl<OptionSet | null>(null),
+      topic: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(30)],
+      }),
+      description: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.maxLength(200)],
+      }),
+      quantity: new FormControl<number>(1, {
+        nonNullable: true,
+        validators: [Validators.required, Validators.min(1)],
+      }),
+      priceamount: new FormControl<number>(1, {
+        nonNullable: true,
+        validators: [Validators.required, Validators.min(1)],
+      }),
+      pricecurrency: new FormControl<string>('PLN', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      offertypeid: new FormControl<number>(2, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      itemCondition: new FormControl<OptionSet | null>(null, {
+        validators: [Validators.required],
+      }),
+      model: new FormControl<ModelType | null>(null, {
+        validators: [Validators.required],
+      }),
+      size: new FormControl<OptionSet | null>(null, {
+        validators: [Validators.required],
+      }),
     });
 
     this.form.controls['model'].valueChanges
@@ -120,56 +130,22 @@ export class SaleofferformComponent implements OnInit {
       quantity: this.form.value.quantity!,
     };
 
-    console.log('DTO to send:', dto);
-    const url = `${environment.apiUrl}/offers`;
+    const call$ = this.selectedFile
+      ? this.offerService.createOfferWithFile(dto, this.selectedFile)
+      : this.offerService.createOffer(dto);
 
-    const httpOptions = {
-      observe: 'response' as const,
-      responseType: 'text' as const,
-    };
-
-    const request$ = this.selectedFile
-      ? this.buildFormDataRequest(url, dto, httpOptions)
-      : this.http.post(url, dto, httpOptions);
-
-    request$
+    call$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (res: HttpResponse<string>) => {
-          let body: OfferType | null = null;
-          try {
-            body = JSON.parse(res.body as string) as OfferType;
-          } catch {
-            console.warn('Non-JSON response:', res.body);
-          }
-          console.log('Response status:', res.status, body);
-          this.handleSuccess();
+        next: () => {
+          this.saving.set(false);
+          this.router.navigate(['/saleofferform']);
         },
-        error: (err: any) => {
-          console.error('Save error:', err.status, err.error);
-          this.handleError(err);
+        error: err => {
+          console.error('Save error:', err);
+          this.saving.set(false);
         },
       });
-  }
-
-  private buildFormDataRequest(
-    url: string,
-    dto: CreateOfferDto,
-    options: { observe: 'response'; responseType: 'text' }
-  ) {
-    const formData = new FormData();
-    formData.append('offer', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
-    formData.append('file', this.selectedFile as File);
-    return this.http.post(url, formData, options);
-  }
-
-  private handleSuccess(): void {
-    this.saving.set(false);
-    this.router.navigate(['/saleofferform']);
-  }
-
-  private handleError(error: any): void {
-    this.saving.set(false);
   }
 
   clearForm(): void {
