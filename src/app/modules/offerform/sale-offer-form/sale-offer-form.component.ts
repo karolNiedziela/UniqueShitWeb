@@ -103,6 +103,19 @@ export class SaleOfferFormComponent implements OnInit {
       .subscribe((opt: OptionSet | null) => {
         this.sizeIdSignal.set(opt?.id ?? 0);
       });
+
+      this.form.get('size')!.disable();
+
+      this.form.get('model')!.valueChanges.subscribe(modelValue => {
+        const sizeCtrl = this.form.get('size')!;
+        if (modelValue) {
+          sizeCtrl.enable();
+        } else {
+          sizeCtrl.disable();
+          sizeCtrl.reset();
+        }
+      });
+
   }
 
   onFileSelected(event: Event): void {

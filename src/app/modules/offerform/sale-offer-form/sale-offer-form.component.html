@@ -17,6 +17,9 @@
             <mat-hint align="end">
               {{ topicInput.value?.length || 0 }} / 30
             </mat-hint>
+            <mat-error *ngIf="form.controls['topic'].hasError('required')">
+            Topic is required.
+            </mat-error>
           </mat-form-field>
         </div>
   
@@ -34,6 +37,9 @@
             <mat-hint align="end">
               {{ descriptionInput.value?.length || 0 }} / 200
             </mat-hint>
+            <mat-error *ngIf="form.controls['description'].hasError('required')">
+            Description is required.
+            </mat-error>
           </mat-form-field>
         </div>
         
@@ -41,18 +47,27 @@
           <app-models-autocomplete
             formControlName="model"
             label="Select model">
+            <mat-error *ngIf="form.controls['model'].hasError('required')">
+            Model is required.
+            </mat-error>
           </app-models-autocomplete>
   
           <app-select
             label="Size"
             formControlName="size"
             [options]="sizeService.sizeOptions.value()">
+            <mat-error *ngIf="form.controls['size'].hasError('required')">
+            Size is required.
+            </mat-error>
           </app-select>
   
           <app-select
             label="Item condition"
             formControlName="itemCondition"
             [options]="itemConditionService.itemConditionOptions.value()">
+            <mat-error *ngIf="form.controls['itemCondition'].hasError('required')">
+            Item condition is required.
+            </mat-error>
           </app-select>
         </div>
   
@@ -60,11 +75,17 @@
           <mat-form-field appearance="outline">
             <mat-label>Quantity</mat-label>
             <input matInput formControlName="quantity" />
+            <mat-error *ngIf="form.controls['quantity'].hasError('required')">
+            Quanity is required.
+            </mat-error>
           </mat-form-field>
   
           <mat-form-field appearance="outline">
             <mat-label>Price Amount</mat-label>
             <input matInput formControlName="priceamount" />
+            <mat-error *ngIf="form.controls['priceamount'].hasError('required')">
+            Price amount is required.
+            </mat-error>
           </mat-form-field>
   
           <mat-form-field appearance="outline">
@@ -76,9 +97,6 @@
             />
           </mat-form-field>
         </div>
-        <mat-form-field hidden>
-          <input matInput formControlName="offertypeid" />
-        </mat-form-field>
   
   <div class="upload-button">
     <button
@@ -91,8 +109,20 @@
   </div>
   
   <div class="buttons">
-    <button mat-flat-button color="primary" type="submit">Save</button>
-    <button mat-raised-button color="warn" routerLink="/saleofferform" type="button" (click)="clearForm()">Cancel</button>
+    <button class="save-button"
+    mat-flat-button
+    color="primary"
+    type="submit"
+    [disabled]="form.invalid">
+    Save
+  </button>
+
+    <button class="cancel-button"
+    mat-raised-button 
+    color="warn" 
+    routerLink="/saleofferform" 
+    type="button" (click)="clearForm()">Cancel
+  </button>
   </div>
   
   <input

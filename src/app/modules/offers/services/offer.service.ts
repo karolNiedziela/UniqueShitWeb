@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, inject, signal } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { OfferType } from '../models/offer.model';
 import { environment } from '../../../../environments/environment';
 import {
@@ -16,8 +17,9 @@ import { CreateOfferDto } from '../models/offer.dto';
 })
 export class OfferService {
   private readonly endpoint = `${environment.apiUrl}/offers`;
+  private offersEndpoint = `${environment.apiUrl}/offers`;
 
-  private offersEndpoint: string = `${environment.apiUrl}/offers`;
+  private httpClient = inject(HttpClient);
 
   offersQueryParameters = signal<OfferQueryParameters>({
     ...DefaultOfferQueryParameters,
@@ -50,24 +52,27 @@ export class OfferService {
     }
   );
 
-  constructor(private http: HttpClient) {}
 
-  createOffer(dto: CreateOfferDto) {
-    console.log('DTO to send:', dto);
-    console.log(`POST ${this.endpoint}`);
-    return this.http
-      .post<OfferType>(this.endpoint, dto)
+  createOffer(dto: CreateOfferDto): Observable<CreateOfferDto> {
+    return this.httpClient
+      .post<CreateOfferDto>(this.endpoint, dto)
       .pipe(tap(() => console.log('Offer created')));
   }
 
-  createOfferWithFile(dto: CreateOfferDto, file: File) {
-    console.log('DTO to send:', dto);
-    console.log(`POST multipart to ${this.endpoint}`);
+
+  createOfferWithFile(
+    dto: CreateOfferDto,
+    file: File
+  ): Observable<CreateOfferDto> {
     const formData = new FormData();
-    formData.append('offer', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+    formData.append(
+      'offer',
+      new Blob([JSON.stringify(dto)], { type: 'application/json' })
+    );
     formData.append('file', file);
-    return this.http
-      .post<OfferType>(this.endpoint, formData)
+
+    return this.httpClient
+      .post<CreateOfferDto>(this.endpoint, formData)
       .pipe(tap(() => console.log('Offer with file created')));
   }
 }
