@@ -9,5 +9,3 @@ export type CreateOfferDto = {
     quantity: number;
   };
   
-  export type OfferType = CreateOfferDto & { id: number };
-  

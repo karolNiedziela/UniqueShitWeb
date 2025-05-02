@@ -16,7 +16,6 @@ import { CreateOfferDto } from '../models/offer.dto';
   providedIn: 'root',
 })
 export class OfferService {
-  private readonly endpoint = `${environment.apiUrl}/offers`;
   private offersEndpoint = `${environment.apiUrl}/offers`;
 
   private httpClient = inject(HttpClient);
@@ -55,7 +54,7 @@ export class OfferService {
 
   createOffer(dto: CreateOfferDto): Observable<CreateOfferDto> {
     return this.httpClient
-      .post<CreateOfferDto>(this.endpoint, dto)
+      .post<CreateOfferDto>(this.offersEndpoint, dto)
       .pipe(tap(() => console.log('Offer created')));
   }
 
@@ -72,7 +71,7 @@ export class OfferService {
     formData.append('file', file);
 
     return this.httpClient
-      .post<CreateOfferDto>(this.endpoint, formData)
+      .post<CreateOfferDto>(this.offersEndpoint, formData)
       .pipe(tap(() => console.log('Offer with file created')));
   }
 }
