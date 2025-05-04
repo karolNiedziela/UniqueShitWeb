@@ -1,0 +1,31 @@
+<mat-form-field class="multiselect-form-field" appearance="outline">
+  <mat-label>{{ label() }}</mat-label>
+  <mat-select
+    #matSelect
+    class="custom-select"
+    panelClass="custom-select-panel"
+    [required]="isRequired"
+    [formControl]="formControl"
+    multiple
+  >
+    <mat-option [hidden]="true"></mat-option>
+    @for (option of options(); track option.viewValue) {
+    <mat-option class="custom-select__option" [value]="option">{{
+      option.value
+    }}</mat-option>
+    }
+  </mat-select>
+  @if (formControl.value) {
+  <button
+    class="custom-select__clear"
+    mat-button
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="clear($event)"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+  } @if (formControl.errors?.['required']) {}
+  <mat-error> {{ label() }} is required. </mat-error>
+</mat-form-field>

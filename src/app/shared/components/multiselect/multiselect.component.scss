@@ -1,0 +1,11 @@
+.multiselect-form-field {
+  width: 100%;
+
+  &__clear {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
