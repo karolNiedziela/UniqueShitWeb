@@ -1,7 +1,7 @@
 <mat-toolbar class="header-toolbar">
 
   <div class="left-buttons">
-    <a mat-button class="title" href="/">UniqueShit</a>
+    <a mat-button class="home-button" href="/">UniqueShit</a>
   
     <a
       mat-stroked-button
@@ -16,8 +16,40 @@
       routerLinkActive="router-link-active"
       >Purchase offers
      </a>
+
+     <button
+     mat-icon-button
+     [matMenuTriggerFor]="appMenu">
+     <mat-icon>more_vert</mat-icon>
+   </button>
+   
+   <mat-menu #appMenu="matMenu">
+    
+      <button mat-menu-item [routerLink]="['/offers-list']">
+        <mat-icon> monetization_on</mat-icon>
+       Sale offers
+      </button>
+
+      <button mat-menu-item [routerLink]="['/offers-list']">
+        <mat-icon>whatshot</mat-icon>
+        Purchase offers
+      </button>
+
+     <ng-container *ngIf="loginDisplay">
+
+       <button mat-menu-item [routerLink]="['/saleofferform']">
+        <mat-icon>add_box</mat-icon>
+        Add sale offer
+       </button>
+
+       <button mat-menu-item [routerLink]="['/webapi']">
+        <mat-icon>add_circle</mat-icon>
+        Add purchase offer
+       </button>
+
+     </ng-container>
+   </mat-menu>
   </div>
-  
   
   <div class="middle-buttons" >
     @if (loginDisplay) {

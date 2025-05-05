@@ -1,39 +1,52 @@
 @use "@angular/material" as mat;
 
+
 mat-toolbar.header-toolbar {
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  height: auto;
   padding: 0.5rem 1rem;
-  box-sizing: border-box;
   background: white;
   z-index: 1001;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.left-buttons,
-.middle-buttons,
-.right-buttons {
+
+mat-toolbar.header-toolbar .left-buttons,
+mat-toolbar.header-toolbar .middle-buttons,
+mat-toolbar.header-toolbar .right-buttons {
   display: flex;
   align-items: center;
-  height: 100%;
 }
 
-.left-buttons {
+
+mat-toolbar.header-toolbar .left-buttons {
   flex: 0 0 auto;
 }
 
-.middle-buttons {
+mat-toolbar.header-toolbar .middle-buttons {
   flex: 1 0 auto;
   justify-content: center;
 }
 
-.right-buttons {
+mat-toolbar.header-toolbar .right-buttons {
   flex: 0 0 auto;
   justify-content: flex-end;
+}
+
+
+mat-toolbar.header-toolbar .left-buttons button[mat-icon-button] {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  mat-toolbar.header-toolbar .left-buttons > a:not(.home-button),
+  mat-toolbar.header-toolbar .middle-buttons > a {
+    display: none;
+  }
+
+  mat-toolbar.header-toolbar .left-buttons button[mat-icon-button] {
+    display: inline-flex;
+  }
 }
