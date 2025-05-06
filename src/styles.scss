@@ -31,6 +31,11 @@ $theme: mat.define-theme(
   padding: 0 !important;
 }
 
+.mat-mdc-form-field-bottom-align::before {
+  display: block !important;
+  height: 3px !important;
+}
+
 :root {
   @include mat.form-field-overrides(
     (

@@ -1,0 +1,139 @@
+<div class="background-wrapper">
+  <div class="saleofferform">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-name">Add a sale offer</div>
+
+      <div class="topic">
+        <mat-form-field appearance="outline">
+          <mat-label>Topic</mat-label>
+          <input matInput formControlName="topic" maxlength="30" #topicInput />
+          <mat-hint align="end">
+            {{ topicInput.value?.length || 0 }} / 30
+          </mat-hint>
+          <mat-error *ngIf="form.controls['topic'].hasError('required')">
+            Topic is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="description">
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            rows="7"
+            maxlength="200"
+            #descriptionInput
+          >
+          </textarea>
+          <mat-hint align="end">
+            {{ descriptionInput.value?.length || 0 }} / 200
+          </mat-hint>
+          <mat-error *ngIf="form.controls['description'].hasError('required')">
+            Description is required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="details-item">
+        <app-models-autocomplete formControlName="model" label="Select model">
+          <mat-error *ngIf="form.controls['model'].hasError('required')">
+            Model is required.
+          </mat-error>
+        </app-models-autocomplete>
+
+        <app-select
+          label="Size"
+          formControlName="size"
+          [options]="sizeService.sizeOptions.value()"
+        >
+          <mat-error *ngIf="form.controls['size'].hasError('required')">
+            Size is required.
+          </mat-error>
+        </app-select>
+
+        <app-select
+          label="Item condition"
+          formControlName="itemCondition"
+          [options]="itemConditionService.itemConditionOptions.value()"
+        >
+          <mat-error
+            *ngIf="form.controls['itemCondition'].hasError('required')"
+          >
+            Item condition is required.
+          </mat-error>
+        </app-select>
+      </div>
+
+      <div class="quantityandprice">
+        <mat-form-field appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input matInput formControlName="quantity" />
+          <mat-error *ngIf="form.controls['quantity'].hasError('required')">
+            Quanity is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Price Amount</mat-label>
+          <input matInput formControlName="priceAmount" />
+          <mat-error *ngIf="form.controls['priceAmount'].hasError('required')">
+            Price amount is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Currency</mat-label>
+          <input matInput formControlName="priceCurrency" readonly />
+        </mat-form-field>
+      </div>
+
+      <div class="upload-button">
+        <button
+          mat-icon-button
+          color="accent"
+          type="button"
+          (click)="fileInput.click()"
+        >
+          <mat-icon>add_photo_alternate</mat-icon>
+        </button>
+      </div>
+
+      <div class="buttons">
+        <button
+          class="save-button"
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid"
+        >
+          Save
+        </button>
+
+        <button
+          class="cancel-button"
+          mat-raised-button
+          color="warn"
+          routerLink="/saleofferform"
+          type="button"
+          (click)="clearForm()"
+        >
+          Cancel
+        </button>
+      </div>
+
+      <input
+        type="file"
+        style="display: none"
+        #fileInput
+        (change)="onFileSelected($event)"
+        accept="image/*"
+      />
+    </form>
+
+    <ng-container *ngIf="saving()">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </ng-container>
+  </div>
+</div>

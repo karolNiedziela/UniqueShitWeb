@@ -1,0 +1,23 @@
+<app-sale-offers-list-filters
+  [visible]="filtersVisible()"
+  (filtersToggled)="toggleFilters()"
+></app-sale-offers-list-filters>
+
+<div class="sale-offers-container" [class.dimmed]="filtersVisible()">
+  <div class="sale-offers-filter-toggle-container">
+    <button mat-raised-button (click)="toggleFilters()">Show filters</button>
+  </div>
+
+  @if (saleOfferService.offers.isLoading()) {
+  <div>Loading ...</div>
+  } @else {
+  <div class="sale-offers-grid-container">
+    @for (saleOffer of saleOfferService.offers.value().items; track
+    saleOffer.id) {
+    <app-sale-offer-card [saleOffer]="saleOffer"></app-sale-offer-card>
+    } @if (saleOfferService.offers.value().items.length === 0) {
+    <div class="no-sale-offers">No sale offers found</div>
+    }
+  </div>
+  }
+</div>

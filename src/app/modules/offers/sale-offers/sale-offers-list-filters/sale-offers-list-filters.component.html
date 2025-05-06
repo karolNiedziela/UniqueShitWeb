@@ -1,13 +1,13 @@
 <div
-  class="offer-filter-side-panel"
+  class="sale-offer-filter-side-panel"
   [formGroup]="filterOffersForm"
   [class.show]="visible()"
 >
   <button mat-raised-button (click)="toggleFilters()">Hide filters</button>
 
   @if (appliedFilters().length > 0) {
-  <div class="offer-applied-filters">
-    <div class="offer-applied-filters__header">
+  <div class="sale-offer-applied-filters">
+    <div class="sale-offer-applied-filters__header">
       <h3>APPLIED FILTERS</h3>
       <button mat-raised-button (click)="this.filterOffersForm.reset()">
         Clear all

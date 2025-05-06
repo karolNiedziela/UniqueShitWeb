@@ -1,6 +1,6 @@
 import { z as zod } from 'zod';
 
-export const OfferSchema = zod.object({
+export const SaleOfferSchema = zod.object({
   id: zod.number(),
   topic: zod.string(),
   brand: zod.object({
@@ -22,6 +22,6 @@ export const OfferSchema = zod.object({
   quantity: zod.number(),
 });
 
-export const OffeArraySchema = zod.array(OfferSchema);
+export const SaleOfferArraySchema = zod.array(SaleOfferSchema);
 
-export type OfferType = zod.infer<typeof OfferSchema>;
+export type SaleOfferType = zod.infer<typeof SaleOfferSchema>;

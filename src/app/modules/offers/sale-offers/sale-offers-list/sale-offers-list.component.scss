@@ -1,6 +1,6 @@
-@use "../../../../styles/variables.scss" as vars;
+@use "../../../../../styles/variables.scss" as vars;
 
-.offers-container {
+.sale-offers-container {
   transition: opacity 0.3s ease;
   padding: 0 5px;
   margin: 20px;
@@ -13,7 +13,7 @@
   }
 }
 
-.offers-filter-toggle-container {
+.sale-offers-filter-toggle-container {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
@@ -61,14 +61,14 @@
   }
 }
 
-.offers-grid-container {
+.sale-offers-grid-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
 
 @media (max-width: 1024px) {
-  .offers-grid-container {
+  .sale-offers-grid-container {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -84,13 +84,13 @@
     }
   }
 
-  .offers-grid-container {
+  .sale-offers-grid-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .offers-grid-container {
+  .sale-offers-grid-container {
     grid-template-columns: 1fr;
   }
 }

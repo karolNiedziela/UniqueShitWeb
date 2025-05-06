@@ -1,6 +1,11 @@
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,16 +13,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-import { ItemConditionService } from '../../item-conditions/services/item-condition.service';
-import { SizeService } from '../../sizes/services/size.service';
-import { ModelsService } from '../../models/services/models.service';
-import { SelectComponent } from '../../../shared/components/select/select.component';
-import { ModelsAutocompleteComponent } from '../../models/models-autocomplete/models-autocomplete.component';
-import { OptionSet } from '../../../shared/models/option-set.model';
-import { ModelType } from '../../models/models/model.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CreateOfferDto } from '../../offers/models/offer.dto';
-import { OfferService } from '../../offers/services/offer.service';
+import { SaleOfferService } from '../services/sale-offer.service';
+import { ItemConditionService } from '../../../item-conditions/services/item-condition.service';
+import { SizeService } from '../../../sizes/services/size.service';
+import { ModelsService } from '../../../models/services/models.service';
+import { SelectComponent } from '../../../../shared/components/select/select.component';
+import { ModelsAutocompleteComponent } from '../../../models/models-autocomplete/models-autocomplete.component';
+import { OptionSet } from '../../../../shared/models/option-set.model';
+import { ModelType } from '../../../models/models/model.model';
+import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
 
 @Component({
   selector: 'app-saleoffer-form',
@@ -34,13 +39,13 @@ import { OfferService } from '../../offers/services/offer.service';
     SelectComponent,
     ModelsAutocompleteComponent,
   ],
-  templateUrl: './sale-offer-form.component.html',
-  styleUrls: ['./sale-offer-form.component.scss'],
+  templateUrl: './add-sale-offer-form.component.html',
+  styleUrls: ['./add-sale-offer-form.component.scss'],
 })
-export class SaleOfferFormComponent implements OnInit {
+export class AddSaleOfferFormComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
-  private offerService = inject(OfferService);
+  private saleOfferService = inject(SaleOfferService);
 
   itemConditionService = inject(ItemConditionService);
   sizeService = inject(SizeService);
@@ -67,15 +72,11 @@ export class SaleOfferFormComponent implements OnInit {
         nonNullable: true,
         validators: [Validators.required, Validators.min(1)],
       }),
-      priceamount: new FormControl<number>(1, {
+      priceAmount: new FormControl<number>(1, {
         nonNullable: true,
         validators: [Validators.required, Validators.min(1)],
       }),
-      pricecurrency: new FormControl<string>('PLN', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      offertypeid: new FormControl<number>(2, {
+      priceCurrency: new FormControl<string>('PLN', {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -104,18 +105,17 @@ export class SaleOfferFormComponent implements OnInit {
         this.sizeIdSignal.set(opt?.id ?? 0);
       });
 
-      this.form.get('size')!.disable();
+    this.form.get('size')!.disable();
 
-      this.form.get('model')!.valueChanges.subscribe(modelValue => {
-        const sizeCtrl = this.form.get('size')!;
-        if (modelValue) {
-          sizeCtrl.enable();
-        } else {
-          sizeCtrl.disable();
-          sizeCtrl.reset();
-        }
-      });
-
+    this.form.get('model')!.valueChanges.subscribe((modelValue) => {
+      const sizeCtrl = this.form.get('size')!;
+      if (modelValue) {
+        sizeCtrl.enable();
+      } else {
+        sizeCtrl.disable();
+        sizeCtrl.reset();
+      }
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -129,14 +129,13 @@ export class SaleOfferFormComponent implements OnInit {
     if (this.form.invalid) return;
     this.saving.set(true);
 
-    const dto: CreateOfferDto = {
+    const dto: CreateSaleOfferDto = {
       topic: this.form.value.topic!,
       description: this.form.value.description!,
       price: {
-        amount: this.form.value.priceamount!,
-        currency: this.form.value.pricecurrency!,
+        amount: this.form.value.priceAmount!,
+        currency: this.form.value.priceCurrency!,
       },
-      offerTypeId: this.form.value.offertypeid!,
       itemConditionId: this.form.value.itemCondition?.id ?? 0,
       modelId: this.modelIdSignal() ?? 0,
       sizeId: this.sizeIdSignal() ?? 0,
@@ -144,25 +143,23 @@ export class SaleOfferFormComponent implements OnInit {
     };
 
     const call$ = this.selectedFile
-      ? this.offerService.createOfferWithFile(dto, this.selectedFile)
-      : this.offerService.createOffer(dto);
+      ? this.saleOfferService.createOfferWithFile(dto, this.selectedFile)
+      : this.saleOfferService.createOffer(dto);
 
-    call$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.saving.set(false);
-          this.router.navigate(['/saleofferform']);
-        },
-        error: err => {
-          console.error('Save error:', err);
-          this.saving.set(false);
-        },
-      });
+    call$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.router.navigate(['/saleofferform']);
+      },
+      error: (err) => {
+        console.error('Save error:', err);
+        this.saving.set(false);
+      },
+    });
   }
 
   clearForm(): void {
-    this.form.reset({ pricecurrency: 'PLN', offertypeid: 2 });
+    this.form.reset({ priceCurrency: 'PLN' });
     this.selectedFile = null;
   }
 }
