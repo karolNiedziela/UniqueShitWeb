@@ -1,72 +1,71 @@
 <mat-toolbar class="header-toolbar">
-
   <div class="left-buttons">
     <a mat-button class="title" href="/">UniqueShit</a>
-  
+
     <a
       mat-stroked-button
-      [routerLink]="['/offers-list']"
+      [routerLink]="['/sale-offers']"
       routerLinkActive="router-link-active"
       >Offers
     </a>
-  
-     <a
-     mat-stroked-button
-      [routerLink]="['/offers-list']"
+
+    <a
+      mat-stroked-button
+      [routerLink]="['/sale-offers']"
       routerLinkActive="router-link-active"
       >Purchase offers
-     </a>
+    </a>
   </div>
-  
-  
-  <div class="middle-buttons" >
+
+  <div class="middle-buttons">
     @if (loginDisplay) {
-      <a
-        mat-stroked-button
-        [routerLink]="['/saleofferform']"
-        routerLinkActive="router-link-active">
-        Add sale offer
-      </a>
-    }
-  
-    @if (loginDisplay) {
-      <a
-        mat-stroked-button
-        [routerLink]="['/webapi']"
-        routerLinkActive="router-link-active">
-        Add purchase offer
-      </a>
+    <a
+      mat-stroked-button
+      [routerLink]="['/sale-offers/create']"
+      routerLinkActive="router-link-active"
+    >
+      Add sale offer
+    </a>
+    } @if (loginDisplay) {
+    <a
+      mat-stroked-button
+      [routerLink]="['/webapi']"
+      routerLinkActive="router-link-active"
+    >
+      Add purchase offer
+    </a>
     }
   </div>
-  
-  
+
   <div class="right-buttons">
     @if (loginDisplay) {
-      <a
-        mat-stroked-button
-        [routerLink]="['/profile']"
-        routerLinkActive="router-link-active">
-        Profile
-      </a>
+    <a
+      mat-stroked-button
+      [routerLink]="['/profile']"
+      routerLinkActive="router-link-active"
+    >
+      Profile
+    </a>
     }
-  
+
     <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
       Login
     </button>
-    
+
     <button mat-raised-button *ngIf="loginDisplay" (click)="logout()">
       Logout
     </button>
-  
-  
+
     <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
       <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
     </button>
-  
+
     <mat-menu #themeMenu="matMenu">
       @for (theme of themeService.getThemes(); track theme.name) {
       <button
-        [class.selected-theme]="themeService.selectedTheme()?.name === theme.name"
+        [class.selected-theme]="
+          themeService.selectedTheme()?.name === theme.name
+        "
         mat-menu-item
         (click)="themeService.setTheme(theme.name)"
       >
@@ -76,5 +75,4 @@
       }
     </mat-menu>
   </div>
-  </mat-toolbar>
-  
+</mat-toolbar>

@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 import { MsalGuard } from '@azure/msal-angular';
 import { ProfileComponent } from './profile/profile.component';
-import { OffersListComponent } from './modules/offers/offers-list/offers-list.component';
 import { HomeComponent } from './modules/home/home.component';
 import { RegulationsComponent } from './modules/regulations/regulations.component';
 import { ContactComponent } from './modules/contact/contact.component';
-import { SaleOfferFormComponent } from './modules/offerform/sale-offer-form/sale-offer-form.component';
+import { SandboxComponent } from './modules/sandbox-component/sandbox/sandbox.component';
+import { AddSaleOfferFormComponent } from './modules/offers/sale-offers/add-sale-offer-form/add-sale-offer-form.component';
+import { SaleOffersListComponent } from './modules/offers/sale-offers/sale-offers-list/sale-offers-list.component';
 
 export const routes: Routes = [
   {
@@ -17,11 +18,20 @@ export const routes: Routes = [
     component: ProfileComponent,
     canActivate: [MsalGuard],
   },
-  {
-    path: 'offers-list',
-    component: OffersListComponent,
-  },
   { path: 'contact', component: ContactComponent },
   { path: 'regulations', component: RegulationsComponent },
-  { path: 'saleofferform', component: SaleOfferFormComponent, canActivate: [MsalGuard] },
+  {
+    path: 'sale-offers',
+    children: [
+      {
+        path: '',
+        component: SaleOffersListComponent,
+      },
+      {
+        path: 'create',
+        component: AddSaleOfferFormComponent,
+        canActivate: [MsalGuard],
+      },
+    ],
+  },
 ];

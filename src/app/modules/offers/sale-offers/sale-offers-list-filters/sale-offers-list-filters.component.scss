@@ -1,6 +1,6 @@
-@use "../../../../styles/variables.scss" as vars;
+@use "../../../../../styles/variables.scss" as vars;
 
-.offer-filter-side-panel {
+.sale-offer-filter-side-panel {
   position: fixed;
   top: 64px;
   right: -300px;
@@ -22,7 +22,7 @@
   }
 }
 
-.offer-applied-filters {
+.sale-offer-applied-filters {
   border-radius: 5px;
 
   &__header {
@@ -34,7 +34,7 @@
 }
 
 @media (max-width: 768px) {
-  .offer-filter-side-panel {
+  .sale-offer-filter-side-panel {
     width: 100%;
     right: -100%;
 

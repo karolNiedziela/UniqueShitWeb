@@ -45,7 +45,9 @@ export class CustomAuthInterceptor implements HttpInterceptor {
   }
 
   private shouldAttachToken(req: HttpRequest<any>): boolean {
-    const rules = [{ url: `${environment.apiUrl}/offers`, method: 'POST' }];
+    const rules = [
+      { url: `${environment.apiUrl}/sale-offers`, method: 'POST' },
+    ];
 
     return rules.some(
       (rule) =>

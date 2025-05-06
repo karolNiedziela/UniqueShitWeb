@@ -1,4 +1,4 @@
-export const OfferListFiltersControlName = {
+export const SaleOfferListFiltersControlName = {
   ProductCategory: 'productCategory',
   Model: 'model',
   Brand: 'brand',
@@ -8,4 +8,4 @@ export const OfferListFiltersControlName = {
 } as const;
 
 export type ControlNameType =
-  (typeof OfferListFiltersControlName)[keyof typeof OfferListFiltersControlName];
+  (typeof SaleOfferListFiltersControlName)[keyof typeof SaleOfferListFiltersControlName];

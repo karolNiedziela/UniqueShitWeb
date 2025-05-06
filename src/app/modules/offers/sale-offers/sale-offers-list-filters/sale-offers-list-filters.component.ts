@@ -1,42 +1,42 @@
-import { ModelType } from './../../models/models/model.model';
-import { OptionSet } from './../../../shared/models/option-set.model';
 import {
   Component,
   DestroyRef,
   inject,
   input,
-  OnDestroy,
   OnInit,
   output,
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { ProductCategoryService } from '../../product-categories/services/product-category.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { distinctUntilChanged, filter, skip, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import {
-  Chip,
-  ChipsComponent,
-} from '../../../shared/components/chips/chips.component';
-import { ItemConditionService } from '../../item-conditions/services/item-condition.service';
-import { SizeService } from '../../sizes/services/size.service';
-import { OfferService } from '../services/offer.service';
-import { AutocompleteComponent } from '../../../shared/components/autocomplete/autocomplete.component';
-import { SelectComponent } from '../../../shared/components/select/select.component';
-import { ColourService } from '../../colours/services/colour.service';
-import { BrandsService } from '../../brands/services/brands.service';
+
 import {
   DefaultOfferQueryParameters,
   OfferQueryParameters,
-} from '../models/offers-query-parameters.model';
-import { ModelsAutocompleteComponent } from '../../models/models-autocomplete/models-autocomplete.component';
-import { ModelsService } from '../../models/services/models.service';
-import { OfferListFiltersControlName } from './offers-list-filters.controls';
+} from '../models/sale-offers-query-parameters.model';
+import { SaleOfferListFiltersControlName } from './sale-offers-list-filters.controls';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductCategoryService } from '../../../product-categories/services/product-category.service';
+import { ColourService } from '../../../colours/services/colour.service';
+import { ItemConditionService } from '../../../item-conditions/services/item-condition.service';
+import { SizeService } from '../../../sizes/services/size.service';
+import { BrandsService } from '../../../brands/services/brands.service';
+import { SaleOfferService } from '../services/sale-offer.service';
+import { ModelsService } from '../../../models/services/models.service';
+import {
+  Chip,
+  ChipsComponent,
+} from '../../../../shared/components/chips/chips.component';
+import { OptionSet } from '../../../../shared/models/option-set.model';
+import { ModelType } from '../../../models/models/model.model';
+import { AutocompleteComponent } from '../../../../shared/components/autocomplete/autocomplete.component';
+import { ModelsAutocompleteComponent } from '../../../models/models-autocomplete/models-autocomplete.component';
+import { SelectComponent } from '../../../../shared/components/select/select.component';
 
 @Component({
-  selector: 'app-offers-list-filters',
+  selector: 'app-sale-offers-list-filters',
   imports: [
     MatButtonModule,
     SelectComponent,
@@ -46,10 +46,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     AutocompleteComponent,
     ModelsAutocompleteComponent,
   ],
-  templateUrl: './offers-list-filters.component.html',
-  styleUrl: './offers-list-filters.component.scss',
+  templateUrl: './sale-offers-list-filters.component.html',
+  styleUrl: './sale-offers-list-filters.component.scss',
 })
-export class OffersListFiltersComponent implements OnInit {
+export class SaleOffersListFiltersComponent implements OnInit {
   visible = input<boolean>(false);
   filtersToggled = output();
 
@@ -58,7 +58,7 @@ export class OffersListFiltersComponent implements OnInit {
   itemConditionService = inject(ItemConditionService);
   sizeService = inject(SizeService);
   brandService = inject(BrandsService);
-  offerService = inject(OfferService);
+  saleOfferService = inject(SaleOfferService);
   modelService = inject(ModelsService);
   destroyRef = inject(DestroyRef);
 
@@ -68,22 +68,19 @@ export class OffersListFiltersComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterOffersForm = new FormGroup({
-      [OfferListFiltersControlName.ProductCategory]:
+      [SaleOfferListFiltersControlName.ProductCategory]:
         new FormControl<OptionSet | null>(null),
-      [OfferListFiltersControlName.Colour]: new FormControl<OptionSet | null>(
-        null
-      ),
-      [OfferListFiltersControlName.ItemCondition]:
+      [SaleOfferListFiltersControlName.Colour]:
         new FormControl<OptionSet | null>(null),
-      [OfferListFiltersControlName.Size]: new FormControl<OptionSet | null>(
+      [SaleOfferListFiltersControlName.ItemCondition]:
+        new FormControl<OptionSet | null>(null),
+      [SaleOfferListFiltersControlName.Size]: new FormControl<OptionSet | null>(
         null
       ),
-      [OfferListFiltersControlName.Brand]: new FormControl<OptionSet | null>(
-        null
-      ),
-      [OfferListFiltersControlName.Model]: new FormControl<ModelType | null>(
-        null
-      ),
+      [SaleOfferListFiltersControlName.Brand]:
+        new FormControl<OptionSet | null>(null),
+      [SaleOfferListFiltersControlName.Model]:
+        new FormControl<ModelType | null>(null),
     });
 
     this.trackFormControlChanges();
@@ -105,7 +102,7 @@ export class OffersListFiltersComponent implements OnInit {
       modelId: formValues.model?.id ?? undefined,
     };
 
-    this.offerService.offersQueryParameters.set(queryParameters);
+    this.saleOfferService.offersQueryParameters.set(queryParameters);
     this.toggleFilters();
   }
 
@@ -139,15 +136,15 @@ export class OffersListFiltersComponent implements OnInit {
 
   private handleValueChange(controlName: string, value: unknown): void {
     switch (controlName) {
-      case OfferListFiltersControlName.ProductCategory:
+      case SaleOfferListFiltersControlName.ProductCategory:
         this.handleProductCategoryChange(value as OptionSet | null);
         break;
 
-      case OfferListFiltersControlName.Model:
+      case SaleOfferListFiltersControlName.Model:
         this.handleModelChange(controlName, value as ModelType | null);
         break;
 
-      case OfferListFiltersControlName.Brand:
+      case SaleOfferListFiltersControlName.Brand:
         this.handleBrandChange(value as OptionSet | null);
         break;
     }
@@ -157,7 +154,7 @@ export class OffersListFiltersComponent implements OnInit {
       return;
     }
 
-    if (controlName !== OfferListFiltersControlName.Model) {
+    if (controlName !== SaleOfferListFiltersControlName.Model) {
       this.updateAppliedFilters(controlName, value as OptionSet);
     }
   }
@@ -170,8 +167,8 @@ export class OffersListFiltersComponent implements OnInit {
       searchTerm: '',
     }));
 
-    this.removeFilterByControlName(OfferListFiltersControlName.Size);
-    this.removeFilterByControlName(OfferListFiltersControlName.Model);
+    this.removeFilterByControlName(SaleOfferListFiltersControlName.Size);
+    this.removeFilterByControlName(SaleOfferListFiltersControlName.Model);
   }
 
   private handleModelChange(controlName: string, value: ModelType | null) {
@@ -196,7 +193,7 @@ export class OffersListFiltersComponent implements OnInit {
       searchTerm: '',
     }));
 
-    this.removeFilterByControlName(OfferListFiltersControlName.Model);
+    this.removeFilterByControlName(SaleOfferListFiltersControlName.Model);
   }
 
   private removeFilterByControlName(controlName: string): void {
