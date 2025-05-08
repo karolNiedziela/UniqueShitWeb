@@ -1,0 +1,24 @@
+<mat-form-field class="text-input-form-field" appearance="outline">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    matInput
+    [formControl]="formControl"
+    [attr.maxlength]="maxLength() ? maxLength() : null"
+  />
+  @if (maxLength()) {
+  <mat-hint align="end">
+    {{ formControl.value?.length || 0 }} / {{ maxLength() }}
+  </mat-hint>
+  } @if (!isValid()) {
+  <mat-error>
+    @if (formControl.hasError('required')) {
+    <mat-error> {{ label() }} is required. </mat-error>
+    } @if (formControl.hasError('maxlength')) {
+    <mat-error>
+      {{ label() }} can contain maximum
+      {{ formControl?.errors?.['maxlength'].requiredLength }} characters.
+    </mat-error>
+    }
+  </mat-error>
+  }
+</mat-form-field>
