@@ -64,7 +64,38 @@
             Item condition is required.
           </mat-error>
         </app-select>
+
+                <app-select
+          label="Delivery Type"
+          formControlName="deliveryType"
+          [options]="deliveryTypeService.deliveryTypeOptions.value()">
+          <mat-error *ngIf="form.controls['deliveryType'].hasError('required')">
+            Delivery Type is required.
+          </mat-error>
+        </app-select>
+
+                <app-select
+          label="Payment Type"
+          formControlName="paymentType"
+          [options]="paymentTypeService.paymentTypeOptions.value()">
+          <mat-error *ngIf="form.controls['paymentType'].hasError('required')">
+            Payment Type is required.
+          </mat-error>
+        </app-select>
+
+<mat-form-field appearance="outline">
+  <mat-label>Colours</mat-label>
+  <mat-select formControlName="colour" multiple>
+    <mat-option *ngFor="let colour of colourService.colourOptions.value()" [value]="colour">
+      {{ colour.viewValue }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="form.controls['colour'].hasError('required')">
+    One of colours is required.
+  </mat-error>
+</mat-form-field>
       </div>
+    
 
       <div class="quantityandprice">
         <mat-form-field appearance="outline">

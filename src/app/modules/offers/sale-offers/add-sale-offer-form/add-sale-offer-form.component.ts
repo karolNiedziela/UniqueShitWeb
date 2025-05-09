@@ -22,7 +22,10 @@ import { SelectComponent } from '../../../../shared/components/select/select.com
 import { ModelsAutocompleteComponent } from '../../../models/models-autocomplete/models-autocomplete.component';
 import { OptionSet } from '../../../../shared/models/option-set.model';
 import { ModelType } from '../../../models/models/model.model';
+import { DeliveryTypeService } from '../../../delivery-types/services/delivery-types.service';
+import { PaymentTypeService } from '../../../payment-types/services/payment-types.service';
 import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
+import { ColourService } from '../../../colours/services/colour.service';
 
 @Component({
   selector: 'app-saleoffer-form',
@@ -50,6 +53,9 @@ export class AddSaleOfferFormComponent implements OnInit {
   itemConditionService = inject(ItemConditionService);
   sizeService = inject(SizeService);
   modelService = inject(ModelsService);
+  deliveryTypeService = inject(DeliveryTypeService);
+  paymentTypeService = inject(PaymentTypeService);
+  colourService = inject(ColourService);
 
   modelIdSignal = signal<number | null>(null);
   sizeIdSignal = signal<number | null>(null);
@@ -89,6 +95,15 @@ export class AddSaleOfferFormComponent implements OnInit {
       size: new FormControl<OptionSet | null>(null, {
         validators: [Validators.required],
       }),
+            deliveryType: new FormControl<OptionSet | null>(null, {
+        validators: [Validators.required],
+      }),
+            paymentType: new FormControl<OptionSet | null>(null, {
+        validators: [Validators.required],
+      }),
+  colour: new FormControl<number[]>([], {
+    validators: [Validators.required],
+  }),
     });
 
     this.form.controls['model'].valueChanges
@@ -140,6 +155,9 @@ export class AddSaleOfferFormComponent implements OnInit {
       modelId: this.modelIdSignal() ?? 0,
       sizeId: this.sizeIdSignal() ?? 0,
       quantity: this.form.value.quantity!,
+      deliveryTypeId: this.form.value.deliveryType?.id ?? 0,
+      paymentTypeId: this.form.value.paymentType?.id ?? 0,
+      colourIds: this.form.value.colour?.id ?? 0,
     };
 
     const call$ = this.selectedFile

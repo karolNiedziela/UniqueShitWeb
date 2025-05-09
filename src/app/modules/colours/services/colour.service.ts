@@ -20,7 +20,7 @@ export class ColourService {
         ColourArraySchema.parse(data).map((colour: ColourType) => ({
           id: colour.id,
           value: colour.name,
-          viewValue: `${colour.id}-${colour.name}}`,
+          viewValue: `${colour.name}`,
         })),
     }
   );

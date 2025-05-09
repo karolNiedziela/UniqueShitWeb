@@ -6,4 +6,7 @@ export type CreateSaleOfferDto = {
   modelId: number;
   sizeId: number;
   quantity: number;
+  deliveryTypeId: number;
+  paymentTypeId: number;
+  colourIds: number[];
 };
