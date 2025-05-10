@@ -31,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   templateUrl: './multiselect.component.html',
-  styleUrl: './multiselect.component.scss',
+  styleUrls: ['./multiselect.component.scss'],
 })
 export class MultiselectComponent
   implements OnInit, ControlValueAccessor, OnDestroy

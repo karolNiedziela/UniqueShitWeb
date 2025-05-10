@@ -3,7 +3,6 @@
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="form-name">Add a sale offer</div>
 
-
 <div class="topic">
   <app-text-input
     formControlName="topic"
@@ -21,7 +20,6 @@
   ></app-text-area>
 </div>
 
-
       <div class="details-item">
         <app-models-autocomplete formControlName="model" label="Select model">
           <mat-error *ngIf="form.controls['model'].hasError('required')">
@@ -32,57 +30,34 @@
         <app-select
           label="Size"
           formControlName="size"
-          [options]="sizeService.sizeOptions.value()"
-        >
-          <mat-error *ngIf="form.controls['size'].hasError('required')">
-            Size is required.
-          </mat-error>
+          [options]="sizeService.sizeOptions.value()">
         </app-select>
 
         <app-select
           label="Item condition"
           formControlName="itemCondition"
-          [options]="itemConditionService.itemConditionOptions.value()"
-        >
-          <mat-error
-            *ngIf="form.controls['itemCondition'].hasError('required')"
-          >
-            Item condition is required.
-          </mat-error>
+          [options]="itemConditionService.itemConditionOptions.value()">
         </app-select>
 
-                <app-select
+        <app-select
           label="Delivery Type"
           formControlName="deliveryType"
           [options]="deliveryTypeService.deliveryTypeOptions.value()">
-          <mat-error *ngIf="form.controls['deliveryType'].hasError('required')">
-            Delivery Type is required.
-          </mat-error>
         </app-select>
 
-                <app-select
+        <app-select
           label="Payment Type"
           formControlName="paymentType"
           [options]="paymentTypeService.paymentTypeOptions.value()">
-          <mat-error *ngIf="form.controls['paymentType'].hasError('required')">
-            Payment Type is required.
-          </mat-error>
         </app-select>
 
-<mat-form-field appearance="outline">
-  <mat-label>Colours</mat-label>
-  <mat-select formControlName="colour" multiple>
-    <mat-option *ngFor="let colour of colourService.colourOptions.value()" [value]="colour">
-      {{ colour.viewValue }}
-    </mat-option>
-  </mat-select>
-  <mat-error *ngIf="form.controls['colour'].hasError('required')">
-    One of colours is required.
-  </mat-error>
-</mat-form-field>
+        <app-multiselect
+          label="Colours"
+          [options]="colourService.colourOptions.value()"
+          formControlName="colour">
+        </app-multiselect>
       </div>
     
-
       <div class="quantityandprice">
         <mat-form-field appearance="outline">
           <mat-label>Quantity</mat-label>
