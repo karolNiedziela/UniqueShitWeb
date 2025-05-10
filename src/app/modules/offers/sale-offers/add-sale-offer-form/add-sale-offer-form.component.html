@@ -3,38 +3,24 @@
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="form-name">Add a sale offer</div>
 
-      <div class="topic">
-        <mat-form-field appearance="outline">
-          <mat-label>Topic</mat-label>
-          <input matInput formControlName="topic" maxlength="30" #topicInput />
-          <mat-hint align="end">
-            {{ topicInput.value?.length || 0 }} / 30
-          </mat-hint>
-          <mat-error *ngIf="form.controls['topic'].hasError('required')">
-            Topic is required.
-          </mat-error>
-        </mat-form-field>
-      </div>
 
-      <div class="description">
-        <mat-form-field appearance="outline">
-          <mat-label>Description</mat-label>
-          <textarea
-            matInput
-            formControlName="description"
-            rows="7"
-            maxlength="200"
-            #descriptionInput
-          >
-          </textarea>
-          <mat-hint align="end">
-            {{ descriptionInput.value?.length || 0 }} / 200
-          </mat-hint>
-          <mat-error *ngIf="form.controls['description'].hasError('required')">
-            Description is required.
-          </mat-error>
-        </mat-form-field>
-      </div>
+<div class="topic">
+  <app-text-input
+    formControlName="topic"
+    [label]="'Topic'"
+    [maxLength]="30"
+  ></app-text-input>
+</div>
+
+<div class="description">
+  <app-text-area
+    formControlName="description"
+    [label]="'Description'"
+    [rows]="7"
+    [maxLength]="200"
+  ></app-text-area>
+</div>
+
 
       <div class="details-item">
         <app-models-autocomplete formControlName="model" label="Select model">

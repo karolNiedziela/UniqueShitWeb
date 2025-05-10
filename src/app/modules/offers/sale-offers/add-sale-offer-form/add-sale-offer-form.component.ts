@@ -26,9 +26,12 @@ import { DeliveryTypeService } from '../../../delivery-types/services/delivery-t
 import { PaymentTypeService } from '../../../payment-types/services/payment-types.service';
 import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
 import { ColourService } from '../../../colours/services/colour.service';
+import { TextInputComponent } from '../../../../shared/components/inputs/text-input/text-input.component';
+import { TextAreaComponent } from '../../../../shared/components/inputs/text-area/text-area.component';
 
 @Component({
   selector: 'app-saleoffer-form',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -41,6 +44,8 @@ import { ColourService } from '../../../colours/services/colour.service';
     MatIconModule,
     SelectComponent,
     ModelsAutocompleteComponent,
+    TextInputComponent,
+    TextAreaComponent,
   ],
   templateUrl: './add-sale-offer-form.component.html',
   styleUrls: ['./add-sale-offer-form.component.scss'],
