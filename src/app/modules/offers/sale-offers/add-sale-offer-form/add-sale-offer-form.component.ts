@@ -22,7 +22,13 @@ import { SelectComponent } from '../../../../shared/components/select/select.com
 import { ModelsAutocompleteComponent } from '../../../models/models-autocomplete/models-autocomplete.component';
 import { OptionSet } from '../../../../shared/models/option-set.model';
 import { ModelType } from '../../../models/models/model.model';
+import { DeliveryTypeService } from '../../../delivery-types/services/delivery-types.service';
+import { PaymentTypeService } from '../../../payment-types/services/payment-types.service';
 import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
+import { ColourService } from '../../../colours/services/colour.service';
+import { TextInputComponent } from '../../../../shared/components/inputs/text-input/text-input.component';
+import { TextAreaComponent } from '../../../../shared/components/inputs/text-area/text-area.component';
+import { MultiselectComponent } from '../../../../shared/components/multiselect/multiselect.component';
 
 @Component({
   selector: 'app-saleoffer-form',
@@ -38,6 +44,9 @@ import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
     MatIconModule,
     SelectComponent,
     ModelsAutocompleteComponent,
+    TextInputComponent,
+    TextAreaComponent,
+    MultiselectComponent,
   ],
   templateUrl: './add-sale-offer-form.component.html',
   styleUrls: ['./add-sale-offer-form.component.scss'],
@@ -50,6 +59,9 @@ export class AddSaleOfferFormComponent implements OnInit {
   itemConditionService = inject(ItemConditionService);
   sizeService = inject(SizeService);
   modelService = inject(ModelsService);
+  deliveryTypeService = inject(DeliveryTypeService);
+  paymentTypeService = inject(PaymentTypeService);
+  colourService = inject(ColourService);
 
   modelIdSignal = signal<number | null>(null);
   sizeIdSignal = signal<number | null>(null);
@@ -89,6 +101,15 @@ export class AddSaleOfferFormComponent implements OnInit {
       size: new FormControl<OptionSet | null>(null, {
         validators: [Validators.required],
       }),
+            deliveryType: new FormControl<OptionSet | null>(null, {
+        validators: [Validators.required],
+      }),
+            paymentType: new FormControl<OptionSet | null>(null, {
+        validators: [Validators.required],
+      }),
+            colour: new FormControl<OptionSet[]>([], {
+        validators: [Validators.required],
+      }),
     });
 
     this.form.controls['model'].valueChanges
@@ -125,38 +146,45 @@ export class AddSaleOfferFormComponent implements OnInit {
     }
   }
 
-  save(): void {
-    if (this.form.invalid) return;
-    this.saving.set(true);
+save(): void {
+  if (this.form.invalid) return;
+  this.saving.set(true);
 
-    const dto: CreateSaleOfferDto = {
-      topic: this.form.value.topic!,
-      description: this.form.value.description!,
-      price: {
-        amount: this.form.value.priceAmount!,
-        currency: this.form.value.priceCurrency!,
-      },
-      itemConditionId: this.form.value.itemCondition?.id ?? 0,
-      modelId: this.modelIdSignal() ?? 0,
-      sizeId: this.sizeIdSignal() ?? 0,
-      quantity: this.form.value.quantity!,
-    };
+  const selectedColours = this.form.controls['colour'].value as OptionSet[];
 
-    const call$ = this.selectedFile
-      ? this.saleOfferService.createOfferWithFile(dto, this.selectedFile)
-      : this.saleOfferService.createOffer(dto);
+  const colourIds = selectedColours.map(col => col.id);
 
-    call$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.saving.set(false);
-        this.router.navigate(['/saleofferform']);
-      },
-      error: (err) => {
-        console.error('Save error:', err);
-        this.saving.set(false);
-      },
-    });
-  }
+  const dto: CreateSaleOfferDto = {
+    topic: this.form.value.topic!,
+    description: this.form.value.description!,
+    price: {
+      amount: this.form.value.priceAmount!,
+      currency: this.form.value.priceCurrency!,
+    },
+    itemConditionId: this.form.value.itemCondition?.id ?? 0,
+    modelId: this.modelIdSignal() ?? 0,
+    sizeId: this.sizeIdSignal() ?? 0,
+    quantity: this.form.value.quantity!,
+    deliveryTypeId: this.form.value.deliveryType?.id ?? 0,
+    paymentTypeId: this.form.value.paymentType?.id ?? 0,
+    colourIds,
+  };
+  
+  const call$ = this.selectedFile
+    ? this.saleOfferService.createOfferWithFile(dto, this.selectedFile)
+    : this.saleOfferService.createOffer(dto);
+
+  call$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    next: () => {
+      this.saving.set(false);
+      this.router.navigate(['/saleofferform']);
+    },
+    error: (err) => {
+      console.error('Save error:', err);
+      this.saving.set(false);
+    },
+  });
+}
 
   clearForm(): void {
     this.form.reset({ priceCurrency: 'PLN' });
