@@ -1,0 +1,58 @@
+<div class="background-wrapper">
+  <div class="purchaseofferform">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-name">Add a purchase offer</div>
+
+      <div class="topic">
+        <app-text-input
+          formControlName="topic"
+          [label]="'Topic'"
+          [maxLength]="30"
+        ></app-text-input>
+      </div>
+
+      <div class="description">
+        <app-text-area
+          formControlName="description"
+          [label]="'Description'"
+          [rows]="7"
+          [maxLength]="200"
+        ></app-text-area>
+      </div>
+
+      <div class="model">
+        <app-models-autocomplete
+          formControlName="model"
+          label="Select model">
+          <mat-error *ngIf="form.controls['model'].hasError('required')">
+            Model is required.
+          </mat-error>
+        </app-models-autocomplete>
+      </div>
+
+      <div class="buttons">
+        <button
+          class="save-button"
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid">
+          Save
+        </button>
+
+        <button
+          class="cancel-button"
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="clearForm()">
+          Cancel
+        </button>
+      </div>
+
+      <ng-container *ngIf="saving()">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </ng-container>
+    </form>
+  </div>
+</div>

@@ -6,6 +6,8 @@ import { RegulationsComponent } from './modules/regulations/regulations.componen
 import { ContactComponent } from './modules/contact/contact.component';
 import { AddSaleOfferFormComponent } from './modules/offers/sale-offers/add-sale-offer-form/add-sale-offer-form.component';
 import { SaleOffersListComponent } from './modules/offers/sale-offers/sale-offers-list/sale-offers-list.component';
+import { AddPurchaseOfferFormComponent } from './modules/offers/purchase-offers/add-purchase-offer-form/add-purchase-offer-form.component';
+
 
 export const routes: Routes = [
   {
@@ -33,4 +35,15 @@ export const routes: Routes = [
       },
     ],
   },
+{
+  path: 'purchase-offers',
+  children: [
+
+    {
+      path: 'create',
+      component: AddPurchaseOfferFormComponent,
+      canActivate: [MsalGuard],
+    },
+  ],
+},
 ];

@@ -17,7 +17,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SaleOfferService } from '../services/sale-offer.service';
 import { ItemConditionService } from '../../../item-conditions/services/item-condition.service';
 import { SizeService } from '../../../sizes/services/size.service';
-import { ModelsService } from '../../../models/services/models.service';
 import { SelectComponent } from '../../../../shared/components/select/select.component';
 import { ModelsAutocompleteComponent } from '../../../models/models-autocomplete/models-autocomplete.component';
 import { OptionSet } from '../../../../shared/models/option-set.model';
@@ -58,7 +57,6 @@ export class AddSaleOfferFormComponent implements OnInit {
 
   itemConditionService = inject(ItemConditionService);
   sizeService = inject(SizeService);
-  modelService = inject(ModelsService);
   deliveryTypeService = inject(DeliveryTypeService);
   paymentTypeService = inject(PaymentTypeService);
   colourService = inject(ColourService);
@@ -171,13 +169,13 @@ save(): void {
   };
   
   const call$ = this.selectedFile
-    ? this.saleOfferService.createOfferWithFile(dto, this.selectedFile)
-    : this.saleOfferService.createOffer(dto);
+    ? this.saleOfferService.createSaleOfferWithFile(dto, this.selectedFile)
+    : this.saleOfferService.createSaleOffer(dto);
 
   call$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
     next: () => {
       this.saving.set(false);
-      this.router.navigate(['/saleofferform']);
+      this.router.navigate(['/sale-offers/create']);
     },
     error: (err) => {
       console.error('Save error:', err);
