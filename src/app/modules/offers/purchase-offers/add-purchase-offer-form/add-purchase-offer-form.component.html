@@ -1,5 +1,5 @@
-<div class="background-wrapper">
-  <div class="purchaseofferform">
+<div class="purchase-offer-background">
+  <div class="purchase-offer-form">
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="form-name">Add a purchase offer</div>
 
@@ -24,9 +24,11 @@
         <app-models-autocomplete
           formControlName="model"
           label="Select model">
-          <mat-error *ngIf="form.controls['model'].hasError('required')">
-            Model is required.
-          </mat-error>
+          @if (form.controls['model'].hasError('required')) {
+      <mat-error>
+        Model is required.
+      </mat-error>
+    }
         </app-models-autocomplete>
       </div>
 
@@ -50,9 +52,9 @@
         </button>
       </div>
 
-      <ng-container *ngIf="saving()">
+      @if (saving()) {
         <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-      </ng-container>
+      }
     </form>
   </div>
 </div>
