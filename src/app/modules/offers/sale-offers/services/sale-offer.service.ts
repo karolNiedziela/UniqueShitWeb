@@ -51,13 +51,12 @@ export class SaleOfferService {
     }
   );
 
-  createOffer(dto: CreateSaleOfferDto): Observable<CreateSaleOfferDto> {
+  createSaleOffer(dto: CreateSaleOfferDto): Observable<CreateSaleOfferDto> {
     return this.httpClient
       .post<CreateSaleOfferDto>(this.saleOffersEndpoint, dto)
-      .pipe(tap(() => console.log('Offer created')));
   }
 
-  createOfferWithFile(
+  createSaleOfferWithFile(
     dto: CreateSaleOfferDto,
     file: File
   ): Observable<CreateSaleOfferDto> {
@@ -70,6 +69,5 @@ export class SaleOfferService {
 
     return this.httpClient
       .post<CreateSaleOfferDto>(this.saleOffersEndpoint, formData)
-      .pipe(tap(() => console.log('Offer with file created')));
   }
 }

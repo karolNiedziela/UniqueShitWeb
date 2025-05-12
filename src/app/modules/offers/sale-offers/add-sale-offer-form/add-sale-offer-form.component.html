@@ -21,10 +21,14 @@
 </div>
 
       <div class="details-item">
-        <app-models-autocomplete formControlName="model" label="Select model">
-          <mat-error *ngIf="form.controls['model'].hasError('required')">
+        <app-models-autocomplete 
+        formControlName="model" 
+        label="Select model">
+        @if (form.controls['model'].hasError('required')) {
+           <mat-error>
             Model is required.
           </mat-error>
+        }
         </app-models-autocomplete>
 
         <app-select
@@ -62,17 +66,21 @@
         <mat-form-field appearance="outline">
           <mat-label>Quantity</mat-label>
           <input matInput formControlName="quantity" />
-          <mat-error *ngIf="form.controls['quantity'].hasError('required')">
+          @if (form.controls['quantity'].hasError('required')) {
+          <mat-error>
             Quanity is required.
           </mat-error>
+        }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Price Amount</mat-label>
           <input matInput formControlName="priceAmount" />
-          <mat-error *ngIf="form.controls['priceAmount'].hasError('required')">
+          @if (form.controls['priceAmount'].hasError('required')) {
+          <mat-error>
             Price amount is required.
           </mat-error>
+        }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -124,8 +132,10 @@
       />
     </form>
 
-    <ng-container *ngIf="saving()">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    </ng-container>
+      @if (saving()) {
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      }
   </div>
 </div>
+
+
