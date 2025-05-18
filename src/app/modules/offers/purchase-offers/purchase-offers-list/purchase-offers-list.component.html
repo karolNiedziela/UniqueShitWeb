@@ -1,0 +1,26 @@
+<app-purchase-offers-list-filters
+  [visible]="filtersVisible()"
+  (filtersToggled)="toggleFilters()"
+></app-purchase-offers-list-filters>
+
+<div class="purchase-offers-container" [class.dimmed]="filtersVisible()">
+  <div class="purchase-offers-header">
+    <button mat-raised-button class="filter-toggle" (click)="toggleFilters()">
+      Show filters
+    </button>
+  </div>
+
+  @if (purchaseOfferService.offers.isLoading()) {
+    <div>Loading...</div>
+  } @else {
+    <div class="purchase-offers-grid-container">
+      @if (purchaseOfferService.offers.value().items.length === 0) {
+        <div class="no-purchase-offers">No purchase offers found</div>
+      } @else {
+        @for (purchaseOffer of purchaseOfferService.offers.value().items; track purchaseOffer.id) {
+          <app-purchase-offer-card [purchaseOffer]="purchaseOffer"></app-purchase-offer-card>
+        }
+      }
+    </div>
+  }
+</div>
