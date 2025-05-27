@@ -1,0 +1,53 @@
+@for (openedChat of openedChats(); track openedChat.id) {
+<div
+  class="opened-chat-bottom-panel fixed bottom-0 z-50"
+  [ngClass]="{
+    'right-0': openedChats().length === 1,
+    'max-w-full w-full sm:w-[360px] md:w-[390px]': true
+  }"
+  [style.right.px]="
+    (this.chatService.sidebarOpened() ? 360 : 0) +
+    openedChats().indexOf(openedChat) * 390
+  "
+>
+  <div class="open-chat-window-container">
+    <div class="open-chat-header">
+      <span class="chat-title">{{ openedChat.displayName }}</span>
+      <button
+        mat-icon-button
+        aria-label="Close chat"
+        (click)="this.chatService.removeChat(openedChat.id)"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div
+      class="chat-messages flex-1 overflow-y-auto px-4 py-2"
+      #messagesContainer
+    >
+      @for (msg of openedChat.messages; track msg.sentAt) {
+      <div [ngClass]="{ bubble: true, me: msg.isMe, receiver: !msg.isMe }">
+        {{ msg.content }}
+      </div>
+      }
+    </div>
+    <div class="chat-message-row">
+      <input
+        class=""
+        [ngModel]="openedChat.inputMessage"
+        (ngModelChange)="this.chatService.updateInput(openedChat.id, $event)"
+        placeholder="Type a message..."
+        (keyup.enter)="this.chatService.sendMessage(openedChat.id)"
+      />
+      <button
+        mat-raised-button
+        class="min-w-[64px]"
+        (click)="this.chatService.sendMessage(openedChat.id)"
+        [disabled]="!openedChat.inputMessage || !openedChat.inputMessage.trim()"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+}

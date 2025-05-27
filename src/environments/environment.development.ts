@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  plainApiUrl: 'https://localhost:5000',
   apiUrl: 'https://localhost:5000/api/v1',
   adb2c: {
     clientId: 'ca92409d-9f71-4abb-9fc3-2a5a379aa60d',
