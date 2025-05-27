@@ -7,7 +7,6 @@ import { Router, RouterModule } from '@angular/router';
   imports: [RouterModule],
   templateUrl: './sale-offer-card.component.html',
   styleUrl: './sale-offer-card.component.scss',
-  standalone: true,
 })
 export class SaleOfferCardComponent {
   saleOffer = input.required<SaleOfferType>();

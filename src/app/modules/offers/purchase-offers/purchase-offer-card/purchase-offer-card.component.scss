@@ -1,0 +1,52 @@
+@use "../../../../../styles/variables.scss" as vars;
+
+.purchaseOffer-card {
+  border: 1px solid vars.$border-color;
+  border-radius: 4px;
+  overflow: visible;           
+  transition: box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: auto;                   
+  max-width: 100%;               
+  min-height: 200px;
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    background-color: whitesmoke;
+    border-bottom: 1px solid vars.$border-color;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  &__topic {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  &__model {
+    font-weight: 600;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+
+  &__description {
+    padding: 10px;
+    font-size: 0.9rem;
+    color: black;
+    flex: 1;
+    overflow-wrap: break-word;
+  }
+
+  @media screen and (max-width: 800px) {
+    & {
+      max-width: 100%;
+    }
+    &__header {
+      flex-wrap: wrap;  
+    }
+  }
+}

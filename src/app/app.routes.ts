@@ -8,6 +8,7 @@ import { AddSaleOfferFormComponent } from './modules/offers/sale-offers/add-sale
 import { SaleOffersListComponent } from './modules/offers/sale-offers/sale-offers-list/sale-offers-list.component';
 import { AddPurchaseOfferFormComponent } from './modules/offers/purchase-offers/add-purchase-offer-form/add-purchase-offer-form.component';
 import { SaleOfferDetailsComponent } from './modules/offers/sale-offers/sale-offer-details/sale-offer-details.component';
+import { PurchaseOffersListComponent } from './modules/offers/purchase-offers/purchase-offers-list/purchase-offers-list.component';
 
 export const routes: Routes = [
   {
@@ -51,4 +52,17 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+  path: 'purchase-offers',
+  children: [
+    {
+      path: '',                              // ← tu
+      component: PurchaseOffersListComponent
+    },
+    {
+      path: 'create',
+      component: AddPurchaseOfferFormComponent,
+      canActivate: [MsalGuard],
+    },
+  ]}
 ];
