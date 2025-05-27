@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
 import { computed, Injectable, inject, signal } from '@angular/core';
-import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import {
   DefaultOfferQueryParameters,
@@ -11,6 +10,7 @@ import { PagedListModel } from '../../../../shared/models/paged-list-model';
 import { environment } from '../../../../../environments/environment';
 import { SaleOfferType } from '../models/sale-offer.model';
 import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
+import { SaleOfferDetails } from '../models/sale-offer-details.model';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +36,11 @@ export class SaleOfferService {
     return params;
   });
 
+  getOffer(id: number): Observable<SaleOfferDetails> {
+    const url = `${this.saleOffersEndpoint}/${id}`;
+    return this.httpClient.get<SaleOfferDetails>(url);
+  }
+
   offers = httpResource<PagedListModel<SaleOfferType>>(
     () => ({ url: `${this.saleOffersEndpoint}?${this.offersParams()}` }),
     {
@@ -52,8 +57,10 @@ export class SaleOfferService {
   );
 
   createSaleOffer(dto: CreateSaleOfferDto): Observable<CreateSaleOfferDto> {
-    return this.httpClient
-      .post<CreateSaleOfferDto>(this.saleOffersEndpoint, dto)
+    return this.httpClient.post<CreateSaleOfferDto>(
+      this.saleOffersEndpoint,
+      dto
+    );
   }
 
   createSaleOfferWithFile(
@@ -67,7 +74,9 @@ export class SaleOfferService {
     );
     formData.append('file', file);
 
-    return this.httpClient
-      .post<CreateSaleOfferDto>(this.saleOffersEndpoint, formData)
+    return this.httpClient.post<CreateSaleOfferDto>(
+      this.saleOffersEndpoint,
+      formData
+    );
   }
 }

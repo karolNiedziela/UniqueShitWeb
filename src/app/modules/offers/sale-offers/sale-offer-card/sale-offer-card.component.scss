@@ -1,8 +1,8 @@
 @import "../../../../../styles/variables.scss";
 
 .sale-offer-card {
-  overflow: hidden;
   transition: box-shadow 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0 4px 8px $card-box-shadow;

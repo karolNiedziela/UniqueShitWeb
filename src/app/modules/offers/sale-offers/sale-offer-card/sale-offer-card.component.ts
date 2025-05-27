@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { SaleOfferType } from '../models/sale-offer.model';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sale-offer-card',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './sale-offer-card.component.html',
   styleUrl: './sale-offer-card.component.scss',
 })
