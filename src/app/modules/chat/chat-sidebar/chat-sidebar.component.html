@@ -1,0 +1,31 @@
+<div class="chat-sidebar">
+  <button
+    mat-icon-button
+    class="close-btn"
+    (click)="close.emit()"
+    aria-label="Close chat"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+  <h3>Your Chats</h3>
+  <div class="chat-previews">
+    <div class="chat-previews">
+      @if (chatPreviews$ | async; as chatPreviews) { @for (preview of
+      chatPreviews.items; track preview.id) {
+      <div class="chat-preview" (click)="chatService.addChat(preview.id)">
+        <div class="chat-title">{{ preview.displayName }}</div>
+        <div class="chat-last-message" [class.unread]="!preview.isRead">
+          {{ preview.lastMessage }}
+        </div>
+      </div>
+      } @if (chatPreviews.length === 0) {
+      <div class="no-chats">No chats yet.</div>
+      } }
+    </div>
+  </div>
+</div>
+
+<app-opened-chats
+  [openedChats]="this.chatService.openedChats()"
+  (closeChat)="this.chatService.removeChat($event)"
+></app-opened-chats>

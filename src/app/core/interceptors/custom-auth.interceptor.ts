@@ -48,6 +48,22 @@ export class CustomAuthInterceptor implements HttpInterceptor {
     const rules = [
       { url: `${environment.apiUrl}/sale-offers`, method: 'POST' },
       { url: `${environment.apiUrl}/purchase-offers`, method: 'POST' },
+      {
+        url: `${environment.apiUrl}/private-chats/get-or-create`,
+        method: 'POST',
+      },
+      {
+        url: `${environment.apiUrl}/private-chats/send-message`,
+        method: 'POST',
+      },
+      {
+        url: `${environment.apiUrl}/private-chats/previews`,
+        method: 'GET',
+      },
+      {
+        url: `${environment.apiUrl}/private-chats/`,
+        method: 'GET',
+      },
     ];
 
     return rules.some(

@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, signal } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,19 +6,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NgIf, TitleCasePipe } from '@angular/common';
 import { ThemeService } from '../../core/services/theme.service';
 import { RouterLink } from '@angular/router';
-import { filter, Subject, takeUntil } from 'rxjs';
-import {
-  MSAL_GUARD_CONFIG,
-  MsalBroadcastService,
-  MsalGuardConfiguration,
-  MsalService,
-} from '@azure/msal-angular';
-import {
-  EventMessage,
-  EventType,
-  InteractionStatus,
-  RedirectRequest,
-} from '@azure/msal-browser';
+import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../core/auth/auth.service';
+import { ChatSidebarComponent } from '../chat/chat-sidebar/chat-sidebar.component';
+import { ChatService } from '../chat/services/chat.service';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +22,7 @@ import {
     TitleCasePipe,
     RouterLink,
     NgIf,
+    ChatSidebarComponent,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -38,72 +30,41 @@ import {
 export class HeaderComponent {
   isIframe = false;
   loginDisplay = false;
+  showChatSidebar = signal(false);
   private readonly _destroying$ = new Subject<void>();
 
   protected readonly themeService = inject(ThemeService);
+  protected readonly authService = inject(AuthService);
+  protected readonly chatService = inject(ChatService);
 
-  constructor(
-    @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
-    private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
-  ) {}
+  async ngOnInit(): Promise<void> {
+    this.isIframe = window !== window.parent && !window.opener;
 
-  ngOnInit(): void {
-    this.authService.handleRedirectObservable().subscribe();
-
-    this.isIframe = window !== window.parent && !window.opener; // Remove this line to use Angular Universal
-
-    this.authService.instance.enableAccountStorageEvents(); // Optional - This will enable ACCOUNT_ADDED and ACCOUNT_REMOVED events emitted when a user logs in or out of another tab or window
-    this.msalBroadcastService.msalSubject$
-      .pipe(
-        filter(
-          (msg: EventMessage) =>
-            msg.eventType === EventType.ACCOUNT_ADDED ||
-            msg.eventType === EventType.ACCOUNT_REMOVED
-        )
-      )
-      .subscribe((result: EventMessage) => {
-        if (this.authService.instance.getAllAccounts().length === 0) {
-          window.location.pathname = '/';
-        } else {
-          this.setLoginDisplay();
-        }
+    this.authService.loginDisplay$
+      .pipe(takeUntil(this._destroying$))
+      .subscribe(async (isLoggedIn) => {
+        this.loginDisplay = isLoggedIn;
       });
-
-    this.msalBroadcastService.inProgress$
-      .pipe(
-        filter(
-          (status: InteractionStatus) => status === InteractionStatus.None
-        ),
-        takeUntil(this._destroying$)
-      )
-      .subscribe(() => {
-        this.setLoginDisplay();
-      });
-  }
-
-  login() {
-    if (this.msalGuardConfig.authRequest) {
-      this.authService.loginRedirect({
-        ...this.msalGuardConfig.authRequest,
-      } as RedirectRequest);
-    } else {
-      this.authService.loginRedirect();
-    }
-  }
-
-  logout() {
-    this.authService.logoutRedirect({
-      postLogoutRedirectUri: 'http://localhost:4200',
-    });
-  }
-
-  setLoginDisplay() {
-    this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
   }
 
   ngOnDestroy(): void {
-    this._destroying$.next(undefined);
+    this._destroying$.next();
     this._destroying$.complete();
+    this.authService.destroy();
+  }
+
+  login(): void {
+    this.authService.login();
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
+  toggleChatSidebar(): void {
+    this.chatService.sidebarOpened.set(!this.chatService.sidebarOpened());
+    if (!this.chatService.sidebarOpened()) {
+      this.chatService.closeAllChats();
+    }
   }
 }

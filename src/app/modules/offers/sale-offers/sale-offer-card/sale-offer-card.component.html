@@ -1,18 +1,26 @@
-<div class="saleOffer-card">
-  <div class="saleOffer-card__image">
-    <img [src]="'https://picsum.photos/300/200'" alt="Sale offer Image" />
-  </div>
-  <div class="saleOffer-card__content">
-    <h3 class="saleOffer-card__topic">{{ saleOffer().topic }}</h3>
-    <div class="saleOffer-card__content__row">
-      <p class="saleOffer-card__price">
-        {{ saleOffer().price.value }} {{ saleOffer().price.currency }}
-      </p>
-      <p class="saleOffer-card__condition">
-        {{ saleOffer().itemCondition.name }}
-      </p>
+<div class="sale-offer-card">
+  <a
+    [routerLink]="['/sale-offers', saleOffer().id]"
+    class="sale-offer-card__link"
+  >
+    <div class="sale-offer-card__image">
+      <img [src]="'https://picsum.photos/300/200'" alt="Sale offer Image" />
     </div>
-    <p class="saleOffer-card__brand">{{ saleOffer().brand.name }}</p>
-    <p class="saleOffer-card__model">{{ saleOffer().model.name }}</p>
-  </div>
+    <div class="sale-offer-card__content">
+      <div class="sale-offer-card__content__row">
+        <h3 class="sale-offer-card__topic">{{ saleOffer().topic }}</h3>
+      </div>
+      <div class="sale-offer-card__content__row">
+        <p class="sale-offer-card__price">
+          {{ saleOffer().price.value }} {{ saleOffer().price.currency }}
+        </p>
+        <p class="saleOffer-card__condition">
+          {{ saleOffer().itemCondition.name }}
+        </p>
+      </div>
+      <div class="sale-offer-card__content__row">
+        <p class="sale-offer-card__brand">{{ saleOffer().brand.name }}</p>
+      </div>
+    </div>
+  </a>
 </div>
