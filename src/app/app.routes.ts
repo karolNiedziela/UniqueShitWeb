@@ -43,20 +43,10 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'purchase-offers',
-    children: [
-      {
-        path: 'create',
-        component: AddPurchaseOfferFormComponent,
-        canActivate: [MsalGuard],
-      },
-    ],
-  },
-  {
   path: 'purchase-offers',
   children: [
     {
-      path: '',                              // ← tu
+      path: '',                             
       component: PurchaseOffersListComponent
     },
     {
