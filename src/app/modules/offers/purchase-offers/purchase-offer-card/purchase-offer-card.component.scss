@@ -1,52 +1,87 @@
-@use "../../../../../styles/variables.scss" as vars;
-
-.purchaseOffer-card {
-  border: 1px solid vars.$border-color;
-  border-radius: 4px;
-  overflow: visible;           
+.purchase-offer-card {
+  /* Ustawiamy elastyczną szerokość, która nie przekroczy 430px */
+  width: 100%;
+  max-width: 430px;
+  min-height: 180px;
+  background-color: #000000e8;
+  color: #fff;
   transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  width: auto;                   
-  max-width: 100%;               
-  min-height: 200px;
   box-sizing: border-box;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    background-color: whitesmoke;
-    border-bottom: 1px solid vars.$border-color;
+  &__content {
+    flex: 1;
     padding: 8px;
-    gap: 8px;
+
+    @media screen and (max-width: 768px) {
+      padding: 10px;
+    }
   }
 
-  &__topic {
-    flex: 0 0 auto;
-    white-space: nowrap;
+  &__description {
+    font-size: 0.875rem;
+    line-height: 1.4em;
     font-weight: 600;
+    color: #fff;
+    padding: 2px;
+    box-sizing: border-box;
+    white-space: pre-line;
+    overflow-wrap: break-word;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @media screen and (max-width: 768px) {
+      font-size: 0.75rem;
+      padding: 0 6px;
+    }
+  }
+
+  &__actions {
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media screen and (max-width: 768px) {
+      padding: 12px;
+    }
   }
 
   &__model {
     font-weight: 600;
-    white-space: nowrap;
-    margin-left: auto;
+    color: whitesmoke;
+    padding-left: 3px;
+
+    @media screen and (max-width: 768px) {
+      font-size: 0.85rem;
+      padding-left: 5px;
+    }
   }
 
-  &__description {
-    padding: 10px;
-    font-size: 0.9rem;
-    color: black;
-    flex: 1;
-    overflow-wrap: break-word;
-  }
+  &__user-displayName {
+    font-weight: 600;
+    font-style: italic;
+    color: goldenrod;
+    padding-right: 3px;
 
-  @media screen and (max-width: 800px) {
-    & {
-      max-width: 100%;
+    @media screen and (max-width: 768px) {
+      font-size: 0.85rem;
+      padding-right: 5px;
     }
-    &__header {
-      flex-wrap: wrap;  
-    }
+  }
+}
+
+/* Dodatkowe style dla bardzo wąskich ekranów */
+@media screen and (max-width: 768px) {
+  .purchase-offer-card {
+    min-height: auto;
+    border-radius: 0;
+    border: 1px solid transparent;
   }
 }

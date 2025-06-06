@@ -6,18 +6,16 @@ import { PurchaseOffersListFiltersComponent } from '../purchase-offers-list-filt
 
 @Component({
   selector: 'app-purchase-offers-list',
-  imports: [
+  imports: [                           
     MatButtonModule,
     PurchaseOfferCardComponent,
-    PurchaseOffersListFiltersComponent,
+    PurchaseOffersListFiltersComponent
   ],
   templateUrl: './purchase-offers-list.component.html',
-  styleUrls: ['./purchase-offers-list.component.scss'],
+  styleUrls: ['./purchase-offers-list.component.scss']
 })
-
 export class PurchaseOffersListComponent {
   filtersVisible = signal<boolean>(false);
-
   purchaseOfferService = inject(PurchaseOfferService);
 
   toggleFilters() {
