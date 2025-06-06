@@ -1,13 +1,17 @@
-<div class="purchaseOffer-card">
-  <div class="purchaseOffer-card__header">
-    <div class="purchaseOffer-card__topic">
-      {{ purchaseOffer().topic }}
-    </div>
-      <div class="purchaseOffer-card__description">
-    {{ purchaseOffer().description }}
-  </div>
-    <div class="purchaseOffer-card__model">
-      {{ purchaseOffer().model.name }}
-    </div>
-  </div>
-</div>
+@if (purchaseOffer(); as offer) {
+  <mat-card class="purchase-offer-card">
+    <mat-card-content class="purchase-offer-card__content">
+      <div class="purchase-offer-card__description">
+        {{ offer.description }}
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="purchase-offer-card__actions">
+      <span class="purchase-offer-card__model">
+        {{ offer.model.name }}
+      </span>
+      <span class="purchase-offer-card__user-displayName">
+        {{ offer.user.displayName }}
+      </span>
+    </mat-card-actions>
+  </mat-card>
+}

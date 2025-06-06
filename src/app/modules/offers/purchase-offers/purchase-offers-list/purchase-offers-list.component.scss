@@ -1,5 +1,5 @@
-@use "../../../../../styles/variables" as vars;
 
+@use "../../../../../styles/variables" as vars;
 
 .purchase-offers-container {
   margin: 20px auto;
@@ -10,29 +10,50 @@
     opacity: 0.5;
     pointer-events: none;
   }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 0 10px;
+  }
 }
 
 .purchase-offers-header {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   margin-bottom: 20px;
 
   .filter-toggle {
     padding: 6px 16px;
     font-size: 0.875rem;
     text-transform: none;
+
+    @media screen and (max-width: 400px) {
+      width: 100%;
+    }
   }
 
-  @media (max-width: 600px) {
+  @media screen and (max-width: 600px) {
     justify-content: center;
   }
 }
 
 .purchase-offers-grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 16px;
-  row-gap: 16px;
+  gap: 16px;
+  width: 100%;
+  max-width: calc(3 * 400px + 2 * 50px);
+  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  justify-items: stretch;
+
+  @media screen and (max-width: 400px) {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  @media screen and (max-width: 320px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .no-purchase-offers {
@@ -40,15 +61,4 @@
   text-align: center;
   color: vars.$text-color;
   padding: 20px 0;
-}
-
-@media (max-width: 400px) {
-  .purchase-offers-container {
-    width: 100%;
-    padding: 0 10px;
-  }
-
-  .filter-toggle {
-    width: 100%;
-  }
 }
