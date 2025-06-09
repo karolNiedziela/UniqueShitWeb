@@ -74,10 +74,6 @@ export class AddPurchaseOfferFormComponent implements OnInit {
       }),
     });
 
-    // Rezygnujemy z ręcznego dzielenia tekstu – teraz przeglądarka zadba o zawijanie
-    // this.form.controls['description'].valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-    //   .subscribe((rawText: string) => { ... });
-
     this.form.controls['model'].valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((m: ModelType | null) => {

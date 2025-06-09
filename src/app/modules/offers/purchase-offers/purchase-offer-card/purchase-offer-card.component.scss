@@ -1,5 +1,4 @@
 .purchase-offer-card {
-  /* Ustawiamy elastyczną szerokość, która nie przekroczy 430px */
   width: 100%;
   max-width: 430px;
   min-height: 180px;
@@ -77,7 +76,6 @@
   }
 }
 
-/* Dodatkowe style dla bardzo wąskich ekranów */
 @media screen and (max-width: 768px) {
   .purchase-offer-card {
     min-height: auto;

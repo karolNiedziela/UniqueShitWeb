@@ -1,0 +1,14 @@
+.adidas-text-button {
+  background: none;      // usuwa domyślne tło
+  border: none;          // usuwa obramowanie
+  padding: 2px 4px;      // mniejszy padding
+  font: inherit;         // dziedziczy czcionkę rodzica
+  font-size: 14px;       // zmniejszony rozmiar czcionki
+  color: inherit;        // dziedziczy kolor tekstu rodzica
+  cursor: pointer;       // wskaźnik przy najechaniu
+  text-decoration: none; // bez podkreślenia domyślnie
+}
+
+.adidas-text-button:hover {
+  text-decoration: underline; // podkreślenie przy hover
+}

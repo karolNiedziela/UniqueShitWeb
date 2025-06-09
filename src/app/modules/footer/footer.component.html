@@ -1,16 +1,35 @@
 <mat-toolbar class="footer-toolbar">
-    <div class="footer-buttons">
-      <a mat-button
-      [routerLink]="['/regulations']" 
-      routerLinkActive="router-link-active">
-      Regulations</a>
-
-      <a mat-button
-      [routerLink]="['/contact']" 
-      routerLinkActive="router-link-active">
-      Contact</a>
+  <div class="footer-container">
+    <div class="footer-left">
+      <div class="sale-offers">
+        <h2 class="offer-title">Sale offers</h2>
+        <div class="offers-buttons">
+          <app-sale-offers-nike></app-sale-offers-nike>
+          <app-sale-offers-adidas></app-sale-offers-adidas>
+        </div>
+      </div>
+      <div class="purchase-offers">
+        <h3 class="offer-title">Purchase offers</h3>
+        <div class="offers-buttons">
+          <app-purchase-offers-nike></app-purchase-offers-nike>
+          <app-purchase-offers-adidas></app-purchase-offers-adidas>
+        </div>
+      </div>
     </div>
-  </mat-toolbar>
 
-
-
+    <div class="footer-center">
+      <a mat-stroked-button
+         [routerLink]="['/regulations']" 
+         routerLinkActive="router-link-active" 
+         class="footer-link">
+        Regulations
+      </a>
+      <a mat-stroked-button 
+         [routerLink]="['/contact']" 
+         routerLinkActive="router-link-active" 
+         class="footer-link">
+        About us
+      </a>
+    </div>
+  </div>
+</mat-toolbar>
