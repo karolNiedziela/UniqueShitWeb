@@ -1,66 +1,95 @@
 mat-toolbar.footer-toolbar {
-  min-height: 200px;
-  padding: 1rem;
-  background: white;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: none;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1;
+}
 
-  .footer-container {
-    width: 100%;
-    position: relative;
-    display: flex;
+.offers-row {
+  width: 100%;
+  background-color: whitesmoke;
+  padding: 1rem;
+}
+
+.offers-container {
+  display: flex;
+  justify-content: space-around; /* Rozmieszczenie sekcji bez sztywnych marginesów */
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+}
+
+.offer-section {
+  flex: 1;
+}
+
+.offers-columns {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.offers-columns .column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.offer-type {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.links-row {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.616);
+  padding: 1rem;
+  margin-top: 0;
+}
+
+.footer-center {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.0rem;
+  justify-content: center;
+  color: rgb(245, 243, 220);
+}
+
+.buttons {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  font: inherit;
+  font-size: 14px;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: text-decoration 0.3s ease;
+}
+
+.buttons:hover {
+  text-decoration: underline;
+}
+
+/* Wersje responsywne */
+@media (max-width: 900px) {
+  .offers-columns {
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
   }
-
-  .footer-left {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
+  .offers-columns .column {
+    width: 100%;
   }
+}
 
-  .sale-offers,
-  .purchase-offers {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .offer-title {
-    font-size: 0.9rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-
-  .offers-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .footer-center {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    gap: 1rem;
-    font-size: 0.9rem;
-  }
-
-
-  @media (max-width: 600px) {
-    .footer-container {
-      flex-direction: column;
-      align-items: center;
-    }
-    .footer-left {
-      display: none; 
-    }
-    .footer-center {
-      position: static;
-      transform: none;
-      margin-top: 1rem;
-    }
+@media (max-width: 600px) {
+  .offers-row {
+    display: none;
   }
 }

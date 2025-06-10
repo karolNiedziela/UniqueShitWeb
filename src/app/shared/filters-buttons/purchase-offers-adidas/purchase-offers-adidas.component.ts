@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component} from '@angular/core';
 import { Router } from '@angular/router';
 import { PurchaseOfferService } from '../../../modules/offers/purchase-offers/services/purchase-offer.service';
 
@@ -8,8 +8,10 @@ import { PurchaseOfferService } from '../../../modules/offers/purchase-offers/se
   styleUrls: ['./purchase-offers-adidas.component.scss']
 })
 export class PurchaseOffersAdidasComponent {
-  private purchaseOfferService = inject(PurchaseOfferService);
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private purchaseOfferService: PurchaseOfferService
+  ) {}
 
   applyAndGo() {
     this.purchaseOfferService.offersQueryParameters.update(q => ({

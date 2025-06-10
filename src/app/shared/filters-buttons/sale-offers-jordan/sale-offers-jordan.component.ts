@@ -3,11 +3,11 @@ import { Router } from '@angular/router';
 import { SaleOfferService } from '../../../modules/offers/sale-offers/services/sale-offer.service';
 
 @Component({
-  selector: 'app-sale-offers-nike',
-  templateUrl: './sale-offers-nike.component.html',
-  styleUrls: ['./sale-offers-nike.component.scss']
+  selector: 'app-sale-offers-jordan',
+  templateUrl: './sale-offers-jordan.component.html',
+  styleUrls: ['./sale-offers-jordan.component.scss']
 })
-export class SaleOffersNikeComponent {
+export class SaleOffersJordanComponent {
   constructor(
     private router: Router,
     private saleOfferService: SaleOfferService
@@ -16,7 +16,7 @@ export class SaleOffersNikeComponent {
   applyAndGo() {
     this.saleOfferService.offersQueryParameters.update(q => ({
       ...q,
-      brandId: 85
+      brandId: 66
     }));
     this.router.navigate(['/sale-offers']);
   }

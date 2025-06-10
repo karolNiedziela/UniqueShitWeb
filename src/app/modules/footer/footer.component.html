@@ -1,35 +1,40 @@
 <mat-toolbar class="footer-toolbar">
-  <div class="footer-container">
-    <div class="footer-left">
-      <div class="sale-offers">
-        <h2 class="offer-title">Sale offers</h2>
-        <div class="offers-buttons">
-          <app-sale-offers-nike></app-sale-offers-nike>
-          <app-sale-offers-adidas></app-sale-offers-adidas>
+  <div class="offers-row">
+    <div class="offers-container">
+      <!-- Sekcja SALE OFFERS -->
+      <div class="offer-section">
+        <h2 class="offer-type">SALE OFFERS</h2>
+        <div class="offers-columns">
+          <div class="column" *ngFor="let column of saleOffersColumns">
+            <ng-container *ngFor="let offer of column">
+              <ng-container *ngComponentOutlet="offer"></ng-container>
+            </ng-container>
+          </div>
         </div>
       </div>
-      <div class="purchase-offers">
-        <h3 class="offer-title">Purchase offers</h3>
-        <div class="offers-buttons">
-          <app-purchase-offers-nike></app-purchase-offers-nike>
-          <app-purchase-offers-adidas></app-purchase-offers-adidas>
+
+      <!-- Sekcja PURCHASE OFFERS -->
+      <div class="offer-section">
+        <h2 class="offer-type">PURCHASE OFFERS</h2>
+        <div class="offers-columns">
+          <div class="column" *ngFor="let column of purchaseOffersColumns">
+            <ng-container *ngFor="let offer of column">
+              <ng-container *ngComponentOutlet="offer"></ng-container>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="links-row">
     <div class="footer-center">
-      <a mat-stroked-button
-         [routerLink]="['/regulations']" 
-         routerLinkActive="router-link-active" 
-         class="footer-link">
-        Regulations
-      </a>
-      <a mat-stroked-button 
-         [routerLink]="['/contact']" 
-         routerLinkActive="router-link-active" 
-         class="footer-link">
-        About us
-      </a>
+      <button type="button" [routerLink]="['/regulations']" class="buttons">
+        REGULATIONS
+      </button>
+      <button type="button" [routerLink]="['/contact']" class="buttons">
+        ABOUT US
+      </button>
     </div>
   </div>
 </mat-toolbar>

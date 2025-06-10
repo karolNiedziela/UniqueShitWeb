@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SaleOfferService } from '../../../modules/offers/sale-offers/services/sale-offer.service';
 
@@ -8,8 +8,10 @@ import { SaleOfferService } from '../../../modules/offers/sale-offers/services/s
   styleUrls: ['./sale-offers-adidas.component.scss']
 })
 export class SaleOffersAdidasComponent {
-  private saleOfferService = inject(SaleOfferService);
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private saleOfferService: SaleOfferService
+  ) {}
 
   applyAndGo() {
     this.saleOfferService.offersQueryParameters.update(q => ({
