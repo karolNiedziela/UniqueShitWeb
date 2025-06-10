@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+
+// Importowane komponenty są ładowane dynamicznie za pomocą *ngComponentOutlet.
+// Ostrzeżenia o "nieużywaniu" tych komponentów w szablonie można zignorować.
 import { SaleOffersNikeComponent } from '../../shared/filters-buttons/sale-offers-nike/sale-offers-nike.component';
 import { SaleOffersAdidasComponent } from '../../shared/filters-buttons/sale-offers-adidas/sale-offers-adidas.component';
 import { PurchaseOffersNikeComponent } from '../../shared/filters-buttons/purchase-offers-nike/purchase-offers-nike.component';
