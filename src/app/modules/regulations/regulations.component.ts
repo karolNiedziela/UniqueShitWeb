@@ -4,7 +4,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contact',
-  standalone: true,
   imports: [
     MatButtonModule,
     RouterLink

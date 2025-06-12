@@ -1,4 +1,4 @@
-import { Component, Inject, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +13,6 @@ import { ChatService } from '../chat/services/chat.service';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [
     MatToolbar,
     MatIconModule,

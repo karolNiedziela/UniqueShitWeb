@@ -3,7 +3,7 @@ import { MsalGuard } from '@azure/msal-angular';
 import { ProfileComponent } from './profile/profile.component';
 import { HomeComponent } from './modules/home/home.component';
 import { RegulationsComponent } from './modules/regulations/regulations.component';
-import { ContactComponent } from './modules/contact/contact.component';
+import { AboutUsComponent } from './modules/about-us/about-us.component';
 import { AddSaleOfferFormComponent } from './modules/offers/sale-offers/add-sale-offer-form/add-sale-offer-form.component';
 import { SaleOffersListComponent } from './modules/offers/sale-offers/sale-offers-list/sale-offers-list.component';
 import { AddPurchaseOfferFormComponent } from './modules/offers/purchase-offers/add-purchase-offer-form/add-purchase-offer-form.component';
@@ -20,7 +20,7 @@ export const routes: Routes = [
     component: ProfileComponent,
     canActivate: [MsalGuard],
   },
-  { path: 'contact', component: ContactComponent },
+  { path: 'about-us', component: AboutUsComponent },
   { path: 'regulations', component: RegulationsComponent },
   {
     path: 'sale-offers',

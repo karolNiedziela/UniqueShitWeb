@@ -1,6 +1,13 @@
 
 @use "../../../../../styles/variables" as vars;
 
+:host {
+  display: block;
+  background-color: rgb(224, 222, 222);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
 .purchase-offers-container {
   margin: 20px auto;
   width: 80%;

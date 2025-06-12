@@ -2,12 +2,14 @@
   width: 100%;
   max-width: 430px;
   min-height: 180px;
-  background-color: #000000e8;
-  color: #fff;
+  background-color: #f8fbfd;
+   color: #333;
   transition: box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
   &__content {
     flex: 1;
@@ -22,7 +24,8 @@
     font-size: 0.875rem;
     line-height: 1.4em;
     font-weight: 600;
-    color: #fff;
+    font-style: italic;
+    color: #444;
     padding: 2px;
     box-sizing: border-box;
     white-space: pre-line;
@@ -36,8 +39,13 @@
     text-overflow: ellipsis;
 
     @media screen and (max-width: 768px) {
-      font-size: 0.75rem;
+      font-size: 0.70rem;
       padding: 0 6px;
+    }
+
+      @media screen and (max-width: 360px) {
+      font-size: 0.65rem; 
+      padding: 0 1px;
     }
   }
 
@@ -46,6 +54,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-top: 2px solid #2a6f97;
 
     @media screen and (max-width: 768px) {
       padding: 12px;
@@ -54,11 +63,11 @@
 
   &__model {
     font-weight: 600;
-    color: whitesmoke;
+      color: #2a6f97; 
     padding-left: 3px;
 
     @media screen and (max-width: 768px) {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       padding-left: 5px;
     }
   }
@@ -66,11 +75,11 @@
   &__user-displayName {
     font-weight: 600;
     font-style: italic;
-    color: goldenrod;
+     color: #d08c5a; 
     padding-right: 3px;
 
     @media screen and (max-width: 768px) {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       padding-right: 5px;
     }
   }
@@ -78,8 +87,8 @@
 
 @media screen and (max-width: 768px) {
   .purchase-offer-card {
-    min-height: auto;
-    border-radius: 0;
+    min-height: 100;
+    border-radius: 8;
     border: 1px solid transparent;
   }
 }

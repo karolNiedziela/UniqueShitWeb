@@ -23,18 +23,6 @@ import { PurchaseOffersTheNorthFaceComponent } from '../../shared/filters-button
     MatToolbarModule,
     MatButtonModule,
     RouterLink,
-    SaleOffersNikeComponent,
-    SaleOffersAdidasComponent,
-    PurchaseOffersNikeComponent,
-    PurchaseOffersAdidasComponent,
-    SaleOffersShoesComponent,
-    SaleOffersTshirtsComponent,
-    SaleOffersHoodiesComponent,
-    SaleOffersJordanComponent,
-    PurchaseOffersJordanComponent,
-    PurchaseOffersLacosteComponent,
-    PurchaseOffersPoloComponent,
-    PurchaseOffersTheNorthFaceComponent
   ],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
