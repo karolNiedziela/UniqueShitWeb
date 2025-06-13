@@ -17,8 +17,8 @@
     </a>
   </div>
 
-  <div class="middle-buttons">
-    @if (loginDisplay) {
+<div class="middle-buttons">
+  @if (loginDisplay) {
     <a
       mat-stroked-button
       [routerLink]="['/sale-offers/create']"
@@ -26,7 +26,15 @@
     >
       Add sale offer
     </a>
-    } @if (loginDisplay) {
+  }
+  
+  <app-models-autocomplete
+    [formControl]="searchModelControl"
+    label="Search model in the sale offers"
+    class="search-bar">
+  </app-models-autocomplete>
+
+  @if (loginDisplay) {
     <a
       mat-stroked-button
       [routerLink]="['/purchase-offers/create']"
@@ -34,8 +42,8 @@
     >
       Add purchase offer
     </a>
-    }
-  </div>
+  }
+</div>
 
   <div class="right-buttons">
     @if (loginDisplay) {

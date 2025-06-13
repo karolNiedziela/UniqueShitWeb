@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Self,
+  Input
 } from '@angular/core';
 import { ModelsService } from '../services/models.service';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
@@ -34,6 +35,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './models-autocomplete.component.scss',
 })
 export class ModelsAutocompleteComponent implements OnInit, OnDestroy {
+  @Input() label: string = 'Model';
   modelService = inject(ModelsService);
   destroyRef = inject(DestroyRef);
 
