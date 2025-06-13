@@ -6,7 +6,7 @@
       mat-stroked-button
       [routerLink]="['/sale-offers']"
       routerLinkActive="router-link-active"
-      >Offers
+      >Sale offers
     </a>
 
     <a
@@ -17,8 +17,8 @@
     </a>
   </div>
 
-  <div class="middle-buttons">
-    @if (loginDisplay) {
+<div class="middle-buttons">
+  @if (loginDisplay) {
     <a
       mat-stroked-button
       [routerLink]="['/sale-offers/create']"
@@ -26,7 +26,16 @@
     >
       Add sale offer
     </a>
-    } @if (loginDisplay) {
+  }
+  
+<app-models-autocomplete
+  [formControl]="searchModelControl"
+  label="Search model in the sale offers"
+  class="search-bar">
+  <mat-icon matSuffix>search</mat-icon>
+</app-models-autocomplete>
+
+  @if (loginDisplay) {
     <a
       mat-stroked-button
       [routerLink]="['/purchase-offers/create']"
@@ -34,8 +43,8 @@
     >
       Add purchase offer
     </a>
-    }
-  </div>
+  }
+</div>
 
   <div class="right-buttons">
     @if (loginDisplay) {
@@ -83,6 +92,7 @@
     </mat-menu>
   </div>
 </mat-toolbar>
+
 @if (this.chatService.sidebarOpened()) {
 <app-chat-sidebar (close)="toggleChatSidebar()"></app-chat-sidebar>
 }

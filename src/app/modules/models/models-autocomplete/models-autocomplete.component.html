@@ -1,14 +1,27 @@
 <mat-form-field class="autocomplete-form-field" appearance="outline">
-  <mat-label> Model</mat-label>
+  <mat-label>{{ label }}</mat-label>
+  <ng-content select="[matPrefix]"></ng-content>
   <input
     type="text"
     matInput
     [formControl]="formControl"
     [matAutocomplete]="auto"
   />
+  <ng-container matSuffix>
+    <ng-content select="[matSuffix]"></ng-content>
+  </ng-container>
+  
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-    @for (model of this.modelService.models.value(); track model.id) {
-    <mat-option [value]="model">{{ model.name }}</mat-option>
+    @if (formControl.value?.length >= 3) {
+      @for (model of modelService.models.value(); track model.id) {
+        <mat-option [value]="model">
+          {{ model.name }}
+        </mat-option>
+      }
+    } @else {
+      <mat-option disabled>
+        enter at least 3 characters...
+      </mat-option>
     }
   </mat-autocomplete>
 </mat-form-field>
