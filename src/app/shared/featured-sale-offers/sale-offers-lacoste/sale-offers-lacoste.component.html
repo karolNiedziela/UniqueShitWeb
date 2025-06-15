@@ -1,0 +1,13 @@
+<div class="lacoste-sale-offers">
+  <div class="lacoste-sale-offers__header">
+    <h2>Lacoste Sale Offers</h2>
+  </div>
+
+  <div class="lacoste-sale-offers__grid">
+    <ng-container *ngFor="let offer of offers()">
+      <div class="lacoste-sale-offers__grid-item">
+        <app-sale-offer-card-home [saleOffer]="offer"></app-sale-offer-card-home>
+      </div>
+    </ng-container>
+  </div>
+</div>

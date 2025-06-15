@@ -1,0 +1,52 @@
+@import "../../../../../styles/variables.scss";
+
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, border 0.2s ease;
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &__image {
+    width: 100%;
+    height: 50px; // Rozważ zastąpienie stałej wartości zmienną, np. $offer-image-height
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+  }
+
+  &__price,
+  &__model {
+    width: 100%;
+    text-align: center;
+    margin: 0.25rem 0;
+    font-size: 0.8rem;
+  }
+
+  &__price {
+    font-weight: 600;
+  }
+
+  &__model {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.1rem;
+    max-height: calc(1.1rem * 2);
+  }
+}
