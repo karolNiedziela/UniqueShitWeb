@@ -63,8 +63,13 @@
 
   &__model {
     font-weight: 600;
-      color: #2a6f97; 
+    color: #2a6f97; 
     padding-left: 3px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 
     @media screen and (max-width: 768px) {
       font-size: 0.75rem;
