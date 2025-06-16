@@ -51,7 +51,7 @@ export class AddPurchaseOfferFormComponent implements OnInit {
     const maxParagraphs: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
       const value: string = control.value ?? '';
       const paragraphs = value.split(/\r?\n/);
-      return paragraphs.length > 4
+      return paragraphs.length > 6
         ? { maxParagraphs: { actual: paragraphs.length, maxAllowed: 4 } }
         : null;
     };

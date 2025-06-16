@@ -15,13 +15,13 @@
         <app-text-area
           formControlName="description"
           [label]="'Description'"
-          [rows]="4"
+          [rows]="6"
           [maxLength]="150"
         ></app-text-area>
 
       @if (form.controls['description'].hasError('maxParagraphs') && form.controls['description'].touched) {
       <mat-error>
-      You can add a maximum of 4 paragraphs.
+      You can add a maximum of 6 paragraphs.
       (currently: {{ form.controls['description'].getError('maxParagraphs').actual }})
       </mat-error>
       }
