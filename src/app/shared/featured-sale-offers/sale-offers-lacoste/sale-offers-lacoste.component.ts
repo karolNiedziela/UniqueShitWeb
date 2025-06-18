@@ -21,6 +21,6 @@ export class SaleOffersLacosteComponent {
   offers = computed(() => {
     const items = this.saleOfferService.offers.value()?.items as any[] | undefined;
     const filteredItems = items?.filter(offer => offer.brand.id === this.brandIdFilter);
-    return filteredItems?.slice(0, 4) ?? [];
+    return filteredItems?.slice(0, 20) ?? [];
   });
 }
