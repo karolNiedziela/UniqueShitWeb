@@ -6,6 +6,3 @@ export const SaleOfferListFiltersControlName = {
   Colour: 'colour',
   ItemCondition: 'itemCondition',
 } as const;
-
-export type ControlNameType =
-  (typeof SaleOfferListFiltersControlName)[keyof typeof SaleOfferListFiltersControlName];

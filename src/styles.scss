@@ -1,6 +1,16 @@
 @use "tailwindcss";
 @use "@angular/material" as mat;
 
+html {
+  @include mat.theme(
+    (
+      primary: mat.$azure-palette,
+      typography: Roboto,
+      density: -1,
+    )
+  );
+}
+
 html,
 body {
   height: 100%;
@@ -12,15 +22,6 @@ body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
 }
-
-$theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-    ),
-  )
-);
 
 // Tailwind conflicts with Angular Material css class
 .mdc-notched-outline__notch {
@@ -54,6 +55,12 @@ $theme: mat.define-theme(
   @include mat.autocomplete-overrides(
     (
       background-color: white,
+    )
+  );
+
+  @include mat.menu-overrides(
+    (
+      container-color: white,
     )
   );
 }

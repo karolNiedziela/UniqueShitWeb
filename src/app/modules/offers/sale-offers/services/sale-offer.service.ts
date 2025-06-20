@@ -2,9 +2,9 @@ import { HttpClient, HttpParams, httpResource } from '@angular/common/http';
 import { computed, Injectable, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  DefaultOfferQueryParameters,
-  OfferQueryParameters,
-  OffersQueryParamMapping,
+  DefaultSaleOfferQueryParameters,
+  SaleOfferQueryParameters,
+  SaleOffersQueryParamMapping,
 } from '../models/sale-offers-query-parameters.model';
 import { PagedListModel } from '../../../../shared/models/paged-list-model';
 import { environment } from '../../../../../environments/environment';
@@ -20,19 +20,22 @@ export class SaleOfferService {
 
   private httpClient = inject(HttpClient);
 
-  offersQueryParameters = signal<OfferQueryParameters>({
-    ...DefaultOfferQueryParameters,
+  offersQueryParameters = signal<SaleOfferQueryParameters>({
+    ...DefaultSaleOfferQueryParameters,
   });
 
   offersParams = computed<HttpParams>(() => {
     let params = new HttpParams();
+
     Object.entries(this.offersQueryParameters()).forEach(([key, value]) => {
       if (value !== null && value !== undefined) {
         const queryParamKey =
-          OffersQueryParamMapping[key as keyof OfferQueryParameters];
+          SaleOffersQueryParamMapping[key as keyof SaleOfferQueryParameters];
         params = params.set(queryParamKey, value.toString());
       }
     });
+
+    console.log(params);
     return params;
   });
 
@@ -49,8 +52,8 @@ export class SaleOfferService {
         totalCount: 0,
         hasNextPage: false,
         hasPreviosPage: false,
-        pageNumber: DefaultOfferQueryParameters.pageNumber,
-        pageSize: DefaultOfferQueryParameters.pageSize,
+        pageNumber: DefaultSaleOfferQueryParameters.pageNumber,
+        pageSize: DefaultSaleOfferQueryParameters.pageSize,
       },
       parse: (data) => data as PagedListModel<SaleOfferType>,
     }

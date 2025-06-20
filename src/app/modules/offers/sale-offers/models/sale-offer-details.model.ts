@@ -2,17 +2,17 @@ export interface SaleOfferDetails {
   id: number;
   topic: string;
   description: string;
+  brand: {
+    id: number;
+    name: string;
+  };
   model: {
     id: number;
     name: string;
-    brand: {
-      id: number;
-      name: string;
-    };
-    productCategory: {
-      id: number;
-      name: string;
-    };
+  };
+  productCategory: {
+    id: number;
+    name: string;
   };
   price: {
     value: number;

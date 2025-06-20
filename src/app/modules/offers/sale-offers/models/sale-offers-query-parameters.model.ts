@@ -1,4 +1,4 @@
-export interface OfferQueryParameters {
+export interface SaleOfferQueryParameters {
   pageNumber: number;
   pageSize: number;
   minimalPrice?: number;
@@ -10,13 +10,13 @@ export interface OfferQueryParameters {
   productCategoryId?: number;
 }
 
-export const DefaultOfferQueryParameters: OfferQueryParameters = {
+export const DefaultSaleOfferQueryParameters: SaleOfferQueryParameters = {
   pageNumber: 1,
   pageSize: 50,
 };
 
-export const OffersQueryParamMapping: Record<
-  keyof OfferQueryParameters,
+export const SaleOffersQueryParamMapping: Record<
+  keyof SaleOfferQueryParameters,
   string
 > = {
   pageNumber: 'pn',

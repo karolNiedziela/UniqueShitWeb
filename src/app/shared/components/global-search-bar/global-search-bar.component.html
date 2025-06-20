@@ -1,0 +1,22 @@
+<mat-form-field class="global-search-bar-form-field" appearance="outline">
+  <input
+    type="text"
+    matInput
+    [matAutocomplete]="auto"
+    [placeholder]="isSmallScreen() ? '' : 'Search by models'"
+    #inputSearch
+  />
+
+  <div class="absolute inset-y-0 right-0 flex items-center sm:hidden">
+    <mat-icon>search</mat-icon>
+  </div>
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onOptionSelected($event.option.value)"
+  >
+    @for (model of this.modelService.models.value(); track model.id) {
+    <mat-option [value]="model">{{ model.name }}</mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
