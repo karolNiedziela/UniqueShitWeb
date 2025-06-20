@@ -1,0 +1,93 @@
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  line-height: 1.6;
+
+  header h1 {
+    font-size: 2.3rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  header p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.offers {
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      background: #f9f9f9;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: left;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  }
+}
+
+.contact {
+  max-width: 400px;      
+  margin: 2rem auto;      
+  padding: 1rem;
+  background: #eef5ff;
+  border: 1px solid #cce0ff;
+  border-radius: 8px;
+  text-align: center;   
+
+  h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    
+    a {
+      display: inline-block;
+      color: #007bff;
+      text-decoration: none;
+      word-break: break-all; 
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+
+.home-button {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+
+  a[mat-stroked-button] {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    header h1 {
+      font-size: 2rem;
+    }
+    header p, .offers li, .contact p {
+      font-size: 1rem;
+    }
+    .offers h2, .contact h2 {
+      font-size: 1.5rem;
+    }
+  }
+}

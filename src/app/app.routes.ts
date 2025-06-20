@@ -14,9 +14,9 @@ export const routes: Routes = [
     canActivate: [MsalGuard],
   },
   {
-    path: 'contact',
+    path: 'about-us',
     loadComponent: () =>
-      import('./modules/contact/contact.component').then(
+      import('./modules/about-us/about-us.component').then(
         (m) => m.ContactComponent
       ),
   },

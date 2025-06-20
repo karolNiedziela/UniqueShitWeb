@@ -15,12 +15,20 @@
         <app-text-area
           formControlName="description"
           [label]="'Description'"
-          [rows]="7"
-          [maxLength]="200"
+          [rows]="6"
+          [maxLength]="150"
         ></app-text-area>
+
+      @if (form.controls['description'].hasError('maxParagraphs') && form.controls['description'].touched) {
+      <mat-error>
+      You can add a maximum of 6 paragraphs.
+      (currently: {{ form.controls['description'].getError('maxParagraphs').actual }})
+      </mat-error>
+      }
+
       </div>
 
-      <div class="model">
+     <div class="model">
         <app-models-autocomplete
           formControlName="model"
           label="Select model">
@@ -38,7 +46,8 @@
           mat-flat-button
           color="primary"
           type="submit"
-          [disabled]="form.invalid">
+          [disabled]="form.invalid"
+        >
           Save
         </button>
 
@@ -47,7 +56,8 @@
           mat-raised-button
           color="warn"
           type="button"
-          (click)="clearForm()">
+          (click)="clearForm()"
+        >
           Cancel
         </button>
       </div>

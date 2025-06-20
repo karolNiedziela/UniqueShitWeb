@@ -1,8 +1,11 @@
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -45,6 +48,14 @@ export class AddPurchaseOfferFormComponent implements OnInit {
   form!: FormGroup;
 
   ngOnInit(): void {
+    const maxParagraphs: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+      const value: string = control.value ?? '';
+      const paragraphs = value.split(/\r?\n/);
+      return paragraphs.length > 6
+        ? { maxParagraphs: { actual: paragraphs.length, maxAllowed: 4 } }
+        : null;
+    };
+
     this.form = new FormGroup({
       topic: new FormControl<string>('', {
         nonNullable: true,
@@ -52,7 +63,11 @@ export class AddPurchaseOfferFormComponent implements OnInit {
       }),
       description: new FormControl<string>('', {
         nonNullable: true,
-        validators: [Validators.required, Validators.maxLength(200)],
+        validators: [
+          Validators.required,
+          Validators.maxLength(150),
+          maxParagraphs,
+        ],
       }),
       model: new FormControl<ModelType | null>(null, {
         validators: [Validators.required],
