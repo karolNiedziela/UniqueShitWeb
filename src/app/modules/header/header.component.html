@@ -1,88 +1,101 @@
-<mat-toolbar class="header-toolbar">
-  <div class="left-buttons">
-    <a mat-button class="title" href="/">UniqueShit</a>
-
-    <a
-      mat-stroked-button
-      [routerLink]="['/sale-offers']"
-      routerLinkActive="router-link-active"
-      >Offers
-    </a>
-
-    <a
-      mat-stroked-button
-      [routerLink]="['/purchase-offers']"
-      routerLinkActive="router-link-active"
-      >Purchase offers
-    </a>
-  </div>
-
-  <div class="middle-buttons">
-    @if (loginDisplay) {
-    <a
-      mat-stroked-button
-      [routerLink]="['/sale-offers/create']"
-      routerLinkActive="router-link-active"
-    >
-      Add sale offer
-    </a>
-    } @if (loginDisplay) {
-    <a
-      mat-stroked-button
-      [routerLink]="['/purchase-offers/create']"
-      routerLinkActive="router-link-active"
-    >
-      Add purchase offer
-    </a>
-    }
-  </div>
-
-  <div class="right-buttons">
-    @if (loginDisplay) {
-    <button
-      mat-icon-button
-      (click)="toggleChatSidebar()"
-      aria-label="Open chat"
-    >
-      <mat-icon>chat</mat-icon>
-    </button>
-    <a
-      mat-stroked-button
-      [routerLink]="['/profile']"
-      routerLinkActive="router-link-active"
-    >
-      Profile
-    </a>
-    }
-
-    <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
-      Login
-    </button>
-
-    <button mat-raised-button *ngIf="loginDisplay" (click)="logout()">
-      Logout
-    </button>
-
-    <button mat-icon-button [mat-menu-trigger-for]="themeMenu">
-      <mat-icon>{{ themeService.selectedTheme()?.icon }}</mat-icon>
-    </button>
-
-    <mat-menu #themeMenu="matMenu">
-      @for (theme of themeService.getThemes(); track theme.name) {
-      <button
-        [class.selected-theme]="
-          themeService.selectedTheme()?.name === theme.name
-        "
-        mat-menu-item
-        (click)="themeService.setTheme(theme.name)"
+<mat-toolbar
+  class="fixed top-0 left-0 right-0 flex items-center bg-white z-[1001] shadow-md"
+>
+  <div class="flex w-full h-auto sm:h-[56px]">
+    <div class="w-1/6 flex justify-start items-center space-x-2">
+      <div class="hidden md:flex">
+        <a mat-button [routerLink]="['/']" routerLinkActive="router-link-active"
+          >UniqueShit</a
+        >
+      </div>
+      <div
+        class="hidden lg:flex justify-center items-center space-x-2 sm:h-[56px]"
       >
-        <mat-icon>{{ theme.icon }}</mat-icon>
-        <span>{{ theme.name | titlecase }}</span>
+        <a
+          mat-button
+          [routerLink]="['/sale-offers']"
+          routerLinkActive="router-link-active"
+          [queryParams]="{ pn: 1, ps: 50 }"
+          queryParamsHandling="merge"
+          >Offers</a
+        >
+        <a
+          mat-button
+          [routerLink]="['/purchase-offers']"
+          routerLinkActive="router-link-active"
+          >Purchase offers</a
+        >
+      </div>
+
+      <div class="flex lg:hidden justify-center items-center">
+        <button
+          mat-icon-button
+          [mat-menu-trigger-for]="mobileMenu"
+          aria-label="Open menu"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <mat-menu #mobileMenu="matMenu">
+          <button
+            mat-menu-item
+            [routerLink]="['/sale-offers']"
+            routerLinkActive="router-link-active"
+            [queryParams]="{ pn: 1, ps: 50 }"
+            queryParamsHandling="merge"
+          >
+            <mat-icon>local_offer</mat-icon>
+            <span>Offers</span>
+          </button>
+          <button mat-menu-item [routerLink]="['/purchase-offers']">
+            <mat-icon>shopping_cart</mat-icon>
+            <span>Purchase Offers</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <div class="w-4/6 flex justify-center items-center">
+      <app-global-search-bar
+        class="w-full max-w-[150px] sm:max-w-[250px] md:max-w-[400px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+      ></app-global-search-bar>
+    </div>
+    <div class="w-1/6 flex flex-row justify-end items-center">
+      @if (loginDisplay) {
+      <button
+        mat-icon-button
+        (click)="toggleChatSidebar()"
+        aria-label="Open chat"
+      >
+        <mat-icon>chat</mat-icon>
       </button>
+      <button
+        mat-icon-button
+        [mat-menu-trigger-for]="profileMenu"
+        aria-label="Open profile menu"
+      >
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/profile']">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
       }
-    </mat-menu>
+
+      <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
+        Login
+      </button>
+    </div>
   </div>
 </mat-toolbar>
+
 @if (this.chatService.sidebarOpened()) {
 <app-chat-sidebar (close)="toggleChatSidebar()"></app-chat-sidebar>
 }

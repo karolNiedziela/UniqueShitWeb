@@ -11,16 +11,17 @@
   </div>
 
   @if (purchaseOfferService.offers.isLoading()) {
-    <div>Loading...</div>
+  <div>Loading...</div>
   } @else {
-    <div class="purchase-offers-grid-container">
-      @if (purchaseOfferService.offers.value().items.length === 0) {
-        <div class="no-purchase-offers">No purchase offers found</div>
-      } @else {
-        @for (purchaseOffer of purchaseOfferService.offers.value().items; track purchaseOffer.id) {
-          <app-purchase-offer-card [purchaseOffer]="purchaseOffer"></app-purchase-offer-card>
-        }
-      }
-    </div>
+  <div class="purchase-offers-grid-container">
+    @if (purchaseOfferService.offers.value().items.length === 0) {
+    <div class="no-purchase-offers">No purchase offers found</div>
+    } @else { @for (purchaseOffer of purchaseOfferService.offers.value().items;
+    track purchaseOffer.id) {
+    <app-purchase-offer-card
+      [purchaseOffer]="purchaseOffer"
+    ></app-purchase-offer-card>
+    } }
+  </div>
   }
 </div>
