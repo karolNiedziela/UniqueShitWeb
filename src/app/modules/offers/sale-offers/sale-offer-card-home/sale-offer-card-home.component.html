@@ -1,0 +1,18 @@
+<div class="offer-card">
+  <a [routerLink]="['/sale-offers', saleOffer().id]">
+    <div class="offer-card__image">
+      <img
+        [src]="'https://picsum.photos/300/200'"
+        alt="offer-sale-image"
+      />
+    </div>
+
+    <div class="offer-card__price">
+      {{ saleOffer().price.value }} {{ saleOffer().price.currency }}
+    </div>
+
+    <div class="offer-card__model">
+      {{ saleOffer().model.name }}
+    </div>
+  </a>
+</div>

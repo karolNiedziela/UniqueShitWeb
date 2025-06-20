@@ -3,6 +3,8 @@
 .sale-offer-card {
   transition: box-shadow 0.3s ease;
   cursor: pointer;
+    width: 100%;
+    margin: 0 auto;
 
   &:hover {
     box-shadow: 0 4px 8px $card-box-shadow;
@@ -20,6 +22,7 @@
     &__row {
       display: flex;
       justify-content: space-between;
+      
     }
   }
 
@@ -29,6 +32,15 @@
 
   &__brand {
     font-weight: 600;
+  }
+
+  &__model
+  {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    overflow: hidden;   
   }
 
   &__image {
@@ -41,5 +53,20 @@
       height: auto;
       object-fit: cover;
     }
+  }
+
+    &__topic {
+    display: block;                  
+    word-break: break-word;                          
+    margin: 0;
+    font-size: 1rem;
+    flex: 1 1 auto;             
+    min-width: 0;                
+    margin-right: 0.5rem;      
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
 }
