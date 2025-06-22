@@ -35,7 +35,6 @@ export class SaleOfferService {
       }
     });
 
-    console.log(params);
     return params;
   });
 

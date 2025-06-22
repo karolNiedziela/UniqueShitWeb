@@ -1,3 +1,4 @@
+import { SaleOfferService } from './../../../modules/offers/sale-offers/services/sale-offer.service';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import {
   DefaultSaleOfferQueryParameters,
+  SaleOfferQueryParameters,
   SaleOffersQueryParamMapping,
 } from '../../../modules/offers/sale-offers/models/sale-offers-query-parameters.model';
 import { fromEvent, Subscription } from 'rxjs';
@@ -36,6 +38,7 @@ import { fromEvent, Subscription } from 'rxjs';
 export class GlobalSearchBarComponent implements OnInit, OnDestroy {
   modelService = inject(ModelsService);
   router = inject(Router);
+  SaleOfferService = inject(SaleOfferService);
 
   @ViewChild('inputSearch') inputSearch!: ElementRef<HTMLInputElement>;
 
@@ -68,6 +71,18 @@ export class GlobalSearchBarComponent implements OnInit, OnDestroy {
         [SaleOffersQueryParamMapping.productCategoryId]:
           model.productCategoryId,
       };
+
+      const saleOfferQueryParameters: SaleOfferQueryParameters = {
+        ...DefaultSaleOfferQueryParameters,
+        productCategoryId: model.productCategoryId ?? undefined,
+        brandId: model.brandId ?? undefined,
+        modelId: model.id ?? undefined,
+      };
+
+      this.SaleOfferService.offersQueryParameters.update((q) => ({
+        ...DefaultSaleOfferQueryParameters,
+        ...saleOfferQueryParameters,
+      }));
 
       this.router.navigate(['/sale-offers'], {
         queryParams: queryParams,

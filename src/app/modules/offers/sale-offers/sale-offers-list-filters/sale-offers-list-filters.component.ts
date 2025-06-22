@@ -104,12 +104,6 @@ export class SaleOffersListFiltersComponent implements OnInit {
         new FormControl<ModelType | null>(null),
     });
 
-    this.filtersLoaded$
-      .pipe(take(2), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.setInitialFilters();
-      });
-
     this.trackFormControlChanges();
   }
 
@@ -131,20 +125,6 @@ export class SaleOffersListFiltersComponent implements OnInit {
     this.saleOfferService.offersQueryParameters.set(queryParameters);
 
     this.toggleFilters();
-
-    const httpParams = this.saleOfferService.offersParams();
-    const queryParams: Record<string, string | undefined> = {};
-    httpParams.keys().forEach((key) => {
-      if (key !== null && key !== undefined) {
-        queryParams[key] = httpParams.get(key) ?? undefined;
-      }
-    });
-
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParams,
-      queryParamsHandling: 'replace',
-    });
   }
 
   clearFilters(): void {
@@ -263,59 +243,6 @@ export class SaleOffersListFiltersComponent implements OnInit {
       });
 
       return updatedFilters;
-    });
-  }
-
-  private setInitialFilters(): void {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      const mappedParams = {
-        modelId: params[SaleOffersQueryParamMapping.modelId],
-        brandId: params[SaleOffersQueryParamMapping.brandId],
-        productCategoryId:
-          params[SaleOffersQueryParamMapping.productCategoryId],
-        sizeId: params[SaleOffersQueryParamMapping.sizeId],
-        itemConditionId: params[SaleOffersQueryParamMapping.itemConditionId],
-      };
-
-      this.filterOffersForm
-        .get(SaleOfferListFiltersControlName.ProductCategory)
-        ?.setValue(
-          this.productCategoryService.productCategoriesOptions
-            .value()
-            .find((category) => category.id == mappedParams.productCategoryId)
-        );
-
-      this.filterOffersForm
-        .get(SaleOfferListFiltersControlName.Brand)
-        ?.setValue(
-          this.brandService.brandOptions
-            .value()
-            .find((brand) => brand.id == mappedParams.brandId)
-        );
-
-      this.filterOffersForm
-        .get(SaleOfferListFiltersControlName.Model)
-        ?.setValue(
-          this.modelService.models
-            .value()
-            .find((model) => model.id == mappedParams.modelId)
-        );
-
-      this.filterOffersForm
-        .get(SaleOfferListFiltersControlName.Size)
-        ?.setValue(
-          this.sizeService.sizeOptions
-            .value()
-            .find((size) => size.id == mappedParams.sizeId)
-        );
-
-      this.filterOffersForm
-        .get(SaleOfferListFiltersControlName.ItemCondition)
-        ?.setValue(
-          this.itemConditionService.itemConditionOptions
-            .value()
-            .find((condition) => condition.id == mappedParams.itemConditionId)
-        );
     });
   }
 }
