@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Self,
-  Input
+  Input,
 } from '@angular/core';
 import { ModelsService } from '../services/models.service';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';

@@ -2,11 +2,13 @@ import { SaleOfferService } from './../../../modules/offers/sale-offers/services
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
   signal,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -21,7 +23,21 @@ import {
   SaleOfferQueryParameters,
   SaleOffersQueryParamMapping,
 } from '../../../modules/offers/sale-offers/models/sale-offers-query-parameters.model';
-import { fromEvent, Subscription } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  fromEvent,
+  Subscription,
+} from 'rxjs';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-global-search-bar',
@@ -30,6 +46,9 @@ import { fromEvent, Subscription } from 'rxjs';
     MatInputModule,
     MatAutocompleteModule,
     MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './global-search-bar.component.html',
   styleUrl: './global-search-bar.component.scss',
@@ -39,17 +58,38 @@ export class GlobalSearchBarComponent implements OnInit, OnDestroy {
   modelService = inject(ModelsService);
   router = inject(Router);
   SaleOfferService = inject(SaleOfferService);
+  destroyRef = inject(DestroyRef);
 
-  @ViewChild('inputSearch') inputSearch!: ElementRef<HTMLInputElement>;
+  globalSearchForm!: FormGroup;
+
+  inputSearch = new FormControl<ModelType | null>(null);
 
   private resizeSub!: Subscription;
   isSmallScreen = signal(false);
 
   ngOnInit(): void {
+    this.globalSearchForm = new FormGroup({
+      inputSearch: new FormControl<ModelType | null>(null),
+    });
+
     this.resizeSub = fromEvent(window, 'resize').subscribe(() => {
       this.checkScreenSize();
     });
     this.checkScreenSize();
+
+    this.inputSearch.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+        filter((value) => typeof value === 'string')
+      )
+      .subscribe((searchTerm: string) => {
+        this.modelService.modelQueryParameters.update((params) => ({
+          ...params,
+          searchTerm,
+        }));
+      });
   }
 
   ngOnDestroy(): void {
@@ -58,9 +98,6 @@ export class GlobalSearchBarComponent implements OnInit, OnDestroy {
 
   onOptionSelected(model: ModelType): void {
     if (model && model.id) {
-      console.log('Selected model:', model);
-      this.inputSearch.nativeElement.value = '';
-
       const queryParams = {
         [SaleOffersQueryParamMapping.pageNumber]:
           DefaultSaleOfferQueryParameters.pageNumber,

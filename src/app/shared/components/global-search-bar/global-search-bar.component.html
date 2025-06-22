@@ -4,19 +4,22 @@
     matInput
     [matAutocomplete]="auto"
     [placeholder]="isSmallScreen() ? '' : 'Search by models'"
-    #inputSearch
+    [formControl]="inputSearch"
   />
 
   <div class="absolute inset-y-0 right-0 flex items-center sm:hidden">
     <mat-icon>search</mat-icon>
   </div>
+
   <mat-autocomplete
     #auto="matAutocomplete"
     [displayWith]="displayFn"
     (optionSelected)="onOptionSelected($event.option.value)"
   >
-    @for (model of this.modelService.models.value(); track model.id) {
+    @if (this.modelService.models.isLoading()) {
+    <mat-option> Loading models... </mat-option>
+    } @else { @for (model of this.modelService.models.value(); track model.id) {
     <mat-option [value]="model">{{ model.name }}</mat-option>
-    }
+    } }
   </mat-autocomplete>
 </mat-form-field>
