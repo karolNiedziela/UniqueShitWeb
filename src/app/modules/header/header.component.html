@@ -1,67 +1,120 @@
-<mat-toolbar
-  class="fixed top-0 left-0 right-0 flex items-center bg-white z-[1001] shadow-md"
->
+<mat-toolbar class="fixed top-0 left-0 right-0 flex items-center bg-white z-[1001] shadow-md">
   <div class="flex w-full h-auto sm:h-[56px]">
-    <div class="w-1/6 flex justify-start items-center space-x-2">
-      <div class="hidden md:flex">
+
+    <div class="flex justify-start items-center space-x-2">
+      <div class="hidden xl:flex">
         <a mat-button [routerLink]="['/']" routerLinkActive="router-link-active"
-          >UniqueShit</a
-        >
-      </div>
-      <div
-        class="hidden lg:flex justify-center items-center space-x-2 sm:h-[56px]"
-      >
-        <a
-          mat-button
-          [routerLink]="['/sale-offers']"
-          routerLinkActive="router-link-active"
-          [queryParams]="{ pn: 1, ps: 50 }"
-          queryParamsHandling="merge"
-          >Offers</a
-        >
-        <a
-          mat-button
-          [routerLink]="['/purchase-offers']"
-          routerLinkActive="router-link-active"
-          >Purchase offers</a
-        >
+        >Home</a>
       </div>
 
-      <div class="flex lg:hidden justify-center items-center">
-        <button
-          mat-icon-button
-          [mat-menu-trigger-for]="mobileMenu"
+      <div class="hidden xl:flex justify-center items-center space-x-2 sm:h-[56px]"
+      >
+        <a 
+          mat-button 
+          [routerLink]="['/sale-offers']" 
+          routerLinkActive="router-link-active"
+          [queryParams]="{ pn: 1, ps: 50 }" 
+          queryParamsHandling="merge"
+          >Sale offers</a
+          >
+        <a 
+          mat-button 
+          [routerLink]="['/purchase-offers']" 
+          routerLinkActive="router-link-active"
+          >Purchase offers</a
+          >
+      </div>
+
+      <div class="flex xl:hidden justify-center items-center">
+        <button 
+          mat-icon-button 
+          [mat-menu-trigger-for]="mobileMenu" 
           aria-label="Open menu"
         >
           <mat-icon>menu</mat-icon>
         </button>
 
         <mat-menu #mobileMenu="matMenu">
-          <button
-            mat-menu-item
-            [routerLink]="['/sale-offers']"
+          <button 
+            mat-menu-item 
+            [routerLink]="['/']" 
+            routerLinkActive="router-link-active">
+            <mat-icon>
+              home
+            </mat-icon>
+            <span>
+              Home</span>
+          </button>
+
+          <button 
+            mat-menu-item 
+            [routerLink]="['/sale-offers']" 
             routerLinkActive="router-link-active"
-            [queryParams]="{ pn: 1, ps: 50 }"
+            [queryParams]="{ pn: 1, ps: 50 }" 
             queryParamsHandling="merge"
           >
             <mat-icon>local_offer</mat-icon>
-            <span>Offers</span>
+            <span>Sale offers</span>
           </button>
-          <button mat-menu-item [routerLink]="['/purchase-offers']">
+
+          <button mat-menu-item 
+            [routerLink]="['/purchase-offers']">
             <mat-icon>shopping_cart</mat-icon>
-            <span>Purchase Offers</span>
+            <span>Purchase offers</span>
           </button>
+
+
+          <button 
+            mat-menu-item 
+            [routerLink]="['/sale-offers/create-sale-offer']">
+            <mat-icon>add</mat-icon>
+            <span>Add sale offer</span>
+          </button>
+
+          <button 
+            mat-menu-item 
+            [routerLink]="['/purchase-offers/create-purchase-offer']">
+            <mat-icon>add</mat-icon>
+            <span>Add purchase offer</span>
+          </button>
+          
         </mat-menu>
       </div>
     </div>
 
-    <div class="w-4/6 flex justify-center items-center">
-      <app-global-search-bar
-        class="w-full max-w-[150px] sm:max-w-[250px] md:max-w-[400px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
-      ></app-global-search-bar>
+    <div class="flex-1 flex justify-center items-center">
+      <div class="hidden xl:flex items-center space-x-1 w-full max-w-[1000px] px-2">
+        <button 
+          mat-button 
+          [routerLink]="['/sale-offers/create-sale-offer']"
+          routerLinkActive="router-link-active"
+          class="flex-shrink-0">
+          Add sale offer
+        </button>
+
+        <div class="flex-1 min-w-[100px] mx-2">
+          <app-global-search-bar 
+          class="w-full truncate">
+          </app-global-search-bar>
+        </div>
+        <button 
+          mat-button 
+          [routerLink]="['/purchase-offers/create-purchase-offer']"
+          routerLinkActive="router-link-active" 
+          class="flex-shrink-0">
+          Add purchase offer
+        </button>
+      </div>
+
+      <div class="flex xl:hidden justify-center items-center w-full px-2">
+        <app-global-search-bar
+          class="w-full max-w-[100px] sm:max-w-[200px] md:max-w-[280px] lg:max-w-[350px] xl:max-w-[500px]">
+        </app-global-search-bar>
+      </div>
     </div>
-    <div class="w-1/6 flex flex-row justify-end items-center">
-      @if (loginDisplay) {
+
+    <div class="flex flex-row justify-end items-center space-x-2">
+        @if (loginDisplay) {
       <button
         mat-icon-button
         (click)="toggleChatSidebar()"
@@ -99,3 +152,4 @@
 @if (this.chatService.sidebarOpened()) {
 <app-chat-sidebar (close)="toggleChatSidebar()"></app-chat-sidebar>
 }
+

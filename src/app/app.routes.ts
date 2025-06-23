@@ -38,7 +38,7 @@ export const routes: Routes = [
           ).then((m) => m.SaleOffersListComponent),
       },
       {
-        path: 'create',
+        path: 'create-sale-offer',
         pathMatch: 'full',
         loadComponent: () =>
           import(
@@ -67,7 +67,7 @@ export const routes: Routes = [
           ).then((m) => m.PurchaseOffersListComponent),
       },
       {
-        path: 'create',
+        path: 'create-purchase-offer',
         loadComponent: () =>
           import(
             './modules/offers/purchase-offers/add-purchase-offer-form/add-purchase-offer-form.component'

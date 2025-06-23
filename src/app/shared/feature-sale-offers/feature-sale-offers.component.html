@@ -1,0 +1,19 @@
+<div class="sale-offers"
+     [ngClass]="brandName().toLowerCase() + '-sale-offers'">
+  <div class="sale-offers__header"
+       [ngClass]="brandName().toLowerCase() + '-sale-offers__header'">
+    <h2>{{ brandName() }} Sale Offers</h2>
+  </div>
+
+  <div class="sale-offers__grid"
+       [ngClass]="brandName().toLowerCase() + '-sale-offers__grid'">
+    @for (offer of offers(); track offer.id) {
+      <div class="sale-offers__grid-item"
+           [ngClass]="brandName().toLowerCase() + '-sale-offers__grid-item'">
+        <app-sale-offer-card-home
+          [saleOffer]="offer">
+        </app-sale-offer-card-home>
+      </div>
+    }
+  </div>
+</div>

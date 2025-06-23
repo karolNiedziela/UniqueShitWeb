@@ -1,4 +1,4 @@
-.lacoste-sale-offers {
+.sale-offers {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
@@ -29,7 +29,7 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding-bottom: 1rem;
-    max-width: 1500px; 
+    max-width: 1500px;
     margin: 0 auto;
 
     &-item {
