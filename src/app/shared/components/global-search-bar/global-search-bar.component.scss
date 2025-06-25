@@ -1,5 +1,11 @@
 .global-search-bar-form-field {
-  width: 100%;
+  width: 333px;
+}
+
+@media (max-width: 768px) {
+  .global-search-bar-form-field {
+    width: 100%;
+  }
 }
 
 .mat-mdc-form-field-infix {
