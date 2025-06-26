@@ -6,7 +6,7 @@ import {
   input,
   computed,
   CUSTOM_ELEMENTS_SCHEMA,
-  afterNextRender 
+  AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SaleOfferService } from '../../modules/offers/sale-offers/services/sale-offer.service';
@@ -14,12 +14,13 @@ import { SaleOfferCardHomeComponent } from '../../modules/offers/sale-offers/sal
 
 @Component({
   selector: 'app-feature-sale-offers',
+  standalone: true,
   imports: [CommonModule, SaleOfferCardHomeComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './feature-sale-offers.component.html',
   styleUrls: ['./feature-sale-offers.component.scss'],
 })
-export class FeatureSaleOffersComponent {
+export class FeatureSaleOffersComponent implements AfterViewInit {
   @ViewChild('swiperRef', { static: true })
   swiperRef!: ElementRef<HTMLElement & { initialize(): void }>;
 
@@ -35,13 +36,8 @@ export class FeatureSaleOffersComponent {
       .slice(0, this.sliceLimit());
   });
 
-  constructor() {
-    afterNextRender(() => {
-      if (this.swiperRef?.nativeElement) {
-        const el = this.swiperRef.nativeElement;
-        el.initialize();
-        const swiper = (el as any).swiper;
-      }
-    });
+  ngAfterViewInit(): void {
+    const el = this.swiperRef.nativeElement;
+    el.initialize();
   }
 }
