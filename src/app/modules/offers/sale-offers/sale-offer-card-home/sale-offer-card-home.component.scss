@@ -3,6 +3,7 @@
   flex-direction: column;
   cursor: pointer;
   overflow: hidden;
+  min-height: 230px; 
 
   &__image {
     width: 100%;

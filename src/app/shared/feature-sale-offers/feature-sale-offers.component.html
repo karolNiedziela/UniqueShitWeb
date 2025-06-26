@@ -1,19 +1,33 @@
-<div class="sale-offers"
-     [ngClass]="brandName().toLowerCase() + '-sale-offers'">
-  <div class="sale-offers__header"
-       [ngClass]="brandName().toLowerCase() + '-sale-offers__header'">
+<div class="sale-offers">
+  <div class="sale-offers__header">
     <h2>{{ brandName() }} Sale Offers</h2>
   </div>
 
-  <div class="sale-offers__grid"
-       [ngClass]="brandName().toLowerCase() + '-sale-offers__grid'">
-    @for (offer of offers(); track offer.id) {
-      <div class="sale-offers__grid-item"
-           [ngClass]="brandName().toLowerCase() + '-sale-offers__grid-item'">
-        <app-sale-offer-card-home
-          [saleOffer]="offer">
-        </app-sale-offer-card-home>
-      </div>
-    }
+  <div class="sale-offers__swiper-wrapper">
+    <swiper-container
+      #swiperRef
+      init="false"
+      slides-per-view="1"
+      slides-per-group="1"
+      navigation="true"
+      pagination='{"clickable": true}'
+      breakpoints='{
+        "0":    { "slidesPerView": 1, "slidesPerGroup": 1 },
+        "576":  { "slidesPerView": 2, "slidesPerGroup": 2 },
+        "768":  { "slidesPerView": 2, "slidesPerGroup": 2 },
+        "1024": { "slidesPerView": 3, "slidesPerGroup": 3 },
+        "1200": { "slidesPerView": 5, "slidesPerGroup": 5 }
+      }'
+    >
+      @for (offer of offers(); track offer.id) {
+        <swiper-slide>
+          <div class="sale-offers__grid-item">
+            <app-sale-offer-card-home [saleOffer]="offer"></app-sale-offer-card-home>
+          </div>
+        </swiper-slide>
+      }
+    </swiper-container>
+
+    <div class="external-swiper-pagination"></div>
   </div>
 </div>
