@@ -10,18 +10,10 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 import { ChatSidebarComponent } from '../chat/chat-sidebar/chat-sidebar.component';
 import { ChatService } from '../chat/services/chat.service';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { ModelType } from '../models/models/model.model';
 import { GlobalSearchBarComponent } from '../../shared/components/global-search-bar/global-search-bar.component';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [
     MatToolbar,
     MatIconModule,
