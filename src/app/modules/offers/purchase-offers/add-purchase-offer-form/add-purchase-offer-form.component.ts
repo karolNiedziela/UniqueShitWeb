@@ -23,7 +23,6 @@ import { CreatePurchaseOfferDto } from '../models/create-purchase-offer.dto';
 
 @Component({
   selector: 'app-purchaseoffer-form',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

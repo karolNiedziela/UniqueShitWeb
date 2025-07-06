@@ -1,6 +1,5 @@
 @use "../../../../styles/variables" as vars;
 
-// Style skopiowane z purchase-offers-list.component.scss
 .purchase-offers-container {
   margin: 20px auto;
   width: 80%;
@@ -21,8 +20,7 @@
   display: grid;
   gap: 16px;
   width: 100%;
-  // Usunąłem max-width, aby siatka lepiej dopasowywała się na stronach profili
-  margin: 20px auto 0; // Dodano margines górny dla odstępu od h2
+  margin: 20px auto 0;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   justify-items: stretch;
 
@@ -43,7 +41,6 @@
   font-size: 1.1rem;
 }
 
-// Style dla ekranu ładowania, na wszelki wypadek
 .loading {
   display: flex;
   justify-content: center;

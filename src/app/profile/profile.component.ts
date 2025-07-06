@@ -2,30 +2,24 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject, of } from 'rxjs';
-// --- POPRAWKA TUTAJ: Dodajemy 'take' do importu ---
 import { catchError, filter, map, startWith, switchMap, takeUntil, tap, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-
 import { AuthService } from '../core/auth/auth.service';
 import { AppUserService, AppUser, UpdateAppUserDto } from '../core/services/app-user.service';
 import { TextAreaComponent } from '../shared/components/inputs/text-area/text-area.component';
 import { ChatService } from '../modules/chat/services/chat.service';
 import { OpenedChatsComponent } from '../modules/chat/opened-chats/opened-chats.component';
 
-// Interfejs do zarządzania całym stanem komponentu w jednym miejscu
 export interface ProfileState {
   isLoading: boolean;
   user?: AppUser;
   error?: string;
   isOwnProfile: boolean;
 }
-
-// Model dla Claims
 export class Claim {
   id: number = 0;
   claim: string = '';
@@ -110,7 +104,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   toggleEditMode(): void {
     this.editMode = !this.editMode;
     if (!this.editMode) {
-      // --- POPRAWKA TUTAJ: Dodajemy typ dla `state` ---
       this.profileState$.pipe(take(1)).subscribe((state: ProfileState) => {
         if (state.user) {
           this.initializeForm(state.user);
