@@ -3,6 +3,7 @@ export interface OfferQueryParameters {
   pageSize: number;
   modelId?: number;
   brandId?: number;
+   userId?: string;
 }
 
 export const DefaultOfferQueryParameters: OfferQueryParameters = {
@@ -18,4 +19,5 @@ export const OffersQueryParamMapping: Record<
   pageSize: 'ps',
   modelId: 'mid',
   brandId: 'bid',
+  userId: 'uid',
 };

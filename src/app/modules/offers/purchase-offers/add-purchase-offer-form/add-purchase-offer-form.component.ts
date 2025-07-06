@@ -95,7 +95,7 @@ export class AddPurchaseOfferFormComponent implements OnInit {
     this.purchaseOfferService.createPurchaseOffer(dto).subscribe({
       next: () => {
         this.saving.set(false);
-        this.router.navigate(['/purchase-offers/create']);
+        this.router.navigate(['/purchase-offers', 'create-purchase-offer']);
       },
       error: (err) => {
         console.error('Save error:', err);

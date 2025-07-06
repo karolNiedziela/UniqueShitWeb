@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { SaleOffersButtonComponent } from '../../shared/filter-offers-buttons/sale-offers-button/sale-offers-button.component';
-import { PurchaseOffersButtonComponent } from '../../shared/filter-offers-buttons/purchase-offers-button/purchase-offers-button.component';
+import { SaleOffersButtonComponent } from '../offers/sale-offers/sale-offers-button/sale-offers-button.component';
+import { PurchaseOffersButtonComponent } from '../offers/purchase-offers/purchase-offers-button/purchase-offers-button.component';
 
 @Component({
   selector: 'app-footer',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { FeatureSaleOffersComponent } from '../../shared/feature-sale-offers/feature-sale-offers.component';
+import { SpecificSaleOffersSliderComponent } from "../offers/sale-offers/specific-sale-offers-slider/specific-sale-offers-slider.component";
 @Component({
   selector: 'app-home',
   imports: [
-    FeatureSaleOffersComponent
+    SpecificSaleOffersSliderComponent
 ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

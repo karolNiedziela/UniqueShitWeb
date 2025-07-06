@@ -12,9 +12,16 @@
       <span class="purchase-offer-card__model">
         {{ offer.model.name }}
       </span>
-      <span class="purchase-offer-card__user-displayName">
-        {{ offer.user.displayName }}
-      </span>
+
+      <div class="purchase-offer-card__user-info">
+        <button mat-button 
+                color="primary"
+                [routerLink]="['/profile', offer.user.displayName]" 
+                class="username-link">
+          {{ offer.user?.displayName }}
+        </button>
+      </div>
+
     </mat-card-actions>
   </mat-card>
 }

@@ -10,12 +10,20 @@
 
     <div class="seller-info">
       <h2>Seller Information</h2>
-      <p>
-        <span>Username: </span> 
-        <span class="username">{{ offer.user?.displayName }}</span>
-      </p>
 
-      <button mat-button (click)="chatService.startChat(offer.user.id, offer.user.displayName)">
+      <div class="seller-username">
+        <span>Username: </span>
+        <button mat-button
+                [routerLink]="['/profile', offer.user.displayName]"
+                class="username-link">
+          {{ offer.user?.displayName }}
+        </button>
+      </div>
+      
+      <button mat-flat-button
+              color="primary"
+              class="chat-button"
+              (click)="chatService.startChat(offer.user.id, offer.user.displayName)">
         Start Chat
       </button>
 

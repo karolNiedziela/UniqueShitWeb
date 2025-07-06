@@ -113,23 +113,17 @@
     </div>
 
     <div class="flex items-center space-x-2 ml-auto">
-        @if (loginDisplay) {
-      <button
-        mat-icon-button
-        (click)="toggleChatSidebar()"
-        aria-label="Open chat"
-      >
+    @if (loginDisplay) {
+      <button mat-icon-button (click)="toggleChatSidebar()" aria-label="Open chat">
         <mat-icon>chat</mat-icon>
       </button>
-      <button
-        mat-icon-button
-        [mat-menu-trigger-for]="profileMenu"
-        aria-label="Open profile menu"
-      >
+      
+      <button mat-icon-button [mat-menu-trigger-for]="profileMenu" aria-label="Open profile menu">
         <mat-icon>account_circle</mat-icon>
       </button>
+      
       <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item [routerLink]="['/profile']">
+        <button mat-menu-item [routerLink]="['/profile', userDisplayName()]">
           <mat-icon>person</mat-icon>
           <span>Profile</span>
         </button>
@@ -138,12 +132,14 @@
           <span>Logout</span>
         </button>
       </mat-menu>
-    }
-      <button mat-raised-button *ngIf="!loginDisplay" (click)="login()">
+    } @else {
+      <button mat-raised-button (click)="login()">
         Login
       </button>
-    </div>
+    }
   </div>
+  </div>
+
 </mat-toolbar>
 
 @if (this.chatService.sidebarOpened()) {

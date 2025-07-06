@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import {
   DefaultOfferQueryParameters,
   OffersQueryParamMapping,
-} from '../../../modules/offers/purchase-offers/models/purchase-offers-query-parameters.model';
-import { PurchaseOfferService } from '../../../modules/offers/purchase-offers/services/purchase-offer.service';
+} from '../models/purchase-offers-query-parameters.model';
+import { PurchaseOfferService } from '../services/purchase-offer.service';
 
 @Component({
   selector: 'app-purchase-offers-button',

@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import {
   DefaultSaleOfferQueryParameters,
   SaleOffersQueryParamMapping,
-} from '../../../modules/offers/sale-offers/models/sale-offers-query-parameters.model';
-import { SaleOfferService } from '../../../modules/offers/sale-offers/services/sale-offer.service';
+} from '../models/sale-offers-query-parameters.model';
+import { SaleOfferService } from '../services/sale-offer.service';
 
 @Component({
   selector: 'app-sale-offers-button',

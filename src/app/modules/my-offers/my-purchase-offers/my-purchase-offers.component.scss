@@ -1,0 +1,54 @@
+@use "../../../../styles/variables" as vars;
+
+// Style skopiowane z purchase-offers-list.component.scss
+.purchase-offers-container {
+  margin: 20px auto;
+  width: 80%;
+  padding: 0 5px;
+
+  &.dimmed {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+
+.purchase-offers-grid-container {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  // Usunąłem max-width, aby siatka lepiej dopasowywała się na stronach profili
+  margin: 20px auto 0; // Dodano margines górny dla odstępu od h2
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  justify-items: stretch;
+
+  @media screen and (max-width: 400px) {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  @media screen and (max-width: 320px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.no-purchase-offers {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: vars.$text-color;
+  padding: 20px 0;
+  font-size: 1.1rem;
+}
+
+// Style dla ekranu ładowania, na wszelki wypadek
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: vars.$text-color;
+}

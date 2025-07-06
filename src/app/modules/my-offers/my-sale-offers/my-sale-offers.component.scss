@@ -1,0 +1,64 @@
+@use "../../styles/variables.scss" as vars;
+
+.user-offers-container {
+
+  max-width: 1200px;
+  margin: 20px auto; 
+  padding: 0 1rem; 
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid vars.$border-color;
+  }
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.no-offers-message {
+  background-color: #f9f9f9;
+  border: 1px dashed vars.$border-color;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+@media (max-width: 1024px) {
+  .offers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .offers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .user-offers-container h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+}
