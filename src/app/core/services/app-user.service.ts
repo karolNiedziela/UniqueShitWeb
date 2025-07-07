@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -22,16 +22,14 @@ export interface UpdateAppUserDto {
   providedIn: 'root',
 })
 export class AppUserService {
+  private http = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/app-users`;
   private cacheKey = 'userDisplayNameIdMap';
-
-  constructor(private http: HttpClient) {}
 
   getUser(userId: string): Observable<AppUser> {
     return this.http.get<AppUser>(`${this.baseUrl}/${userId}`).pipe(
       tap(user => {
-        if (user && user.displayName) {
-          // Zapisujemy powiązanie do sessionStorage
+        if (user?.displayName) {
           this.cacheUserMapping(user.displayName, user.id);
         }
       })
@@ -39,31 +37,29 @@ export class AppUserService {
   }
 
   getUserIdByName(displayName: string): string | undefined {
-    // 1. Spróbuj pobrać z sessionStorage
     const cache = this.getCache();
-    const userId = cache[displayName];
-    return userId;
+    return cache[displayName];
   }
 
-  private getCache(): { [key: string]: string } {
+  private getCache(): Record<string, string> {
     try {
-      const cachedData = sessionStorage.getItem(this.cacheKey);
-      return cachedData ? JSON.parse(cachedData) : {};
-    } catch (e) {
-      console.error("Błąd odczytu cache'u użytkowników z sessionStorage", e);
+      const data = sessionStorage.getItem(this.cacheKey);
+      return data ? JSON.parse(data) : {};
+    } catch {
+      console.error('Error reading user cache');
       return {};
     }
   }
 
-public cacheUserMapping(displayName: string, userId: string): void {
+  public cacheUserMapping(displayName: string, userId: string): void {
     try {
       const cache = this.getCache();
       if (cache[displayName] !== userId) {
         cache[displayName] = userId;
         sessionStorage.setItem(this.cacheKey, JSON.stringify(cache));
       }
-    } catch (e) {
-      console.error("Błąd zapisu do cache'u użytkowników w sessionStorage", e);
+    } catch {
+      console.error('Error writing user cache');
     }
   }
 
