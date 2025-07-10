@@ -5,11 +5,10 @@ import { environment } from '../../../environments/environment';
 
 export interface AppUser {
   id: string;
-  email: string;
   displayName: string;
-  phoneNumber: string;
-  aboutMe: string;
-  city: string;
+  phoneNumber?: string;
+  aboutMe?: string;
+  city?: string;
 }
 
 export interface UpdateAppUserDto {

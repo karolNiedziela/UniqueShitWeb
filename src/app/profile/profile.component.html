@@ -14,7 +14,7 @@
     }
 
     @if (state.user; as u) {
-      
+
       @if (!editMode) {
         <div class="profile-header">
           <h1>User profile: {{ u.displayName }}</h1>
@@ -47,19 +47,25 @@
         </div>
       } 
       
-      @else if (editMode && state.isOwnProfile) {
+      @else {
         <div class="profile-header">
           <h1>Edit your profile</h1>
         </div>
 
-        <form [formGroup]="editForm" (ngSubmit)="saveChanges(u)">
+        <form [formGroup]="editForm" (ngSubmit)="saveChanges()">
           <div class="form-field">
-            <label for="phoneNumber">Telephone:</label>
-            <input id="phoneNumber" formControlName="phoneNumber" />
+            <app-text-input
+              formControlName="phoneNumber"
+              [label]="'Telephone:'"
+              [maxLength]="12">
+            </app-text-input>
           </div>
           <div class="form-field">
-            <label for="city">City:</label>
-            <input id="city" formControlName="city" />
+            <app-text-input
+              formControlName="city"
+              [label]="'City:'"
+              [maxLength]="20">
+            </app-text-input>
           </div>
 
           <div class="form-field">
@@ -69,8 +75,12 @@
               [maxLength]="512"
               [rows]="8">
             </app-text-area>
-            @if (editForm.get('aboutMe')?.hasError('maxlength')) {
-              <div class="form-error">The description fits max 512 characters.</div>
+
+            @if (editForm.get('aboutMe')?.hasError('maxParagraphs') && editForm.get('aboutMe')?.touched) {
+              <div class="form-error">
+                You can use a maximum of 8 paragraphs. (currently:
+                {{ editForm.get('aboutMe')?.getError('maxParagraphs').actual }})
+              </div>
             }
           </div>
 
@@ -89,5 +99,5 @@
 }
 <app-opened-chats
   [openedChats]="chatService.openedChats()"
-  (closeChat)="chatService.removeChat($event)"
-></app-opened-chats>
+  (closeChat)="chatService.removeChat($event)">
+</app-opened-chats>

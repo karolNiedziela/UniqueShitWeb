@@ -1,4 +1,4 @@
-import { Inject, Injectable, signal } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   MSAL_GUARD_CONFIG,
   MsalBroadcastService,
@@ -13,6 +13,7 @@ import {
   RedirectRequest,
 } from '@azure/msal-browser';
 import { BehaviorSubject, filter, Subject, takeUntil } from 'rxjs';
+import { AppUser, AppUserService } from '../services/app-user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,15 +23,20 @@ export class AuthService {
   private _loginDisplay = new BehaviorSubject<boolean>(false);
   private _activeAccountReady = new BehaviorSubject<boolean>(false);
   activeAccountReady$ = this._activeAccountReady.asObservable();
-  public userId = signal<string>('');
+
+  private _currentUser = new BehaviorSubject<AppUser | null>(null);
+  public currentUser$ = this._currentUser.asObservable();
 
   loginDisplay$ = this._loginDisplay.asObservable();
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private msalService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
-  ) {}
+    private msalBroadcastService: MsalBroadcastService,
+    private appUserService: AppUserService
+  ) {
+    this.initializeAuth();
+  }
 
   initializeAuth(): void {
     this.msalService.initialize();
@@ -42,6 +48,7 @@ export class AuthService {
         ) {
           this.msalService.instance.setActiveAccount(result.account);
           this._activeAccountReady.next(true);
+          this.updateLoginDisplay();
         }
       },
       error: (error) => console.log(error),
@@ -75,20 +82,32 @@ export class AuthService {
       });
   }
 
-  updateLoginDisplay(): void {
+  private updateLoginDisplay(): void {
     const isLoggedIn = this.msalService.instance.getAllAccounts().length > 0;
+    this._loginDisplay.next(isLoggedIn);
 
     if (isLoggedIn) {
       const account = this.msalService.instance.getActiveAccount();
       if (account) {
-        this.userId.set(account.localAccountId);
-        this._activeAccountReady.next(true);
+        const id = account.localAccountId;
+        this.appUserService.getUser(id).subscribe(user => {
+          const logged: AppUser = {
+            id: user.id,
+            displayName: user.displayName,
+            phoneNumber: user.phoneNumber,
+            aboutMe: user.aboutMe,
+            city: user.city,
+          };
+          this._currentUser.next(logged);
+          this._activeAccountReady.next(true);
+        });
       }
+    } else {
+      this._currentUser.next(null);
     }
-    this._loginDisplay.next(isLoggedIn);
   }
 
-  login() {
+  login(): void {
     if (this.msalGuardConfig.authRequest) {
       this.msalService.loginRedirect({
         ...this.msalGuardConfig.authRequest,
@@ -98,10 +117,14 @@ export class AuthService {
     }
   }
 
-  logout() {
+  logout(): void {
     this.msalService.logoutRedirect({
       postLogoutRedirectUri: 'http://localhost:4200',
     });
+  }
+
+  public userId(): string | null {
+    return this._currentUser.value?.id ?? null;
   }
 
   destroy(): void {
