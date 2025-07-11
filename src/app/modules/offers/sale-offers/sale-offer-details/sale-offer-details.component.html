@@ -14,7 +14,7 @@
       <div class="seller-username">
         <span>Username: </span>
         <button mat-button
-                [routerLink]="['/profile', offer.user.displayName]"
+                [routerLink]="['/profile', offer.user.id]"
                 class="username-link">
           {{ offer.user?.displayName }}
         </button>

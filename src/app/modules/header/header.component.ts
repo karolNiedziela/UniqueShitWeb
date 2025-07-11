@@ -10,6 +10,7 @@ import { ChatSidebarComponent } from '../chat/chat-sidebar/chat-sidebar.componen
 import { ChatService } from '../chat/services/chat.service';
 import { GlobalSearchBarComponent } from '../../shared/components/global-search-bar/global-search-bar.component';
 import { CommonModule } from '@angular/common';
+import { AppUser } from '../../core/services/app-user.service';
 
 @Component({
   selector: 'app-header',
@@ -27,20 +28,19 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  loginDisplay = false;
-  userDisplayName = '';
+  user: AppUser | null = null; 
 
   private readonly destroying$ = new Subject<void>();
   private readonly authService = inject(AuthService);
   public readonly chatService = inject(ChatService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  ngOnInit(): void {
+async ngOnInit(): Promise<void>{
     this.authService.currentUser$
       .pipe(takeUntil(this.destroying$))
       .subscribe(user => {
-        this.loginDisplay = !!user;
-        this.userDisplayName = user?.displayName ?? '';
+        this.user = user;
+        
         this.cdr.markForCheck();
       });
   }

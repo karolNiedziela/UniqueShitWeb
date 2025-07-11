@@ -20,10 +20,10 @@
           <h1>User profile: {{ u.displayName }}</h1>
           
           <div class="header-actions">
-            <button mat-stroked-button color="accent" [routerLink]="['/profile', u.displayName, 'sale-offers']">
+            <button mat-stroked-button color="accent" [routerLink]="['/profile', u.id, 'sale-offers']">
               Sale offers
             </button>
-            <button mat-stroked-button color="accent" [routerLink]="['/profile', u.displayName, 'purchase-offers']">
+            <button mat-stroked-button color="accent" [routerLink]="['/profile', u.id, 'purchase-offers']">
               Purchase offers
             </button>
 

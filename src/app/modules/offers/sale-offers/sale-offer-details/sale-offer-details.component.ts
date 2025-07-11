@@ -18,8 +18,6 @@ import { AppUserService } from '../../../../core/services/app-user.service';
 export class SaleOfferDetailsComponent implements OnInit {
   salesOfferService = inject(SaleOfferService);
 
-  private appUserService = inject(AppUserService); 
-
   saleOffer$!: Observable<SaleOfferDetails>;
 
   private readonly route = inject(ActivatedRoute);
@@ -30,7 +28,6 @@ export class SaleOfferDetailsComponent implements OnInit {
     this.saleOffer$ = this.salesOfferService.getOffer(Number(saleOfferId)).pipe(
       tap((offer: SaleOfferDetails) => {
         if (offer && offer.user) {
-          this.appUserService.cacheUserMapping(offer.user.displayName, offer.user.id);
         }
       })
     );

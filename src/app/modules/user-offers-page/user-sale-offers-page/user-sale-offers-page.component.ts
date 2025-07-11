@@ -17,11 +17,18 @@ export class UserSaleOffersPageComponent implements OnInit {
   userId: string | null = null;
   userName: string | null = null;
 
-  ngOnInit(): void {
-    const displayName = this.route.snapshot.paramMap.get('name');
-    if (displayName) {
-      this.userName = displayName;
-      this.userId = this.appUserService.getUserIdByName(displayName) ?? null;
-    }
+ngOnInit(): void {
+  const userIdFromRoute = this.route.snapshot.paramMap.get('id');
+
+  if (userIdFromRoute) {
+    this.userId = userIdFromRoute;
+
+    this.appUserService.getUser(this.userId).subscribe(user => {
+      this.userName = user.displayName;
+    });
+  } else {
+    console.error("User ID not found in route parameters!");
+    this.userId = null;
+    this.userName = 'Unknown User'; 
   }
-}
+}}

@@ -59,27 +59,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.paramMap.pipe(
       switchMap(params => {
-        const displayName = params.get('name');
-        if (!displayName) {
-          return of({ isLoading: false, error: 'Does not include username in the URL.', isOwnProfile: false });
-        }
-    
-        const userId = this.appUserService.getUserIdByName(displayName); 
-        if (!userId) {
-          return of({ isLoading: false, error: 'The user could not be found.', isOwnProfile: false });
-        }
+        const userIdFromRoute = params.get('id');
         
-        const isOwnProfile = userId === this.coreAuthService.userId();
+        if (!userIdFromRoute) {
+          return of({ isLoading: false, error: 'User ID not found in URL.', isOwnProfile: false });
+        }
+  
+        const isOwnProfile = userIdFromRoute === this.coreAuthService.userId();
 
-        return this.appUserService.getUser(userId).pipe(
+        return this.appUserService.getUser(userIdFromRoute).pipe(
           map(user => ({ isLoading: false, user, isOwnProfile })),
           catchError(err => {
             console.error('Error loading profile:', err);
-            return of({ isLoading: false, error: 'Failed to load profile.', isOwnProfile });
+            return of({ isLoading: false, error: 'Failed to load profile. User may not exist.', isOwnProfile });
           })
         );
       }),
-
       tap(state => {
         if ('user' in state && state.user) {
           this.initializeForm(state.user);
