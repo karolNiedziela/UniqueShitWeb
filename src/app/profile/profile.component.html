@@ -1,18 +1,103 @@
-<h1>ID token claims:</h1>
+@if (profileState$ | async; as state) {
+  <div class="profile-container">
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <!-- Claim Column -->
-  <ng-container matColumnDef="claim">
-    <th mat-header-cell *matHeaderCellDef>Claim</th>
-    <td mat-cell *matCellDef="let element">{{ element.claim }}</td>
-  </ng-container>
+    @if (state.isLoading) {
+      <div class="loading-spinner">
+        <p>Loading profile...</p>
+      </div>
+    }
 
-  <!-- Value Column -->
-  <ng-container matColumnDef="value">
-    <th mat-header-cell *matHeaderCellDef>Value</th>
-    <td mat-cell *matCellDef="let element">{{ element.value }}</td>
-  </ng-container>
+    @if (state.error) {
+      <div class="error-message">
+        <p>{{ state.error }}</p>
+      </div>
+    }
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+    @if (state.user; as u) {
+
+      @if (!editMode) {
+        <div class="profile-header">
+          <h1>User profile: {{ u.displayName }}</h1>
+          
+          <div class="header-actions">
+            <button mat-stroked-button color="accent" [routerLink]="['/profile', u.id, 'sale-offers']">
+              Sale offers
+            </button>
+            <button mat-stroked-button color="accent" [routerLink]="['/profile', u.id, 'purchase-offers']">
+              Purchase offers
+            </button>
+
+            @if (!state.isOwnProfile) {
+              <button mat-flat-button color="primary" (click)="chatService.startChat(u.id, u.displayName)">
+                Start Chat
+              </button>
+            }
+
+            @if (state.isOwnProfile) {
+              <button mat-stroked-button color="primary" (click)="toggleEditMode()">Edit Profile</button>
+            }
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <p><strong>Telephone:</strong> {{ u.phoneNumber || 'Not specified' }}</p>
+          <p><strong>City:</strong> {{ u.city || 'Not specified' }}</p>
+          <p><strong>About me:</strong></p>
+          <blockquote class="about-me">{{ u.aboutMe || 'No description.' }}</blockquote>
+        </div>
+      } 
+      
+      @else {
+        <div class="profile-header">
+          <h1>Edit your profile</h1>
+        </div>
+
+        <form [formGroup]="editForm" (ngSubmit)="saveChanges()">
+          <div class="form-field">
+            <app-text-input
+              formControlName="phoneNumber"
+              [label]="'Telephone:'"
+              [maxLength]="12">
+            </app-text-input>
+          </div>
+          <div class="form-field">
+            <app-text-input
+              formControlName="city"
+              [label]="'City:'"
+              [maxLength]="20">
+            </app-text-input>
+          </div>
+
+          <div class="form-field">
+            <app-text-area
+              formControlName="aboutMe"
+              [label]="'About me:'"
+              [maxLength]="512"
+              [rows]="8">
+            </app-text-area>
+
+            @if (editForm.get('aboutMe')?.hasError('maxParagraphs') && editForm.get('aboutMe')?.touched) {
+              <div class="form-error">
+                You can use a maximum of 8 paragraphs. (currently:
+                {{ editForm.get('aboutMe')?.getError('maxParagraphs').actual }})
+              </div>
+            }
+          </div>
+
+          <div class="form-actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="editForm.invalid || isSaving">
+              {{ isSaving ? 'Saving...' : 'Save' }}
+            </button>
+            <button mat-stroked-button type="button" (click)="toggleEditMode()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      }
+    }
+  </div>
+}
+<app-opened-chats
+  [openedChats]="chatService.openedChats()"
+  (closeChat)="chatService.removeChat($event)">
+</app-opened-chats>

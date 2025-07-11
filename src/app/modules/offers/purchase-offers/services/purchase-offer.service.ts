@@ -10,6 +10,8 @@ import { environment } from '../../../../../environments/environment';
 import { PurchaseOfferType } from '../models/purchase-offer.model';
 import { CreatePurchaseOfferDto } from '../models/create-purchase-offer.dto';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -56,4 +58,19 @@ export class PurchaseOfferService {
       .post<CreatePurchaseOfferDto>(this.purchaseOffersEndpoint, dto)
   }
 
+  getOffersByUserId(userId: string): Observable<PurchaseOfferType[]> {
+    const params = new HttpParams()
+      .set(OffersQueryParamMapping.pageNumber, '1')
+      .set(OffersQueryParamMapping.pageSize, '9999'); 
+    return this.httpClient
+      .get<PagedListModel<PurchaseOfferType>>(this.purchaseOffersEndpoint, { params })
+      .pipe(
+        map(response => {
+          if (!response || !response.items) {
+            return [];
+          }
+          return response.items.filter(offer => offer.user.id === userId);
+        })
+      );
+  }
 }

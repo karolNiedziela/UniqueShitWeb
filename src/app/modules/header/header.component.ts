@@ -1,65 +1,53 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { NgIf } from '@angular/common';
-import { ThemeService } from '../../core/services/theme.service';
 import { RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 import { ChatSidebarComponent } from '../chat/chat-sidebar/chat-sidebar.component';
 import { ChatService } from '../chat/services/chat.service';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { ModelType } from '../models/models/model.model';
 import { GlobalSearchBarComponent } from '../../shared/components/global-search-bar/global-search-bar.component';
+import { CommonModule } from '@angular/common';
+import { AppUser } from '../../core/services/app-user.service';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [
     MatToolbar,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
     RouterLink,
-    NgIf,
     ChatSidebarComponent,
     GlobalSearchBarComponent,
-    GlobalSearchBarComponent,
+    CommonModule
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+  styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
-  isIframe = false;
-  loginDisplay = false;
-  showChatSidebar = signal(false);
-  private readonly _destroying$ = new Subject<void>();
+export class HeaderComponent implements OnInit, OnDestroy {
+  user: AppUser | null = null; 
 
-  protected readonly themeService = inject(ThemeService);
-  protected readonly authService = inject(AuthService);
-  protected readonly chatService = inject(ChatService);
+  private readonly destroying$ = new Subject<void>();
+  private readonly authService = inject(AuthService);
+  public readonly chatService = inject(ChatService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  async ngOnInit(): Promise<void> {
-    this.isIframe = window !== window.parent && !window.opener;
-
-    this.authService.loginDisplay$
-      .pipe(takeUntil(this._destroying$))
-      .subscribe(async (isLoggedIn) => {
-        this.loginDisplay = isLoggedIn;
+async ngOnInit(): Promise<void>{
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroying$))
+      .subscribe(user => {
+        this.user = user;
+        
+        this.cdr.markForCheck();
       });
   }
 
   ngOnDestroy(): void {
-    this._destroying$.next();
-    this._destroying$.complete();
-    this.authService.destroy();
+    this.destroying$.next();
+    this.destroying$.complete();
   }
 
   login(): void {

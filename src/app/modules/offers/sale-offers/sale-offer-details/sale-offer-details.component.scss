@@ -103,42 +103,33 @@
   font-weight: 600;
 }
 
-.seller-info p {
-  margin-bottom: 1rem;
+.seller-username {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   color: black;
-  line-height: 1.5;
 }
 
-.seller-info button {
+.chat-button {
   width: 100%;
-  background-color: rgba(0, 0, 255, 0.664);
-  color: whitesmoke;
-  margin-bottom: 1.5rem;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
-.seller-info button:hover {
-  background-color: #1e3a8a;
-}
 
 .item-info {
   display: grid;
   grid-template-columns: repeat(2, minmax(150px, 1fr));
   grid-template-areas:
+    "price price"
     "brand model"
     "colour size"
     "quantity condition"
-    "price price"
     "delivery payment";
   gap: 0.75rem;
   border-radius: 0.5rem;
   height: 100%;
-  padding: 1rem; 
+  padding: 1rem;
 }
 
 .spec {
@@ -209,13 +200,13 @@
   .item-info {
     grid-template-columns: 1fr;
     grid-template-areas:
+      "price"
       "brand"
       "model"
       "colour"
       "size"
       "quantity"
       "condition"
-      "price"
       "delivery"
       "payment";
     gap: 0.75rem;

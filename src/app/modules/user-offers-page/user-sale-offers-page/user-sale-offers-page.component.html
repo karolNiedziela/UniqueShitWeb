@@ -1,0 +1,10 @@
+<div class="offers-page-container">
+  @if (userId) {
+    <app-my-sale-offers [userId]="userId"></app-my-sale-offers>
+  } @else {
+    <div class="error-message">
+      <h2>Could not load offers</h2>
+      <p>User "{{ userName }}" not found.</p>
+    </div>
+  }
+</div>

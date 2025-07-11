@@ -13,6 +13,6 @@ export const PurchaseOfferSchema = zod.object({
   }),
 });
 
-export const SaleOfferArraySchema = zod.array(PurchaseOfferSchema);
+export const PurchaseOfferArraySchema = zod.array(PurchaseOfferSchema);
 
 export type PurchaseOfferType = zod.infer<typeof PurchaseOfferSchema>;

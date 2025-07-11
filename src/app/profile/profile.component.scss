@@ -1,0 +1,148 @@
+$primary-color: rgb(0, 119, 255); 
+$light-bg: #f5f5f5;
+$dark-text: #212121;
+$secondary-text: #757575;
+$border-color: #e0e0e0;
+$border-radius: 8px;
+$spacing: 1rem;
+$shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+.profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: $spacing * 2;
+  background: #fff;
+  border-radius: $border-radius;
+  box-shadow: $shadow;
+  color: $dark-text;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: $spacing;
+  padding-bottom: $spacing;
+  border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing * 1.5;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin: 0; 
+    word-break: break-word; 
+  }
+
+
+  .header-actions {
+    display: flex;
+    gap: $spacing * 0.75;
+    flex-wrap: wrap; 
+  }
+}
+
+.profile-details {
+  p {
+    margin: 0.8rem 0;
+    line-height: 1.6;
+    color: $secondary-text;
+
+    strong {
+      font-weight: 500;
+      color: $dark-text;
+      margin-right: 0.5em;
+    }
+  }
+  
+
+  p:has(+ .about-me) {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: $dark-text;
+  }
+
+  .about-me {
+    margin: 0;
+    padding: $spacing;
+    background: $light-bg;
+    border-left: 4px solid $primary-color;
+    border-radius: 0 4px 4px 0;
+    min-height: 150px;
+    white-space: pre-line; 
+    color: $dark-text;
+    font-style: italic;
+    line-height: 1.7;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
+form {
+  .form-field {
+    margin-bottom: $spacing * 1.5;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: $dark-text;
+    }
+    
+    input,
+    ::ng-deep app-text-area textarea {
+      width: 100%;
+      padding: 0.75rem $spacing;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+      }
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing;
+    margin-top: $spacing * 2;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-container {
+    margin: 1rem;
+    padding: $spacing * 1.5;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+    
+    .header-actions {
+      justify-content: flex-start;
+      width: 100%;
+    }
+  }
+
+  .form-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}

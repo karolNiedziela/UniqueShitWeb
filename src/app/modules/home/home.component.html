@@ -1,7 +1,21 @@
 <div class="home-offers">
-    <app-sale-offers-adidas class="home__offer-item"></app-sale-offers-adidas>
-    <app-sale-offers-nike class="home__offer-item"></app-sale-offers-nike>
-    <app-sale-offers-jordan class="home__offer-item"></app-sale-offers-jordan>
-    <app-sale-offers-lacoste class="home__offer-item"></app-sale-offers-lacoste>
-</div>
+  <app-specific-sale-offers-slider
+    [brandId]="4"
+    [brandName]="'Adidas'">
+  </app-specific-sale-offers-slider>
 
+  <app-specific-sale-offers-slider
+    [brandId]="85"
+    [brandName]="'Nike'">
+</app-specific-sale-offers-slider>
+
+  <app-specific-sale-offers-slider
+    [brandId]="66"
+    [brandName]="'Jordan'">
+  </app-specific-sale-offers-slider>
+
+  <app-specific-sale-offers-slider
+    [brandId]="69"
+    [brandName]="'Lacoste'">
+  </app-specific-sale-offers-slider>
+</div>
