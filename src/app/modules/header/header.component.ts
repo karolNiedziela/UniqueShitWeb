@@ -10,7 +10,7 @@ import { ChatSidebarComponent } from '../chat/chat-sidebar/chat-sidebar.componen
 import { ChatService } from '../chat/services/chat.service';
 import { GlobalSearchBarComponent } from '../../shared/components/global-search-bar/global-search-bar.component';
 import { CommonModule } from '@angular/common';
-import { AppUser } from '../../core/services/app-user.service';
+import { AppUser } from '../logged-user/logged-user.service';
 
 @Component({
   selector: 'app-header',

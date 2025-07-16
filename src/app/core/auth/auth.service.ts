@@ -13,7 +13,7 @@ import {
   RedirectRequest,
 } from '@azure/msal-browser';
 import { BehaviorSubject, filter, Subject, takeUntil } from 'rxjs';
-import { AppUser, AppUserService } from '../services/app-user.service';
+import { AppUser, LoggedUserService } from '../../modules/logged-user/logged-user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +33,7 @@ export class AuthService {
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private msalService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
-    private appUserService: AppUserService
+    private loggedUserService: LoggedUserService
   ) {
     this.initializeAuth();
   }
@@ -90,7 +90,7 @@ export class AuthService {
       const account = this.msalService.instance.getActiveAccount();
       if (account) {
         const id = account.localAccountId;
-        this.appUserService.getUser(id).subscribe(user => {
+        this.loggedUserService.getUser(id).subscribe(user => {
           const logged: AppUser = {
             id: user.id,
             displayName: user.displayName,

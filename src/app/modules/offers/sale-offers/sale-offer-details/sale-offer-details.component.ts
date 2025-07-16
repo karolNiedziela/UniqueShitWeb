@@ -7,7 +7,6 @@ import { SaleOfferDetails } from '../models/sale-offer-details.model';
 import { MatButtonModule } from '@angular/material/button';
 import { OpenedChatsComponent } from '../../../chat/opened-chats/opened-chats.component';
 import { ChatService } from '../../../chat/services/chat.service';
-import { AppUserService } from '../../../../core/services/app-user.service'; 
 
 @Component({
   selector: 'app-sale-offer-details',

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AppUserService } from '../../../core/services/app-user.service';
+import { LoggedUserService } from '../../logged-user/logged-user.service';
 import { MySaleOffersComponent } from '../../my-offers/my-sale-offers/my-sale-offers.component';
 
 @Component({
@@ -12,7 +12,7 @@ import { MySaleOffersComponent } from '../../my-offers/my-sale-offers/my-sale-of
 })
 export class UserSaleOffersPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private appUserService = inject(AppUserService);
+  private appUserService = inject(LoggedUserService);
 
   userId: string | null = null;
   userName: string | null = null;

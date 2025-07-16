@@ -11,8 +11,8 @@ import { TextAreaComponent } from '../shared/components/inputs/text-area/text-ar
 import { OpenedChatsComponent } from '../modules/chat/opened-chats/opened-chats.component';
 import { TextInputComponent } from '../shared/components/inputs/text-input/text-input.component';
 import { AuthService } from '../core/auth/auth.service';
-import { AppUserService, AppUser, UpdateAppUserDto } from '../core/services/app-user.service';
 import { ChatService } from '../modules/chat/services/chat.service';
+import { LoggedUserService, AppUser, UpdateAppUserDto } from '../modules/logged-user/logged-user.service';
 
 export interface ProfileState {
   isLoading: boolean;
@@ -38,7 +38,7 @@ export interface ProfileState {
 export class ProfileComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
-  private readonly appUserService = inject(AppUserService);
+  private readonly appUserService = inject(LoggedUserService);
   private readonly coreAuthService = inject(AuthService);
   private readonly authService = inject(MsalService);
   private readonly msalBroadcastService = inject(MsalBroadcastService);
