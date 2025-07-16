@@ -6,14 +6,14 @@
   <h2 class="offer-type">SALE OFFERS</h2>
   <div class="offers-columns">
     <div class="column">
-      <app-sale-offers-button [brandId]="66" label="Jordan"></app-sale-offers-button>
-      <app-sale-offers-button [brandId]="85" label="Nike"></app-sale-offers-button>
-      <app-sale-offers-button [brandId]="4" label="Adidas"></app-sale-offers-button>
+          <app-sale-offers-button [brandId]="brandId.Jordan" label="Jordan"></app-sale-offers-button>
+          <app-sale-offers-button [brandId]="brandId.Nike" label="Nike"></app-sale-offers-button>
+          <app-sale-offers-button [brandId]="brandId.Adidas" label="Adidas"></app-sale-offers-button>
     </div>
     <div class="column">
-      <app-sale-offers-button [productCategoryId]="3" label="Hoodies"></app-sale-offers-button>
-      <app-sale-offers-button [productCategoryId]="1" label="Shoes"></app-sale-offers-button>
-      <app-sale-offers-button [productCategoryId]="4" label="T-shirts"></app-sale-offers-button>
+          <app-sale-offers-button [productCategoryId]="productCategoryId.Hoodies" label="Hoodies"></app-sale-offers-button>
+          <app-sale-offers-button [productCategoryId]="productCategoryId.Shoes" label="Shoes"></app-sale-offers-button>
+          <app-sale-offers-button [productCategoryId]="productCategoryId.TShirts" label="T-shirts"></app-sale-offers-button>
     </div>
     </div>
     </div>
@@ -22,14 +22,14 @@
         <h2 class="offer-type">PURCHASE OFFERS</h2>
         <div class="offers-columns">
           <div class="column">
-            <app-purchase-offers-button [brandId]="4" label="Adidas"> </app-purchase-offers-button>
-            <app-purchase-offers-button [brandId]="85" label="Nike"> </app-purchase-offers-button>
-            <app-purchase-offers-button [brandId]="66" label="Jordan"> </app-purchase-offers-button>
+            <app-purchase-offers-button [brandId]="brandId.Adidas" label="Adidas"> </app-purchase-offers-button>
+            <app-purchase-offers-button [brandId]="brandId.Nike" label="Nike"> </app-purchase-offers-button>
+            <app-purchase-offers-button [brandId]="brandId.Jordan" label="Jordan"> </app-purchase-offers-button>
           </div>
           <div class="column">
-            <app-purchase-offers-button [brandId]="69" label="Lacoste"> </app-purchase-offers-button>
-            <app-purchase-offers-button [brandId]="102" label="Polo"> </app-purchase-offers-button>
-            <app-purchase-offers-button [brandId]="122" label="The North Face"> </app-purchase-offers-button>
+            <app-purchase-offers-button [brandId]="brandId.Lacoste" label="Lacoste"> </app-purchase-offers-button>
+            <app-purchase-offers-button [brandId]="brandId.Polo" label="Polo"> </app-purchase-offers-button>
+            <app-purchase-offers-button [brandId]="brandId.TheNorthFace" label="The North Face"> </app-purchase-offers-button>
           </div>
           </div>
         </div>

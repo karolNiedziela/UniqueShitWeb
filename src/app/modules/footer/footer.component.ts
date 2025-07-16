@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { SaleOffersButtonComponent } from '../offers/sale-offers/sale-offers-button/sale-offers-button.component';
 import { PurchaseOffersButtonComponent } from '../offers/purchase-offers/purchase-offers-button/purchase-offers-button.component';
+import { BrandId, ProductCategoryId } from '../../shared/enums/enums.component';
 
 @Component({
   selector: 'app-footer',
@@ -19,4 +20,7 @@ import { PurchaseOffersButtonComponent } from '../offers/purchase-offers/purchas
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent { }
+export class FooterComponent {
+  brandId = BrandId;
+  productCategoryId = ProductCategoryId;
+}

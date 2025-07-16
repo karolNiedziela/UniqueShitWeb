@@ -1,21 +1,8 @@
 <div class="home-offers">
-  <app-specific-sale-offers-slider
-    [brandId]="4"
-    [brandName]="'Adidas'">
-  </app-specific-sale-offers-slider>
-
-  <app-specific-sale-offers-slider
-    [brandId]="85"
-    [brandName]="'Nike'">
-</app-specific-sale-offers-slider>
-
-  <app-specific-sale-offers-slider
-    [brandId]="66"
-    [brandName]="'Jordan'">
-  </app-specific-sale-offers-slider>
-
-  <app-specific-sale-offers-slider
-    [brandId]="69"
-    [brandName]="'Lacoste'">
-  </app-specific-sale-offers-slider>
+  @for (slider of sliders; track slider.brandId) {
+    <app-specific-sale-offers-slider
+      [brandId]="slider.brandId"
+      [brandName]="slider.brandName">
+    </app-specific-sale-offers-slider>
+  }
 </div>
