@@ -1,25 +1,24 @@
 <div class="offers-page-container">
   @if (appUserService.currentUser(); as state) {
-    @if (state.isLoading) {
+      @if (state.isLoading) {
       <div class="loading-spinner">
-        <p>Loading user's offers...</p>
+        <p>Loading sale offers....</p>
       </div>
     }
-    @else if (state.error) {
+      @else if (state.error) {
       <div class="error-message">
         <h2>Could not load offers</h2>
         <p>{{ state.error }}</p>
       </div>
     }
-    @else if (state.user) {
+     @else if (state.user) {
       <app-my-sale-offers [userId]="state.user.id"></app-my-sale-offers>
     }
-    @else {
+      @else {
       <div class="error-message">
-        <h2>Offers not available</h2>
-        <p>User was not specified in the address.</p>
+        <h2>Could not load offers</h2>
+        <p>User not specified.</p>
       </div>
     }
-
   }
 </div>

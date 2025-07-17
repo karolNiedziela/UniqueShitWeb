@@ -1,11 +1,3 @@
-<!-- C:\Users\KRUL\test22.06\UniqueShitWeb\src\app\profile\profile.component.html -->
-
-<!-- 
-  Kluczowa zmiana: 
-  Zamiast `@if (profileState$ | async; as state)` 
-  używamy teraz `@if (profileState(); as state)`
-  aby odczytać wartość bezpośrednio z sygnału.
--->
 @if (profileState(); as state) {
   <div class="profile-container">
 
@@ -81,15 +73,10 @@
               formControlName="aboutMe"
               [label]="'About me:'"
               [maxLength]="512"
-              [rows]="8">
+              [rows]="8"
+              [maxParagraphs]="8">
             </app-text-area>
 
-            @if (editForm.get('aboutMe')?.hasError('maxParagraphs') && editForm.get('aboutMe')?.touched) {
-              <div class="form-error">
-                You can use a maximum of 8 paragraphs. (currently:
-                {{ editForm.get('aboutMe')?.getError('maxParagraphs').actual }})
-              </div>
-            }
           </div>
 
           <div class="form-actions">

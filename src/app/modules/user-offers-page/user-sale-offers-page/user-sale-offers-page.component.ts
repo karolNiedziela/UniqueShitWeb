@@ -1,4 +1,3 @@
-// src/app/pages/user-sale-offers-page/user-sale-offers-page.component.ts
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -12,8 +11,8 @@ import { MySaleOffersComponent } from '../../my-offers/my-sale-offers/my-sale-of
   styleUrl: './user-sale-offers-page.component.scss'
 })
 export class UserSaleOffersPageComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  protected appUserService = inject(LoggedUserService);
+  private readonly route = inject(ActivatedRoute);
+  protected readonly appUserService = inject(LoggedUserService);
 
   userId: string | null = null;
 
@@ -25,7 +24,6 @@ export class UserSaleOffersPageComponent implements OnInit {
       this.appUserService.loadUser(this.userId);
     } else {
       console.error("User ID not found in route parameters!");
-      this.userId = null;
     }
   }
 }

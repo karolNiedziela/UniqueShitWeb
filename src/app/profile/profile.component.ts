@@ -1,8 +1,7 @@
-// C:\Users\KRUL\test22.06\UniqueShitWeb\src\app\profile\profile.component.ts
 
 import { Component, inject, OnInit, signal, WritableSignal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -26,7 +25,6 @@ export interface ProfileState {
 
 @Component({
   selector: 'app-profile',
-  standalone: true, // Pamiętaj o ustawieniu standalone, jeśli tak jest w projekcie
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -49,7 +47,6 @@ export class ProfileComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   protected readonly chatService = inject(ChatService);
 
-  // Zastępujemy BehaviorSubject sygnałem
   profileState: WritableSignal<ProfileState> = signal({
     isLoading: true,
     isOwnProfile: false,
@@ -60,7 +57,6 @@ export class ProfileComponent implements OnInit {
   isSaving = false;
 
   ngOnInit(): void {
-    // Strumień z parametrami trasy. Subskrypcja jest automatycznie czyszczona.
     this.route.paramMap.pipe(
       switchMap(params => {
         const userIdFromRoute = params.get('id');
@@ -79,16 +75,14 @@ export class ProfileComponent implements OnInit {
           })
         );
       }),
-      // Wewnątrz tap aktualizujemy sygnał
       tap(state => {
         this.profileState.set(state);
         if (state.user) {
           this.initializeForm(state.user);
         }
       })
-    ).subscribe(); // Subskrypcja jest potrzebna, aby uruchomić strumień
+    ).subscribe(); 
 
-    // Używamy takeUntilDestroyed do automatycznego czyszczenia subskrypcji
     this.msalBroadcastService.inProgress$
       .pipe(
         filter(status => status === InteractionStatus.None || status === InteractionStatus.HandleRedirect),
@@ -102,7 +96,6 @@ export class ProfileComponent implements OnInit {
   toggleEditMode(): void {
     this.editMode = !this.editMode;
     if (!this.editMode) {
-      // Odczytujemy wartość z sygnału przez jego wywołanie: this.profileState()
       const currentUser = this.profileState().user;
       if (currentUser) {
         this.editForm.reset({
@@ -119,7 +112,6 @@ export class ProfileComponent implements OnInit {
     
     this.isSaving = true;
     const formValues = this.editForm.value;
-    // Odczytujemy wartość z sygnału: this.profileState()
     const currentUser = this.profileState().user;
     if (!currentUser) {
       this.isSaving = false;
@@ -147,7 +139,6 @@ export class ProfileComponent implements OnInit {
       next: () => {
         this.isSaving = false;
         this.editMode = false;
-        // Używamy .update() do aktualizacji stanu na podstawie poprzedniej wartości
         this.profileState.update(currentState => {
             const updatedUser = { ...currentState.user, ...payload } as AppUser;
             return { ...currentState, user: updatedUser };
@@ -160,27 +151,16 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private initializeForm(user: AppUser): void {
-    this.editForm = this.fb.group({
-      phoneNumber: [user.phoneNumber || ''],
-      city: [user.city || ''],
-      aboutMe: [
-        user.aboutMe || '',
-        [Validators.maxLength(512), this.maxParagraphsValidator(8)],
-      ],
-    });
-  }
-  
-  private maxParagraphsValidator(max: number): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value: string = control.value ?? '';
-      const paragraphs = value.split(/\r?\n/).filter(p => p.trim() !== '');
-      return paragraphs.length > max
-        ? { maxParagraphs: { actual: paragraphs.length, maxAllowed: max } }
-        : null;
-    };
-  }
-
+private initializeForm(user: AppUser): void {
+  this.editForm = this.fb.group({
+    phoneNumber: [user.phoneNumber || ''],
+    city: [user.city || ''],
+    aboutMe: [
+      user.aboutMe || '',
+      [Validators.maxLength(512)], 
+    ],
+  });
+}
   private checkAndSetActiveAccount(): void {
     let activeAccount = this.authService.instance.getActiveAccount();
     if (!activeAccount && this.authService.instance.getAllAccounts().length > 0) {

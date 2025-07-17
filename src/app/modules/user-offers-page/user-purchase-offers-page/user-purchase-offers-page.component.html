@@ -1,35 +1,24 @@
-<!-- C:\Users\KRUL\test22.06\UniqueShitWeb\src\app\modules\user-offers-page\user-purchase-offers-page\user-purchase-offers-page.component.html -->
-
 <div class="offers-page-container">
-
-  <!-- 
-    Zaczynamy jeden, główny blok @if, który otwiera nawias klamrowy.
-    Pobieramy stan z serwisu i tworzymy dla niego alias 'state'.
-  -->
   @if (appUserService.currentUser(); as state) {
-
-    <!-- 
-      Wewnątrz głównego bloku @if, tworzymy łańcuch warunków.
-      To jest jeden, spójny blok logiczny.
-    -->
-    @if (state.isLoading) {
+      @if (state.isLoading) {
       <div class="loading-spinner">
-        <p>Loading offers...</p>
+        <p>Loading purchase offers...</p>
       </div>
-    } @else if (state.error) {
+    } 
+      @else if (state.error) {
       <div class="error-message">
         <h2>Could not load offers</h2>
         <p>{{ state.error }}</p>
       </div>
-    } @else if (state.user) {
+    }
+      @else if (state.user) {
       <app-my-purchase-offers [userId]="state.user.id"></app-my-purchase-offers>
-    } @else {
+    } 
+      @else {
       <div class="error-message">
         <h2>Could not load offers</h2>
         <p>User not specified.</p>
       </div>
     }
-
-  } <!-- <-- Ten nawias zamyka główny, zewnętrzny blok @if. To jego brak powodował błąd. -->
-
+  }
 </div>
