@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, signal } from '@angular/core';
 import {
   MSAL_GUARD_CONFIG,
   MsalBroadcastService,
@@ -12,7 +12,7 @@ import {
   InteractionStatus,
   RedirectRequest,
 } from '@azure/msal-browser';
-import { BehaviorSubject, filter, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { AppUser, LoggedUserService } from '../../modules/logged-user/logged-user.service';
 
 @Injectable({
@@ -20,14 +20,12 @@ import { AppUser, LoggedUserService } from '../../modules/logged-user/logged-use
 })
 export class AuthService {
   private readonly _destroying$ = new Subject<void>();
-  private _loginDisplay = new BehaviorSubject<boolean>(false);
-  private _activeAccountReady = new BehaviorSubject<boolean>(false);
-  activeAccountReady$ = this._activeAccountReady.asObservable();
 
-  private _currentUser = new BehaviorSubject<AppUser | null>(null);
-  public currentUser$ = this._currentUser.asObservable();
-
-  loginDisplay$ = this._loginDisplay.asObservable();
+  // Sygnały są publiczne i bezpośrednio zapisywalne.
+  public currentUser = signal<AppUser | null>(null);
+  public loginDisplay = signal<boolean>(false);
+  // POPRAWKA: Ta linia została przeoczona i teraz jest dodana
+  public activeAccountReady = signal<boolean>(false); 
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
@@ -47,7 +45,7 @@ export class AuthService {
           this.msalService.instance.getAllAccounts().length > 0
         ) {
           this.msalService.instance.setActiveAccount(result.account);
-          this._activeAccountReady.next(true);
+          this.activeAccountReady.set(true); // Wywołanie jest teraz poprawne, bo sygnał istnieje
           this.updateLoginDisplay();
         }
       },
@@ -84,7 +82,7 @@ export class AuthService {
 
   private updateLoginDisplay(): void {
     const isLoggedIn = this.msalService.instance.getAllAccounts().length > 0;
-    this._loginDisplay.next(isLoggedIn);
+    this.loginDisplay.set(isLoggedIn);
 
     if (isLoggedIn) {
       const account = this.msalService.instance.getActiveAccount();
@@ -98,12 +96,12 @@ export class AuthService {
             aboutMe: user.aboutMe,
             city: user.city,
           };
-          this._currentUser.next(logged);
-          this._activeAccountReady.next(true);
+          this.currentUser.set(logged);
+          this.activeAccountReady.set(true); // Wywołanie jest teraz poprawne
         });
       }
     } else {
-      this._currentUser.next(null);
+      this.currentUser.set(null);
     }
   }
 
@@ -124,7 +122,7 @@ export class AuthService {
   }
 
   public userId(): string | null {
-    return this._currentUser.value?.id ?? null;
+    return this.currentUser()?.id ?? null;
   }
 
   destroy(): void {

@@ -1,4 +1,12 @@
-@if (profileState$ | async; as state) {
+<!-- C:\Users\KRUL\test22.06\UniqueShitWeb\src\app\profile\profile.component.html -->
+
+<!-- 
+  Kluczowa zmiana: 
+  Zamiast `@if (profileState$ | async; as state)` 
+  używamy teraz `@if (profileState(); as state)`
+  aby odczytać wartość bezpośrednio z sygnału.
+-->
+@if (profileState(); as state) {
   <div class="profile-container">
 
     @if (state.isLoading) {

@@ -1,8 +1,11 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+// C:\Users\KRUL\test22.06\UniqueShitWeb\src\app\profile\profile.component.ts
+
+import { Component, inject, OnInit, signal, WritableSignal, DestroyRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { BehaviorSubject, Subject, of } from 'rxjs';
-import { catchError, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
 import { InteractionStatus } from '@azure/msal-browser';
@@ -23,6 +26,7 @@ export interface ProfileState {
 
 @Component({
   selector: 'app-profile',
+  standalone: true, // Pamiętaj o ustawieniu standalone, jeśli tak jest w projekcie
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -35,34 +39,34 @@ export interface ProfileState {
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent implements OnInit, OnDestroy {
+export class ProfileComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly appUserService = inject(LoggedUserService);
   private readonly coreAuthService = inject(AuthService);
   private readonly authService = inject(MsalService);
   private readonly msalBroadcastService = inject(MsalBroadcastService);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly chatService = inject(ChatService);
 
-  private readonly profileStateSubject = new BehaviorSubject<ProfileState>({
+  // Zastępujemy BehaviorSubject sygnałem
+  profileState: WritableSignal<ProfileState> = signal({
     isLoading: true,
     isOwnProfile: false,
   });
-  readonly profileState$ = this.profileStateSubject.asObservable();
   
   editMode = false;
   editForm!: FormGroup;
   isSaving = false;
 
-  private readonly _destroying$ = new Subject<void>();
-
   ngOnInit(): void {
+    // Strumień z parametrami trasy. Subskrypcja jest automatycznie czyszczona.
     this.route.paramMap.pipe(
       switchMap(params => {
         const userIdFromRoute = params.get('id');
         
         if (!userIdFromRoute) {
-          return of({ isLoading: false, error: 'User ID not found in URL.', isOwnProfile: false });
+          return of<ProfileState>({ isLoading: false, error: 'User ID not found in URL.', isOwnProfile: false });
         }
   
         const isOwnProfile = userIdFromRoute === this.coreAuthService.userId();
@@ -71,38 +75,35 @@ export class ProfileComponent implements OnInit, OnDestroy {
           map(user => ({ isLoading: false, user, isOwnProfile })),
           catchError(err => {
             console.error('Error loading profile:', err);
-            return of({ isLoading: false, error: 'Failed to load profile. User may not exist.', isOwnProfile });
+            return of<ProfileState>({ isLoading: false, error: 'Failed to load profile. User may not exist.', isOwnProfile });
           })
         );
       }),
+      // Wewnątrz tap aktualizujemy sygnał
       tap(state => {
-        if ('user' in state && state.user) {
+        this.profileState.set(state);
+        if (state.user) {
           this.initializeForm(state.user);
         }
-        this.profileStateSubject.next(state);
-      }),
-      takeUntil(this._destroying$)
-    ).subscribe();
+      })
+    ).subscribe(); // Subskrypcja jest potrzebna, aby uruchomić strumień
 
+    // Używamy takeUntilDestroyed do automatycznego czyszczenia subskrypcji
     this.msalBroadcastService.inProgress$
       .pipe(
         filter(status => status === InteractionStatus.None || status === InteractionStatus.HandleRedirect),
-        takeUntil(this._destroying$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
         this.checkAndSetActiveAccount();
       });
   }
   
-  ngOnDestroy(): void {
-    this._destroying$.next();
-    this._destroying$.complete();
-  }
-
   toggleEditMode(): void {
     this.editMode = !this.editMode;
     if (!this.editMode) {
-      const currentUser = this.profileStateSubject.getValue().user;
+      // Odczytujemy wartość z sygnału przez jego wywołanie: this.profileState()
+      const currentUser = this.profileState().user;
       if (currentUser) {
         this.editForm.reset({
           phoneNumber: currentUser.phoneNumber || '',
@@ -118,7 +119,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     
     this.isSaving = true;
     const formValues = this.editForm.value;
-    const currentUser = this.profileStateSubject.getValue().user;
+    // Odczytujemy wartość z sygnału: this.profileState()
+    const currentUser = this.profileState().user;
     if (!currentUser) {
       this.isSaving = false;
       return;
@@ -139,15 +141,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.appUserService.updateUser(payload).pipe(
-      takeUntil(this._destroying$)
-    ).subscribe({
+    this.appUserService.updateUser(payload)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: () => {
         this.isSaving = false;
         this.editMode = false;
-        const currentState = this.profileStateSubject.getValue();
-        const updatedUser = { ...currentState.user, ...payload } as AppUser;
-        this.profileStateSubject.next({ ...currentState, user: updatedUser });
+        // Używamy .update() do aktualizacji stanu na podstawie poprzedniej wartości
+        this.profileState.update(currentState => {
+            const updatedUser = { ...currentState.user, ...payload } as AppUser;
+            return { ...currentState, user: updatedUser };
+        });
       },
       error: err => {
         console.error('Profile update error:', err);

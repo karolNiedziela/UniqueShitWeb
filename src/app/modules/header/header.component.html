@@ -95,8 +95,8 @@
       ></app-global-search-bar>
     </div>
 
- <div class="ml-auto flex items-center space-x-1">
-  @if (user) {
+<div class="ml-auto flex items-center space-x-1">
+  @if (user(); as loggedUser) {
     <button mat-icon-button (click)="toggleChatSidebar()" aria-label="Open chat">
       <mat-icon>chat</mat-icon>
     </button>
@@ -109,7 +109,7 @@
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/profile', user.id]">
+      <button mat-menu-item [routerLink]="['/profile', loggedUser.id]">
         <mat-icon>person</mat-icon>
         <span>Profile</span>
       </button>
