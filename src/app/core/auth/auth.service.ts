@@ -20,11 +20,8 @@ import { AppUser, LoggedUserService } from '../../modules/logged-user/logged-use
 })
 export class AuthService {
   private readonly _destroying$ = new Subject<void>();
-
-  // Sygnały są publiczne i bezpośrednio zapisywalne.
   public currentUser = signal<AppUser | null>(null);
   public loginDisplay = signal<boolean>(false);
-  // POPRAWKA: Ta linia została przeoczona i teraz jest dodana
   public activeAccountReady = signal<boolean>(false); 
 
   constructor(
@@ -45,7 +42,7 @@ export class AuthService {
           this.msalService.instance.getAllAccounts().length > 0
         ) {
           this.msalService.instance.setActiveAccount(result.account);
-          this.activeAccountReady.set(true); // Wywołanie jest teraz poprawne, bo sygnał istnieje
+          this.activeAccountReady.set(true);
           this.updateLoginDisplay();
         }
       },
@@ -97,7 +94,7 @@ export class AuthService {
             city: user.city,
           };
           this.currentUser.set(logged);
-          this.activeAccountReady.set(true); // Wywołanie jest teraz poprawne
+          this.activeAccountReady.set(true);
         });
       }
     } else {
