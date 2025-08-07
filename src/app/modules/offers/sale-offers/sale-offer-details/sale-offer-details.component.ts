@@ -1,7 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SaleOfferService } from '../services/sale-offer.service';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SaleOfferDetails } from '../models/sale-offer-details.model';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,7 @@ import { ChatService } from '../../../chat/services/chat.service';
 
 @Component({
   selector: 'app-sale-offer-details',
-  imports: [CommonModule, MatButtonModule, OpenedChatsComponent],
+  imports: [CommonModule, MatButtonModule, OpenedChatsComponent, RouterModule],
   templateUrl: './sale-offer-details.component.html',
   styleUrl: './sale-offer-details.component.scss',
 })
@@ -24,6 +24,11 @@ export class SaleOfferDetailsComponent implements OnInit {
 
   ngOnInit() {
     const saleOfferId = this.route.snapshot.paramMap.get('id');
-    this.saleOffer$ = this.salesOfferService.getOffer(Number(saleOfferId));
+    this.saleOffer$ = this.salesOfferService.getOffer(Number(saleOfferId)).pipe(
+      tap((offer: SaleOfferDetails) => {
+        if (offer && offer.user) {
+        }
+      })
+    );
   }
 }

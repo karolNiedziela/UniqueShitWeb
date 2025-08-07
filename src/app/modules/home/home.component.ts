@@ -1,18 +1,22 @@
 import { Component } from '@angular/core';
-import { SaleOffersAdidasComponent } from '../../shared/featured-sale-offers/sale-offers-adidas/sale-offers-adidas.component';
-import { SaleOffersNikeComponent } from '../../shared/featured-sale-offers/sale-offers-nike/sale-offers-nike.component';
-import { SaleOffersJordanComponent } from '../../shared/featured-sale-offers/sale-offers-jordan/sale-offers-jordan.component';
-import { SaleOffersLacosteComponent } from '../../shared/featured-sale-offers/sale-offers-lacoste/sale-offers-lacoste.component';
+import { SpecificSaleOffersSliderComponent } from "../offers/sale-offers/specific-sale-offers-slider/specific-sale-offers-slider.component";
+import { CommonModule } from '@angular/common';
+import { BrandId } from '../../shared/enums/enums.component';
 
 @Component({
   selector: 'app-home',
   imports: [
-    SaleOffersAdidasComponent,
-    SaleOffersNikeComponent,
-    SaleOffersJordanComponent,
-    SaleOffersLacosteComponent
-],
+    CommonModule,
+    SpecificSaleOffersSliderComponent
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {}
+export class HomeComponent {
+  readonly sliders = [
+    { brandId: BrandId.Adidas, brandName: 'Adidas' },
+    { brandId: BrandId.Nike, brandName: 'Nike' },
+    { brandId: BrandId.Jordan, brandName: 'Jordan' },
+    { brandId: BrandId.Lacoste, brandName: 'Lacoste' },
+  ];
+}

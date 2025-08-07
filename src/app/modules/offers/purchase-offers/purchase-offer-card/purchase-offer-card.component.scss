@@ -42,8 +42,8 @@
   box-sizing: border-box;
   border-radius: 16px;
   box-shadow: 
-    0 5px 15px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(0, 0, 0, 0.03);
+    0 5px 10px rgba(44, 62, 80, 0.05),
+    0 15px 40px rgba(44, 62, 80, 0.2);
   position: relative;
   overflow: hidden;
 
@@ -151,7 +151,7 @@
     }
   }
 
-  &__user-displayName {
+  &__user-info {
     font-weight: 600;
     color:rgba(182, 16, 16, 0.637);
     white-space: nowrap;

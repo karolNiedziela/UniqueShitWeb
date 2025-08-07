@@ -1,7 +1,8 @@
 <div class="home-offers">
-    <app-sale-offers-adidas class="home__offer-item"></app-sale-offers-adidas>
-    <app-sale-offers-nike class="home__offer-item"></app-sale-offers-nike>
-    <app-sale-offers-jordan class="home__offer-item"></app-sale-offers-jordan>
-    <app-sale-offers-lacoste class="home__offer-item"></app-sale-offers-lacoste>
+  @for (slider of sliders; track slider.brandId) {
+    <app-specific-sale-offers-slider
+      [brandId]="slider.brandId"
+      [brandName]="slider.brandName">
+    </app-specific-sale-offers-slider>
+  }
 </div>
-

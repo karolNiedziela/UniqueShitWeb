@@ -64,6 +64,8 @@ export class CustomAuthInterceptor implements HttpInterceptor {
         url: `${environment.apiUrl}/private-chats/`,
         method: 'GET',
       },
+      { url: `${environment.apiUrl}/app-users`, 
+        method: 'PATCH' },
     ];
 
     return rules.some(

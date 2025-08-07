@@ -1,0 +1,17 @@
+@if (userOffers$ | async; as offers) {
+  <div class="purchase-offers-container">
+    <div class="purchase-offers-grid-container">
+      @if (offers && offers.length > 0) {
+        @for (offer of offers; track offer.id) {
+          <app-purchase-offer-card [purchaseOffer]="offer"></app-purchase-offer-card>
+        }
+      } @else {
+        <p class="no-purchase-offers">This user has no active offers.</p>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="loading">
+    <p>Loading offers...</p>
+  </div>
+}

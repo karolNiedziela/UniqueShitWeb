@@ -1,26 +1,39 @@
 <mat-form-field class="text-area-form-field" appearance="outline">
-  <mat-label>Description</mat-label>
+  <mat-label>{{ label() }}</mat-label>
+
   <textarea
     matInput
     [formControl]="formControl"
     [rows]="rows()"
     [attr.maxlength]="maxLength() ? maxLength() : null"
-  >
-  </textarea>
+  ></textarea>
+
   @if (maxLength()) {
-  <mat-hint align="end">
-    {{ formControl.value?.length || 0 }} / {{ maxLength() }}
-  </mat-hint>
-  } @if (!isValid()) {
-  <mat-error>
-    @if (formControl.hasError('required')) {
-    <mat-error> {{ label() }} is required. </mat-error>
-    } @if (formControl.hasError('maxlength')) {
+    <mat-hint align="end">
+      {{ formControl.value?.length || 0 }} / {{ maxLength() }}
+    </mat-hint>
+  }
+
+  @if (!isValid()) {
     <mat-error>
-      {{ label() }} can contain maximum
-      {{ formControl?.errors?.['maxlength'].requiredLength }} characters.
+      @if (formControl.hasError('required')) {
+        <span> {{ label() }} is required. </span>
+      }
+
+      @if (formControl.hasError('maxlength')) {
+        <span>
+          {{ label() }} can contain maximum
+          {{ formControl.errors?.maxlength.requiredLength }} characters.
+        </span>
+      }
+
+      @if (formControl.hasError('maxParagraphs')) {
+        <span>
+          You can use a maximum of
+          {{ formControl.getError('maxParagraphs').maxAllowed }} paragraphs.
+          (currently: {{ formControl.getError('maxParagraphs').actual }})
+        </span>
+      }
     </mat-error>
-    }
-  </mat-error>
   }
 </mat-form-field>

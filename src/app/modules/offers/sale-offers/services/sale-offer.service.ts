@@ -11,6 +11,7 @@ import { environment } from '../../../../../environments/environment';
 import { SaleOfferType } from '../models/sale-offer.model';
 import { CreateSaleOfferDto } from '../models/create-sale-offer.dto';
 import { SaleOfferDetails } from '../models/sale-offer-details.model';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -81,4 +82,24 @@ export class SaleOfferService {
       formData
     );
   }
+  getOffersByUserId(userId: string): Observable<SaleOfferType[]> {
+    const params = new HttpParams()
+      .set(SaleOffersQueryParamMapping.userId, userId) 
+      .set(SaleOffersQueryParamMapping.pageNumber, '1')
+      .set(SaleOffersQueryParamMapping.pageSize, '50');
+    return this.httpClient
+      .get<PagedListModel<SaleOfferType>>(this.saleOffersEndpoint, { params })
+      .pipe(map(response => response.items));
+  }
+
+    getOffersByBrand(brandId: number, limit: number): Observable<SaleOfferType[]> {
+      const params = new HttpParams()
+        .set(SaleOffersQueryParamMapping.brandId, brandId.toString())
+        .set(SaleOffersQueryParamMapping.pageSize, limit.toString())
+        .set(SaleOffersQueryParamMapping.pageNumber, '1');
+
+      return this.httpClient
+        .get<PagedListModel<SaleOfferType>>(this.saleOffersEndpoint, { params })
+        .pipe(map(response => response.items ?? []));
+    }
 }

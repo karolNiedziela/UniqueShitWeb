@@ -8,11 +8,25 @@ export const routes: Routes = [
       import('./modules/home/home.component').then((m) => m.HomeComponent),
   },
   {
-    path: 'profile',
-    loadComponent: () =>
-      import('./profile/profile.component').then((m) => m.ProfileComponent),
-    canActivate: [MsalGuard],
+  path: 'profile/:id', 
+  loadComponent: () =>
+    import('./profile/profile.component').then((m) => m.ProfileComponent),
+  canActivate: [MsalGuard],
   },
+  {
+    path: 'profile/:id/sale-offers',
+    loadComponent: () =>
+      import('./modules/user-offers-page/user-sale-offers-page/user-sale-offers-page.component'
+    ).then(m => m.UserSaleOffersPageComponent),
+    canActivate: [MsalGuard],
+    },
+    {
+    path: 'profile/:id/purchase-offers',
+    loadComponent: () =>
+      import('./modules/user-offers-page/user-purchase-offers-page/user-purchase-offers-page.component'
+    ).then(m => m.UserPurchaseOffersPageComponent),
+    canActivate: [MsalGuard],
+    },
   {
     path: 'about-us',
     loadComponent: () =>
@@ -38,7 +52,7 @@ export const routes: Routes = [
           ).then((m) => m.SaleOffersListComponent),
       },
       {
-        path: 'create',
+        path: 'create-sale-offer',
         pathMatch: 'full',
         loadComponent: () =>
           import(
@@ -67,7 +81,7 @@ export const routes: Routes = [
           ).then((m) => m.PurchaseOffersListComponent),
       },
       {
-        path: 'create',
+        path: 'create-purchase-offer',
         loadComponent: () =>
           import(
             './modules/offers/purchase-offers/add-purchase-offer-form/add-purchase-offer-form.component'

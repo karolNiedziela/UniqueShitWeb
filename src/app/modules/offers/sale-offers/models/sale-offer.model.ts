@@ -20,6 +20,11 @@ export const SaleOfferSchema = zod.object({
     name: zod.string(),
   }),
   quantity: zod.number(),
+  user: zod.object({
+    id: zod.string(),
+    displayName: zod.string(),
+  }),
+
 });
 
 export const SaleOfferArraySchema = zod.array(SaleOfferSchema);

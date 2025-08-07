@@ -8,6 +8,7 @@ export interface SaleOfferQueryParameters {
   sizeId?: number;
   brandId?: number;
   productCategoryId?: number;
+  userId?: string;
 }
 
 export const DefaultSaleOfferQueryParameters: SaleOfferQueryParameters = {
@@ -28,4 +29,5 @@ export const SaleOffersQueryParamMapping: Record<
   sizeId: 'sid',
   brandId: 'bid',
   productCategoryId: 'pcid',
+  userId: 'uid',
 };

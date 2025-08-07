@@ -1,7 +1,7 @@
 @if (purchaseOffer(); as offer) {
   <mat-card class="purchase-offer-card">
     <div class="card-highlight"></div>
-    
+    	
     <mat-card-content class="purchase-offer-card__content">
       <div class="purchase-offer-card__description">
         {{ offer.description }}
@@ -12,9 +12,16 @@
       <span class="purchase-offer-card__model">
         {{ offer.model.name }}
       </span>
-      <span class="purchase-offer-card__user-displayName">
-        {{ offer.user.displayName }}
-      </span>
+
+      <div class="purchase-offer-card__user-info">
+        <button mat-button 
+                color="primary"
+                [routerLink]="['/profile', offer.user.id]" 
+                class="username-link">
+          {{ offer.user?.displayName }}
+        </button>
+      </div>
+
     </mat-card-actions>
   </mat-card>
 }

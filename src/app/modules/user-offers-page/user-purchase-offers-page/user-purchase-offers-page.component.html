@@ -1,0 +1,24 @@
+<div class="offers-page-container">
+  @if (appUserService.currentUser(); as state) {
+      @if (state.isLoading) {
+      <div class="loading-spinner">
+        <p>Loading purchase offers...</p>
+      </div>
+    } 
+      @else if (state.error) {
+      <div class="error-message">
+        <h2>Could not load offers</h2>
+        <p>{{ state.error }}</p>
+      </div>
+    }
+      @else if (state.user) {
+      <app-my-purchase-offers [userId]="state.user.id"></app-my-purchase-offers>
+    } 
+      @else {
+      <div class="error-message">
+        <h2>Could not load offers</h2>
+        <p>User not specified.</p>
+      </div>
+    }
+  }
+</div>

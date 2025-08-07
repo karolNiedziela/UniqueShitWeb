@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, Injectable } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import * as signalR from '@microsoft/signalr';
 import { environment } from '../../../../environments/environment';
@@ -13,15 +13,18 @@ export class ChatSignalRService {
   private hubConnection!: signalR.HubConnection;
   private messageReceived = new BehaviorSubject<ChatMessage | null>(null);
   public messageReceived$ = this.messageReceived.asObservable();
+  
+  private connectionInitialized = false;
 
   constructor(
     private msalService: MsalService,
     private authService: AuthService
-  ) {}
+  ) {
+    effect(async () => {
+      const isReady = this.authService.activeAccountReady();
+      if (isReady && !this.connectionInitialized) {
+        this.connectionInitialized = true; 
 
-  async startConnection(): Promise<void> {
-    this.authService.activeAccountReady$.subscribe(async (isReady) => {
-      if (isReady) {
         const account = this.msalService.instance.getActiveAccount();
         if (!account) {
           console.error('No active user. Please login first.');
@@ -55,5 +58,8 @@ export class ChatSignalRService {
         });
       }
     });
+  }
+
+  async startConnection(): Promise<void> {
   }
 }

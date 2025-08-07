@@ -175,7 +175,7 @@ save(): void {
   call$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
     next: () => {
       this.saving.set(false);
-      this.router.navigate(['/sale-offers/create']);
+     this.router.navigate(['/sale-offers', 'create-sale-offer']);
     },
     error: (err) => {
       console.error('Save error:', err);
